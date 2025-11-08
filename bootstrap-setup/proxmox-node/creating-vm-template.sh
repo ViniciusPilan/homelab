@@ -14,10 +14,8 @@ TEMPLATE_MEMORY_SIZE="4096" # Mb
 TEMPLATE_STORAGE_DISK_SIZE="200G"
 
 
-function installDependencies {
-  # Installing necessary dependencies
-  echo "INSTALLING DEPENDENCIES"
-  apt install libguestfs-tools -y
+function setupCurrentMachine {
+  apt update -y
 }
 
 
@@ -27,6 +25,13 @@ function downloadImage {
   echo "DOWNLOAD AND PREPARE THE VM IMAGE"
   wget "$CLOUD_IMAGE_URL"
   virt-customize --add $CLOUD_IMAGE_FILE_NAME --install qemu-guest-agent
+}
+
+
+function installDependencies {
+  # Installing necessary dependencies
+  echo "INSTALLING DEPENDENCIES"
+  apt install libguestfs-tools -y
 }
 
 
@@ -63,8 +68,9 @@ function createVMTemplate {
 
 
 function main {
-  installDependencies
+  setupCurrentMachine
   downloadImage
+  installDependencies
   createVMTemplate
 }
 
