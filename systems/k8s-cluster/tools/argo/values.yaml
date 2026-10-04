@@ -1,0 +1,75 @@
+# Ref: https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
+
+# Argo CD configuration https://github.com/argoproj/argo-cd
+
+
+## Globally shared configuration
+global:
+  # -- Common labels for the all resources
+  additionalLabels:
+    app: argo-cd
+
+  # -- Number of old deployment ReplicaSets to retain. The rest will be garbage collected.
+  revisionHistoryLimit: 2
+
+  # Default image used by all components
+  image:
+    # -- If defined, a repository applied to all Argo CD deployments
+    repository: quay.io/argoproj/argocd
+    # -- Overrides the global Argo CD image tag whose default is the chart appVersion
+    tag: ""
+    # -- If defined, a imagePullPolicy applied to all Argo CD deployments
+    imagePullPolicy: IfNotPresent
+
+  # Default logging options used by all components
+  logging:
+    # -- Set the global logging format. Either: `text` or `json`
+    format: text
+    # -- Set the global logging level. One of: `debug`, `info`, `warn` or `error`
+    level: info
+
+  # -- Toggle and define pod-level security context.
+  # @default -- `{}` (See [values.yaml])
+  securityContext: {}
+  #  runAsUser: 999
+  #  runAsGroup: 999
+  #  fsGroup: 999
+
+  # Default network policy rules used by all components
+  networkPolicy:
+    # -- Create NetworkPolicy objects for all components
+    create: false
+    # -- Default deny all ingress traffic
+    defaultDenyIngress: false
+
+
+  # -- Default node selector for all components
+  nodeSelector:
+    kubernetes.io/os: linux
+
+  # -- Default tolerations for all components
+  tolerations: []
+
+  # Default affinity preset for all components
+  affinity:
+    # -- Default pod anti-affinity rules. Either: `none`, `soft` or `hard`
+    podAntiAffinity: soft
+    # Node affinity rules
+    nodeAffinity:
+      # -- Default node affinity rules. Either: `none`, `soft` or `hard`
+      type: hard
+      # -- Default match expressions for node affinity
+      matchExpressions: []
+        # - key: topology.kubernetes.io/zone
+        #   operator: In
+        #   values:
+        #    - antarctica-east1
+        #    - antarctica-west1
+
+  # -- Default [TopologySpreadConstraints] rules for all components
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  ## If labelSelector is left out, it will default to the labelSelector of the component
+  topologySpreadConstraints: []
+    # - maxSkew: 1
+    #   topologyKey: topology.kubernetes.io/zone
+    #   whenUnsatisfiable: DoNotSchedule

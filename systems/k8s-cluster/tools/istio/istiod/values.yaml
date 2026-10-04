@@ -1,0 +1,191 @@
+# Ref: helm show values istio/istiod --version 1.30.1
+
+autoscaleEnabled: true
+autoscaleMin: 2
+autoscaleMax: 3
+replicaCount: 2
+rollingMaxSurge: 100%
+rollingMaxUnavailable: 25%
+
+# Resources for a small pilot install
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+# Set to `type: RuntimeDefault` to use the default profile if available.
+seccompProfile: {}
+
+affinity: {}
+
+tolerations: []
+
+cpu:
+  targetAverageUtilization: 80
+
+nodeSelector: {}
+
+topologySpreadConstraints: []
+
+# Whether to use an existing CNI installation
+cni:
+  enabled: true
+  provider: default
+
+## Mesh config settings
+
+# Install the mesh config map, generated from values.yaml.
+# If false, pilot wil use default values (by default) or user-supplied values.
+configMap: true
+
+telemetry:
+  enabled: true
+  v2:
+    # For Null VM case now.
+    # This also enables metadata exchange.
+    enabled: true
+    # Indicate if prometheus stats filter is enabled or not
+    prometheus:
+      enabled: true
+    # stackdriver filter settings.
+    stackdriver:
+      enabled: false
+
+# meshConfig defines runtime configuration of components, including Istiod and istio-agent behavior
+# See https://istio.io/docs/reference/config/istio.mesh.v1alpha1/ for all available options
+meshConfig:
+  enablePrometheusMerge: true
+
+global:
+  # Used to locate istiod.
+  istioNamespace: istio-system
+
+  # A minimal set of requested resources to applied to all deployments so that
+  # Horizontal Pod Autoscaler will be able to function (if set).
+  # Each component can overwrite these default values by adding its own resources
+  # block in the relevant section below and setting the desired resources values.
+  defaultResources:
+    requests:
+      cpu: 10m
+    #   memory: 128Mi
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  # Default hub for Istio images.
+  # Releases are published to docker hub under 'istio' project.
+  # Dev builds from prow are on registry.istio.io/testing.
+  hub: registry.istio.io/release
+  # Default tag for Istio images.
+  tag: 1.30.1
+  # Variant of the image to use.
+  # Currently supported are: [debug, distroless]
+  variant: ""
+
+  # To output all istio components logs in json format by adding --log_as_json argument to each container argument
+  logAsJson: false
+
+  # In order to use native nftable rules instead of iptable rules, set this flag to true.
+  nativeNftables: false
+
+  # Comma-separated minimum per-scope logging level of messages to output, in the form of <scope>:<level>,<scope>:<level>
+  # The control plane has different scopes depending on component, but can configure default log level across all components
+  # If empty, default scope and level will be used as configured in code
+  logging:
+    level: "default:info"
+
+  # When enabled, default NetworkPolicy resources will be created
+  networkPolicy:
+    enabled: false
+
+  omitSidecarInjectorConfigMap: false
+
+  # resourceScope controls what resources will be processed by helm.
+  # This is useful when installing Istio on a cluster where some resources need to be owned by a cluster administrator and some can be owned by the mesh administrator.
+  # It can be one of:
+  # - all: all resources are processed
+  # - cluster: only cluster-scoped resources are processed
+  # - namespace: only namespace-scoped resources are processed
+  resourceScope: all
+
+  # Configure whether Operator manages webhook configurations. The current behavior
+  # of Istiod is to manage its own webhook configurations.
+  # When this option is set as true, Istio Operator, instead of webhooks, manages the
+  # webhook configurations. When this option is set as false, webhooks manage their
+  # own webhook configurations.
+  operatorManageWebhooks: false
+
+  # Custom DNS config for the pod to resolve names of services in other
+  # clusters. Use this to add additional search domains, and other settings.
+  # see
+  # https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#dns-config
+  # This does not apply to gateway pods as they typically need a different
+  # set of DNS settings than the normal application pods (e.g., in
+  # multicluster scenarios).
+  # NOTE: If using templates, follow the pattern in the commented example below.
+  #podDNSSearchNamespaces:
+  #- global
+  #- "{{ valueOrDefault .DeploymentMeta.Namespace \"default\" }}.global"
+
+  # Kubernetes >=v1.11.0 will create two PriorityClass, including system-cluster-critical and
+  # system-node-critical, it is better to configure this in order to make sure your Istio pods
+  # will not be killed because of low priority class.
+  # Refer to https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  # for more detail.
+  priorityClassName: ""
+
+  proxy:
+    # Log level for proxy, applies to gateways and sidecars.
+    # Expected values are: trace|debug|info|warning|error|critical|off
+    logLevel: warning
+
+    seccompProfile: {}
+
+    # The number of successive failed probes before indicating readiness failure.
+    readinessFailureThreshold: 4
+
+    # The initial delay for readiness probes in seconds.
+    readinessInitialDelaySeconds: 0
+
+    # The period between readiness probes.
+    readinessPeriodSeconds: 15
+
+    # Enables or disables a startup probe.
+    # For optimal startup times, changing this should be tied to the readiness probe values.
+    #
+    # If the probe is enabled, it is recommended to have delay=0s,period=15s,failureThreshold=4.
+    # This ensures the pod is marked ready immediately after the startup probe passes (which has a 1s poll interval),
+    # and doesn't spam the readiness endpoint too much
+    #
+    # If the probe is disabled, it is recommended to have delay=1s,period=2s,failureThreshold=30.
+    # This ensures the startup is reasonable fast (polling every 2s). 1s delay is used since the startup is not often ready instantly.
+    startupProbe:
+      enabled: true
+      failureThreshold: 600 # 10 minutes
+
+    # Resources for the sidecar.
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 2000m
+        memory: 1024Mi
+
+    # Default port for Pilot agent health checks. A value of 0 will disable health checking.
+    statusPort: 15020
+
+    # If specified, affinity defines the scheduling constraints of waypoint pods.
+    affinity: {}
+
+    # Topology Spread Constraints for the waypoint proxy.
+    topologySpreadConstraints: []
+
+    # Node labels for the waypoint proxy.
+    nodeSelector: {}
+
+    # Tolerations for the waypoint proxy.
+    tolerations: []
+
+base:
+  validationFailurePolicy: Fail

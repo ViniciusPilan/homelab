@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno
+
+  sources:
+    - repoURL: https://kyverno.github.io/kyverno
+      chart: kyverno
+      targetRevision: 3.9.1
+      helm:
+        releaseName: kyverno
+        valueFiles:
+          - $values/tools/kyverno/values.yaml
+
+    - repoURL: https://github.com/ViniciusPilan/k8s-cluster.git
+      targetRevision: refactor-v1
+      ref: values
+
+    - repoURL: https://github.com/ViniciusPilan/k8s-cluster.git
+      targetRevision: refactor-v1
+      path: tools/kyverno/policies
+
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

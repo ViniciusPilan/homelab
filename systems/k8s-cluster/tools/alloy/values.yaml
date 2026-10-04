@@ -1,0 +1,37 @@
+# Full chart values for Grafana Alloy version 1.12.1: https://github.com/grafana/alloy/blob/helm-chart/1.12.1/operations/helm/charts/alloy/values.yaml
+
+controller:
+  # A single scraper avoids every DaemonSet replica scraping every pod.
+  type: deployment
+  replicas: 1
+
+alloy:
+  configMap:
+    content: |
+      prometheus.operator.podmonitors "podmonitors" {
+        forward_to = [prometheus.remote_write.metrics_service.receiver]
+      }
+
+      prometheus.operator.servicemonitors "servicemonitors" {
+        forward_to = [prometheus.remote_write.metrics_service.receiver]
+      }
+
+      prometheus.remote_write "metrics_service" {
+        endpoint {
+          url = "http://mimir-gateway.mimir.svc.cluster.local/api/v1/push"
+          headers = {
+            "X-Scope-OrgID" = "anonymous",
+          }
+        }
+      }
+
+extraObjects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: alloy-sa-token
+    labels:
+      app.kubernetes.io/component: alloy
+    annotations:
+      kubernetes.io/service-account.name: alloy
+  type: kubernetes.io/service-account-token

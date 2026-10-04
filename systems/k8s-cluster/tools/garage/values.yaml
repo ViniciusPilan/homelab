@@ -1,0 +1,47 @@
+# Single-node personal Garage deployment on the cluster's local-path storage.
+deployment:
+  replicaCount: 1
+
+garage:
+  replicationFactor: "1"
+  secret:
+    # The chart generates admin and RPC secrets. They are retained by Helm and
+    # ignored by Argo CD comparison so they are not regenerated on each sync.
+    create: true
+
+persistence:
+  enabled: true
+  data:
+    size: 20Gi
+    storageClass: standard
+  meta:
+    size: 1Gi
+    storageClass: standard
+
+clusterConfig:
+  enabled: true
+  layout:
+    enabled: true
+    zone: dc1
+  buckets:
+    - name: general
+    - name: mimir-metrics
+  podAnnotations:
+    # Garage's peer RPC traffic must remain outside the Istio mesh.
+    sidecar.istio.io/inject: "false"
+
+# Garage RPC discovery and traffic are kept outside the Istio mesh.
+podAnnotations:
+  sidecar.istio.io/inject: "false"
+
+# ClusterIP keeps the S3 API private. In-cluster clients can use:
+# http://garage.garage.svc.cluster.local:3900
+service:
+  type: ClusterIP
+
+webui:
+  enabled: true
+  ingress:
+    enabled: false
+  gatewayApi:
+    enabled: false

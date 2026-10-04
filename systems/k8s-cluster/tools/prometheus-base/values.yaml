@@ -1,0 +1,98 @@
+# Full chart values for kube-prometheus-stack version 91.5.2: https://raw.githubusercontent.com/prometheus-community/helm-charts/kube-prometheus-stack-91.5.2/charts/kube-prometheus-stack/values.yaml
+
+fullnameOverride: prom-base
+
+crds:
+  enabled: true
+
+defaultRules:
+  create: false
+
+alertmanager:
+  enabled: false
+
+grafana:
+  enabled: false
+
+prometheus:
+  enabled: true
+  agentMode: true
+
+  prometheusSpec:
+    remoteWrite:
+    - url: http://mimir-gateway.mimir.svc.cluster.local/api/v1/push
+
+prometheusOperator:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: false
+
+nodeExporter:
+  enabled: false
+
+# Keep the core component Services and ServiceMonitors for Alloy discovery.
+kubeApiServer:
+  enabled: true
+  serviceMonitor:
+    authorization:
+      type: Bearer
+      credentials:
+        name: 'alloy-sa-token'
+        key: token
+
+kubeControllerManager:
+  enabled: true
+  serviceMonitor:
+    authorization:
+      type: Bearer
+      credentials:
+        name: 'alloy-sa-token'
+        key: token
+
+kubeScheduler:
+  enabled: true
+  serviceMonitor:
+    authorization:
+      type: Bearer
+      credentials:
+        name: 'alloy-sa-token'
+        key: token
+
+kubeEtcd:
+  enabled: true
+  serviceMonitor:
+    authorization:
+      type: Bearer
+      credentials:
+        name: 'alloy-sa-token'
+        key: token
+
+kubelet:
+  enabled: true
+  serviceMonitor:
+    authorization:
+      type: Bearer
+      credentials:
+        name: 'alloy-sa-token'
+        key: token
+
+kubeProxy:
+  enabled: true
+  serviceMonitor:
+    authorization:
+      type: Bearer
+      credentials:
+        name: 'alloy-sa-token'
+        key: token
+
+coreDns:
+  enabled: true
+  serviceMonitor:
+    authorization:
+      type: Bearer
+      credentials:
+        name: 'alloy-sa-token'
+        key: token
+
+cleanPrometheusOperatorObjectNames: true

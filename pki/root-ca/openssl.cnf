@@ -1,0 +1,16 @@
+[ req ]
+default_md = sha256
+prompt = no
+distinguished_name = root_ca_subject
+x509_extensions = root_ca_extensions
+
+[ root_ca_subject ]
+C  = BR
+O  = Homelab
+OU = Infrastructure
+CN = Homelab Root CA
+
+[ root_ca_extensions ]
+basicConstraints = critical, CA:true, pathlen:1
+keyUsage = critical, keyCertSign, cRLSign
+subjectKeyIdentifier = hash

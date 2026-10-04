@@ -1,0 +1,7 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: ingress-ca
+spec:
+  ca:
+    secretName: ca-ingress-tls-secret

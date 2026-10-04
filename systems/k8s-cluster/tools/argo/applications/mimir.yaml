@@ -1,0 +1,32 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: mimir
+#   namespace: argocd
+# spec:
+#   project: default
+
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: mimir
+
+#   sources:
+#     - repoURL: ghcr.io/grafana/helm-charts
+#       chart: mimir-distributed
+#       targetRevision: 6.2.0
+#       helm:
+#         releaseName: mimir
+#         valueFiles:
+#           - $values/tools/mimir/values.yaml
+
+#     - repoURL: https://github.com/ViniciusPilan/k8s-cluster.git
+#       targetRevision: refactor-v1
+#       ref: values
+
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true
+#       - ServerSideApply=true

@@ -1,0 +1,16 @@
+[ req ]
+default_md = sha256
+prompt = no
+distinguished_name = intermediate_ca_subject
+req_extensions = intermediate_ca_extensions
+
+[ intermediate_ca_subject ]
+C  = BR
+O  = Homelab
+OU = Infrastructure
+CN = Homelab TLS Intermediate CA
+
+[ intermediate_ca_extensions ]
+basicConstraints = critical, CA:true, pathlen:0
+keyUsage = critical, keyCertSign, cRLSign
+subjectKeyIdentifier = hash

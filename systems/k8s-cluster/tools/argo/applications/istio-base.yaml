@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-base
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+
+  ignoreDifferences:
+  - group: admissionregistration.k8s.io
+    kind: ValidatingWebhookConfiguration
+    name: istiod-default-validator
+    jqPathExpressions:
+      - '.webhooks[].failurePolicy'
+
+  sources:
+    # Istio base
+    - repoURL: https://istio-release.storage.googleapis.com/charts
+      chart: base
+      targetRevision: 1.30.1
+      helm:
+        releaseName: istio-base
+
+    # Istio CNI
+    - repoURL: https://istio-release.storage.googleapis.com/charts
+      chart: cni
+      targetRevision: 1.30.1
+      helm:
+        releaseName: istio-cni
+        valueFiles:
+          - $values/tools/istio/cni/values.yaml
+
+    - repoURL: https://github.com/ViniciusPilan/k8s-cluster.git
+      targetRevision: refactor-v1
+      ref: values
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
