@@ -14,11 +14,13 @@ module "ansible_inventory" {
     vms_groups = [
         {
             name = "tools"
-            vms  = {
-                name     = module.tools.vm.name
-                ip       = module.tools.vm.ipv4
-                ssh_user = module.tools.vm.ssh_user
-            }
+            vms  = [
+                {
+                    name     = module.tools.vm.name
+                    ip       = module.tools.vm.ipv4
+                    ssh_user = module.tools.vm.ssh_user
+                }
+            ]
         }
     ]
 }
