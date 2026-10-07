@@ -6,7 +6,7 @@ variable "proxmox_endpoint" {
 variable "proxmox_insecure_tls" {
   description = "Set true only when Proxmox uses a certificate Terraform cannot validate."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "proxmox_node_name" {
