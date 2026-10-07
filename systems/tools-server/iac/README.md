@@ -22,7 +22,7 @@ from this directory with `-i ansible/inventory.ini`.
 After the VM is available and SSH access works, run:
 
 ```sh
-ansible-playbook -i ansible/inventory.ini --private-key ~/.ssh/homelab_vms ansible/install-docker.yml
+ansible-playbook -i ansible/inventory.ini --private-key ~/.ssh/homelab_vms ../../../ansible-playbooks/install-docker.yml
 ```
 
 The playbook installs Docker Engine and the Docker Compose plugin from Docker's
