@@ -3,7 +3,7 @@ locals {
     for group in var.vms_groups : join("\n", concat(
       ["[${group.name}]"],
       [
-        for vm in (can(tolist(group.vms)) ? tolist(group.vms) : [group.vms]) :
+        for vm in flatten([group.vms]) :
         "${vm.name} ansible_host=${vm.ip} ansible_user=${vm.ssh_user}"
       ]
     ))

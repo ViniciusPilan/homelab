@@ -9,7 +9,7 @@ locals {
 
 
 module "ansible_inventory" {
-  source = "../../../tf-modules/ansible-inventory"
+  source = "../../../../../tf-modules/ansible-inventory"
 
   vms_groups = [
     {
@@ -37,7 +37,7 @@ module "ansible_inventory" {
 
 
 module "controlplane01" {
-  source = "../../../tf-modules/proxmox-vm"
+  source = "../../../../../tf-modules/proxmox-vm"
 
   proxmox_endpoint       = local.proxmox_endpoint
   proxmox_node_name      = local.proxmox_node_name
@@ -55,7 +55,7 @@ module "controlplane01" {
 }
 
 module "worker01" {
-  source = "../../../tf-modules/proxmox-vm"
+  source = "../../../../../tf-modules/proxmox-vm"
 
   proxmox_endpoint       = local.proxmox_endpoint
   proxmox_node_name      = local.proxmox_node_name
