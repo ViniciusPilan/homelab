@@ -1,0 +1,215 @@
+---
+- name: Prepare Ubuntu hosts for Kubernetes with kubeadm
+  hosts: controlplane:workers
+  become: true
+  gather_facts: true
+
+  vars:
+    kubernetes_minor_version: "v1.37"
+    kubernetes_apt_keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    helm_apt_keyring: /etc/apt/keyrings/helm.gpg
+
+  tasks:
+    - name: Require Ubuntu
+      ansible.builtin.assert:
+        that:
+          - ansible_distribution == "Ubuntu"
+        fail_msg: This playbook currently supports Ubuntu hosts only.
+
+    - name: Install runtime and repository prerequisites
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - containerd
+          - containernetworking-plugins
+          - curl
+          - gpg
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Load required kernel modules at boot
+      ansible.builtin.copy:
+        dest: /etc/modules-load.d/k8s.conf
+        content: |
+          overlay
+          br_netfilter
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Load overlay and bridge netfilter modules now
+      ansible.builtin.modprobe:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - overlay
+        - br_netfilter
+
+    - name: Configure Kubernetes networking sysctls
+      ansible.builtin.copy:
+        dest: /etc/sysctl.d/99-kubernetes-cri.conf
+        content: |
+          net.bridge.bridge-nf-call-iptables = 1
+          net.bridge.bridge-nf-call-ip6tables = 1
+          net.ipv4.ip_forward = 1
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Apply sysctl settings
+
+    - name: Enable IPv4 forwarding now and persist it
+      ansible.builtin.sysctl:
+        name: net.ipv4.ip_forward
+        value: "1"
+        sysctl_file: /etc/sysctl.d/99-kubernetes-cri.conf
+        state: present
+        reload: true
+
+    - name: Disable swap immediately
+      ansible.builtin.command: swapoff -a
+      when: ansible_swaptotal_mb | int > 0
+      changed_when: true
+
+    - name: Disable swap entries in fstab
+      ansible.builtin.replace:
+        path: /etc/fstab
+        regexp: '^(\s*[^#\n]\S*\s+\S*\s+swap\s+.*)$'
+        replace: '# disabled for Kubernetes: \1'
+
+    - name: Ensure containerd has a default configuration
+      ansible.builtin.command: containerd config default
+      register: containerd_default_config
+      changed_when: false
+      when: not ansible_check_mode
+
+    - name: Create containerd configuration directory
+      ansible.builtin.file:
+        path: /etc/containerd
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Write containerd configuration when missing
+      ansible.builtin.copy:
+        dest: /etc/containerd/config.toml
+        content: "{{ containerd_default_config.stdout }}\n"
+        owner: root
+        group: root
+        mode: "0644"
+        force: false
+      notify: Restart containerd
+      when: containerd_default_config.stdout is defined
+
+    - name: Use systemd cgroups in containerd
+      ansible.builtin.replace:
+        path: /etc/containerd/config.toml
+        regexp: '^(\s*)SystemdCgroup = false$'
+        replace: '\1SystemdCgroup = true'
+      notify: Restart containerd
+
+    - name: Enable and start containerd
+      ansible.builtin.service:
+        name: containerd
+        state: started
+        enabled: true
+
+    - name: Create apt keyrings directory
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Download Kubernetes package signing key
+      ansible.builtin.get_url:
+        url: "https://pkgs.k8s.io/core:/stable:/{{ kubernetes_minor_version }}/deb/Release.key"
+        dest: /tmp/kubernetes-Release.key
+        mode: "0644"
+
+    - name: Dearmor Kubernetes package signing key
+      ansible.builtin.command:
+        cmd: "gpg --dearmor --yes --output {{ kubernetes_apt_keyring }} /tmp/kubernetes-Release.key"
+      args:
+        creates: "{{ kubernetes_apt_keyring }}"
+
+    - name: Configure Kubernetes apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by={{ kubernetes_apt_keyring }}] https://pkgs.k8s.io/core:/stable:/{{ kubernetes_minor_version }}/deb/ /"
+        filename: kubernetes
+        state: present
+        update_cache: true
+
+    - name: Install kubelet, kubeadm and kubectl
+      ansible.builtin.apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+        update_cache: true
+
+    - name: Download Helm package signing key
+      ansible.builtin.get_url:
+        url: https://packages.buildkite.com/helm-linux/helm-debian/gpgkey
+        dest: /tmp/helm.gpg
+        mode: "0644"
+
+    - name: Read Helm package signing key fingerprint
+      ansible.builtin.command:
+        cmd: "gpg --show-keys --with-colons /tmp/helm.gpg"
+      register: helm_key_details
+      changed_when: false
+
+    - name: Verify Helm package signing key fingerprint
+      ansible.builtin.assert:
+        that:
+          - "'DDF78C3E6EBB2D2CC223C95C62BA89D07698DBC6' in helm_key_details.stdout"
+        fail_msg: The Helm package signing key fingerprint did not match the expected value.
+
+    - name: Install Helm package signing key
+      ansible.builtin.command:
+        cmd: "gpg --dearmor --yes --output {{ helm_apt_keyring }} /tmp/helm.gpg"
+      args:
+        creates: "{{ helm_apt_keyring }}"
+
+    - name: Configure Helm apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by={{ helm_apt_keyring }}] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main"
+        filename: helm-stable-debian
+        state: present
+        update_cache: true
+
+    - name: Install Helm
+      ansible.builtin.apt:
+        name: helm
+        state: present
+        update_cache: true
+
+    - name: Hold Kubernetes packages for deliberate upgrades
+      ansible.builtin.dpkg_selections:
+        name: "{{ item }}"
+        selection: hold
+      loop:
+        - kubelet
+        - kubeadm
+        - kubectl
+
+    - name: Enable kubelet
+      ansible.builtin.service:
+        name: kubelet
+        enabled: true
+        state: started
+
+  handlers:
+    - name: Apply sysctl settings
+      ansible.builtin.command: sysctl --system
+      changed_when: true
+
+    - name: Restart containerd
+      ansible.builtin.service:
+        name: containerd
+        state: restarted
