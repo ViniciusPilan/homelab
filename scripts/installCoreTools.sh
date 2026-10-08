@@ -46,11 +46,11 @@ function checkDockerIsRunning() {
 function checkRequirements() {
     echo "INFO: Checking the requirements"
 
-    checkInstalledBinary "docker"
+    # checkInstalledBinary "docker"
     checkInstalledBinary "kubectl"
     checkInstalledBinary "helm"
 
-    checkDockerIsRunning
+    # checkDockerIsRunning
 
     echo "INFO: All requirements are satisfied."
 }

@@ -8,6 +8,8 @@
 # This script must be executed inside the proxmox host.
 
 # How to run:
+# $ scp -i ~/.ssh/homelab_vms scripts/createVMTemplate.sh root@192.168.12.20:/root/createVMTemplate.sh
+# $ ssh root@192.168.12.20
 # $ bash createVMTemplate.sh
 
 
@@ -19,6 +21,7 @@ RESOURCES_DISK_SIZE_GB=150
 
 
 function setupProxMoxNode() {
+    apt update -y
     apt install libguestfs-tools -y
 }
 

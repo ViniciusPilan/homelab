@@ -17,6 +17,19 @@ Applying this deployment also writes `ansible/inventory.ini`, with the tools VM,
 Kubernetes control plane, and workers in separate Ansible groups. Run Ansible
 from this directory with `-i ansible/inventory.ini`.
 
+## Install Docker on the tools server
+
+After the VM is available and SSH access works, run:
+
+```sh
+ansible-playbook -i ansible/inventory.ini --private-key ~/.ssh/homelab_vms ../../../ansible-playbooks/install-docker.yml
+```
+
+The playbook installs Docker Engine and the Docker Compose plugin from Docker's
+official Ubuntu apt repository, enables the Docker service, and adds the SSH
+user to the `docker` group. Reconnect over SSH for the new group membership to
+take effect.
+
 ## Example of a VM creation
 ```tf
 module "controlplane01" {
