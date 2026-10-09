@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  project: default
+
+  sources:
+    - repoURL: https://helm.cilium.io
+      chart: cilium
+      targetRevision: 1.20.2
+      helm:
+        releaseName: cilium
+        valueFiles:
+          - $values/tools/cilium/values.yaml
+
+    - repoURL: https://github.com/ViniciusPilan/k8s-cluster.git
+      targetRevision: refactor-v1
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

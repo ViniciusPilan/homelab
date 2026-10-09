@@ -1,0 +1,9 @@
+# Full chart values for cilium version 1.20.2: https://github.com/cilium/cilium/blob/v1.20.2/install/kubernetes/cilium/values.yaml
+ipam:
+  mode: kubernetes
+
+image:
+  pullPolicy: IfNotPresent
+
+cni:
+  exclusive: false
