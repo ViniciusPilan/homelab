@@ -11,9 +11,9 @@ spec:
     namespace: argocd
 
   sources:
-    - repoURL: https://github.com/ViniciusPilan/k8s-cluster.git
-      targetRevision: refactor-v1
-      path: tools/argo/applications
+    - repoURL: https://github.com/ViniciusPilan/homelab.git
+      targetRevision: main
+      path: systems/k8s-cluster/tools/argo/applications
 
   syncPolicy:
     automated:

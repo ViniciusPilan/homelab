@@ -17,10 +17,10 @@ spec:
       helm:
         releaseName: garage
         valueFiles:
-          - $values/tools/garage/values.yaml
+          - $values/systems/k8s-cluster/tools/garage/values.yaml
 
-    - repoURL: https://github.com/ViniciusPilan/k8s-cluster.git
-      targetRevision: observability
+    - repoURL: https://github.com/ViniciusPilan/homelab.git
+      targetRevision: main
       ref: values
 
   syncPolicy:
