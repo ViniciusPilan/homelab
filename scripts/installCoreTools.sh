@@ -1,6 +1,7 @@
 #!/bin/bash 
 
 # This script will create the cluster with the project patterns and base tools:
+# - Cilium (to provide cluster networking)
 # - Argocd (to deploy applications)
 # - Kyverno (to ensure project patterns)
 # - CertManager (to handle with cluster certifications issued by the homelab CA)
@@ -15,6 +16,9 @@
 # How to run:
 # $ cd cluster-provisioning/scripts
 # $ bash installCoreTools.sh
+
+
+TOOLS_DIR="../systems/k8s-cluster/tools"
 
 
 function checkInstalledBinary() {
@@ -56,6 +60,24 @@ function checkRequirements() {
 }
 
 
+function installCilium() {
+    echo "INFO: Installing Cilium"
+
+    echo "Step 01: add Cilium Helm repository"
+    helm repo add cilium https://helm.cilium.io/ || exit 1
+
+    echo "Step 02: update Helm repositories"
+    helm repo update || exit 1
+
+    echo "Step 03: install Cilium with its Helm chart"
+    helm upgrade --install cilium cilium/cilium \
+        --version 1.20.2 \
+        --namespace kube-system \
+        --set ipam.mode=kubernetes \
+        --set cni.exclusive=false || exit 1
+}
+
+
 function installArgo() {
     echo "INFO: Installing ArgoCD"
 
@@ -63,10 +85,10 @@ function installArgo() {
     helm repo add argo https://argoproj.github.io/argo-helm
 
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install argocd argo/argo-cd --values=../../tools/argo/values.yaml --namespace=argocd --create-namespace=true --wait --version 10.9.2
+    helm install argocd argo/argo-cd --values=$TOOLS_DIR/argo/values.yaml --namespace=argocd --create-namespace=true --wait --version 10.9.2
 
     echo "Step 03: create argo applications to manage all repository applications"
-    kubectl apply -f ../../tools/argo/argo-applications.yaml
+    kubectl apply -f $TOOLS_DIR/argo/argo-applications.yaml
 
     echo "Step 04: access ArgoCD"
     echo " - login: admin"
@@ -83,10 +105,10 @@ function installKyverno() {
     helm repo update
 
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install kyverno kyverno/kyverno -n kyverno --create-namespace=true --wait --values=../../tools/kyverno/values.yaml --version 3.9.1
+    helm install kyverno kyverno/kyverno -n kyverno --create-namespace=true --wait --values=$TOOLS_DIR/kyverno/values.yaml --version 3.9.1
 
     echo "Step 03: apply policies"
-    kubectl apply -f ../../tools/kyverno/policies
+    kubectl apply -f $TOOLS_DIR/kyverno/policies
 }
 
 
@@ -97,7 +119,7 @@ function installCertManager() {
     helm repo add jetstack https://charts.jetstack.io
     
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install cert-manager jetstack/cert-manager --version v1.21.2 --wait --create-namespace=true -n cert-manager --values=../../tools/certmanager/values.yaml
+    helm install cert-manager jetstack/cert-manager --version v1.21.2 --wait --create-namespace=true -n cert-manager --values=$TOOLS_DIR/certmanager/values.yaml
 }
 
 
@@ -113,10 +135,10 @@ function installIstioBase() {
     helm repo add istio https://istio-release.storage.googleapis.com/charts
     
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install istio-base istio/base --version 1.30.1 --wait --create-namespace=true -n istio-system --values=../../tools/istio/base/values.yaml
+    helm install istio-base istio/base --version 1.30.1 --wait --create-namespace=true -n istio-system --values=$TOOLS_DIR/istio/base/values.yaml
 
     echo "Step 03: install Helm release and wait all be ready to proceed"
-    helm install istio-cni istio/cni --version 1.30.1 --wait --create-namespace=true -n istio-system --values=../../tools/istio/cni/values.yaml
+    helm install istio-cni istio/cni --version 1.30.1 --wait --create-namespace=true -n istio-system --values=$TOOLS_DIR/istio/cni/values.yaml
 }
 
 
@@ -127,7 +149,7 @@ function installIstiod() {
     helm repo add istio https://istio-release.storage.googleapis.com/charts
     
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install istiod istio/istiod --version 1.30.1 --wait --create-namespace=true -n istio-system --values=../../tools/istio/istiod/values.yaml
+    helm install istiod istio/istiod --version 1.30.1 --wait --create-namespace=true -n istio-system --values=$TOOLS_DIR/istio/istiod/values.yaml
 }
 
 
@@ -139,7 +161,7 @@ function installIstioGateway() {
     helm repo add istio https://istio-release.storage.googleapis.com/charts
     
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install istio-ingress istio/gateway --version 1.30.1 --wait --create-namespace=true -n istio-system --values=../../tools/istio/gateway/values.yaml
+    helm install istio-ingress istio/gateway --version 1.30.1 --wait --create-namespace=true -n istio-system --values=$TOOLS_DIR/istio/gateway/values.yaml
 }
 
 
@@ -155,6 +177,7 @@ function installIstio() {
 function main() {
     checkRequirements
 
+    installCilium
     installKyverno
     installIstio
     installCertManager
