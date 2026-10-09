@@ -20,10 +20,10 @@ spec:
       helm:
         releaseName: istio-ingress
         valueFiles:
-          - $values/tools/istio/gateway/values.yaml
+          - $values/systems/k8s-cluster/tools/istio/gateway/values.yaml
 
-    - repoURL: https://github.com/ViniciusPilan/k8s-cluster.git
-      targetRevision: refactor-v1
+    - repoURL: https://github.com/ViniciusPilan/homelab.git
+      targetRevision: main
       ref: values
 
   syncPolicy:

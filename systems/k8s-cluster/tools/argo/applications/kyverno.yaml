@@ -19,15 +19,15 @@ spec:
       helm:
         releaseName: kyverno
         valueFiles:
-          - $values/tools/kyverno/values.yaml
+          - $values/systems/k8s-cluster/tools/kyverno/values.yaml
 
-    - repoURL: https://github.com/ViniciusPilan/k8s-cluster.git
-      targetRevision: refactor-v1
+    - repoURL: https://github.com/ViniciusPilan/homelab.git
+      targetRevision: main
       ref: values
 
-    - repoURL: https://github.com/ViniciusPilan/k8s-cluster.git
-      targetRevision: refactor-v1
-      path: tools/kyverno/policies
+    - repoURL: https://github.com/ViniciusPilan/homelab.git
+      targetRevision: main
+      path: systems/k8s-cluster/tools/kyverno/policies
 
 
   syncPolicy:
