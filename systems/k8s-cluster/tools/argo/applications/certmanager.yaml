@@ -1,37 +1,37 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: cert-manager
-  namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
-spec:
-  project: default
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: cert-manager
+#   namespace: argocd
+#   annotations:
+#     argocd.argoproj.io/sync-wave: "1"
+# spec:
+#   project: default
 
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: cert-manager
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: cert-manager
 
-  sources:
-  - repoURL: quay.io/jetstack/charts
-    chart: cert-manager
-    targetRevision: v1.21.2
-    helm:
-      releaseName: cert-manager
-      valueFiles:
-        - $values/systems/k8s-cluster/tools/certmanager/values.yaml
+#   sources:
+#   - repoURL: quay.io/jetstack/charts
+#     chart: cert-manager
+#     targetRevision: v1.21.2
+#     helm:
+#       releaseName: cert-manager
+#       valueFiles:
+#         - $values/systems/k8s-cluster/tools/certmanager/values.yaml
 
-  - repoURL: https://github.com/ViniciusPilan/homelab.git
-    targetRevision: main
-    ref: values
+#   - repoURL: https://github.com/ViniciusPilan/homelab.git
+#     targetRevision: main
+#     ref: values
 
-  - repoURL: https://github.com/ViniciusPilan/homelab.git
-    targetRevision: main
-    path: systems/k8s-cluster/tools/certmanager/manifests
+#   - repoURL: https://github.com/ViniciusPilan/homelab.git
+#     targetRevision: main
+#     path: systems/k8s-cluster/tools/certmanager/manifests
 
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true
