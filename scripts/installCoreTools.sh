@@ -180,8 +180,8 @@ function main() {
     installCilium
     installKyverno
     installIstio
-    installCertManager
-    createIntermediateCASecret
+    # installCertManager
+    # createIntermediateCASecret
     installArgo
 }
 
