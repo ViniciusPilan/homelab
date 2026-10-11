@@ -40,10 +40,17 @@ node:
 
 ```sh
 cd systems/k8s-cluster/provisioning/iac
+export TF_VAR_proxmox_api_token_ajax='terraform@pve!provider=<AJAX_SECRET>'
+export TF_VAR_proxmox_api_token_heitor='terraform@pve!provider=<HEITOR_SECRET>'
 tofu init
 tofu plan
 tofu apply
 ```
+
+The centralized state configures separate Proxmox provider aliases for Ajax
+and Heitor. Store each complete token in your shell environment or a private
+secrets manager; do not commit token values. Both tokens must be available for
+a full plan or apply.
 
 Inspect the plans before applying. The Terraform state files in these
 directories contain infrastructure details and must remain private.

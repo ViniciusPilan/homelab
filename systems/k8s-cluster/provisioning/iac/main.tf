@@ -66,7 +66,11 @@ module "ansible_inventory" {
 
 
 module "controlplane01" {
-  source = "../../../../../tf-modules/proxmox-vm"
+  source = "../../../../tf-modules/proxmox-vm"
+
+  providers = {
+    proxmox = proxmox.heitor
+  }
 
   proxmox_endpoint       = local.heitor.proxmox_endpoint
   proxmox_node_name      = local.heitor.proxmox_node_name
@@ -85,7 +89,11 @@ module "controlplane01" {
 }
 
 module "controlplane02" {
-  source = "../../../../../tf-modules/proxmox-vm"
+  source = "../../../../tf-modules/proxmox-vm"
+
+  providers = {
+    proxmox = proxmox.ajax
+  }
 
   proxmox_endpoint       = local.ajax.proxmox_endpoint
   proxmox_node_name      = local.ajax.proxmox_node_name
@@ -105,7 +113,11 @@ module "controlplane02" {
 
 
 module "worker01" {
-  source = "../../../../../tf-modules/proxmox-vm"
+  source = "../../../../tf-modules/proxmox-vm"
+
+  providers = {
+    proxmox = proxmox.heitor
+  }
 
   proxmox_endpoint       = local.heitor.proxmox_endpoint
   proxmox_node_name      = local.heitor.proxmox_node_name
@@ -124,7 +136,11 @@ module "worker01" {
 }
 
 module "worker02" {
-  source = "../../../../../tf-modules/proxmox-vm"
+  source = "../../../../tf-modules/proxmox-vm"
+
+  providers = {
+    proxmox = proxmox.ajax
+  }
 
   proxmox_endpoint       = local.ajax.proxmox_endpoint
   proxmox_node_name      = local.ajax.proxmox_node_name

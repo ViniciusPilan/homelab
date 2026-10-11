@@ -8,9 +8,3 @@ terraform {
     }
   }
 }
-
-provider "proxmox" {
-  endpoint = var.proxmox_endpoint
-  # Supply PROXMOX_VE_API_TOKEN in the environment as user@realm!token-name=secret.
-  insecure = var.proxmox_insecure_tls
-}
