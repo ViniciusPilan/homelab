@@ -27,6 +27,11 @@ ansible-playbook \
   -i ansible/inventory.ini \
   --private-key ~/.ssh/homelab_vms \
   ../../../../../ansible-playbooks/prepare-kubernetes-node.yml
+
+ansible-playbook \
+  -i ansible/inventory.ini \
+  --private-key ~/.ssh/homelab_vms \
+  ../../../../../ansible-playbooks/node-cleaner.yml
 ```
 
 The playbook currently targets Ubuntu and defaults to Kubernetes `v1.37`.
@@ -34,5 +39,7 @@ Override `kubernetes_minor_version` to match the cluster version you intend to
 bootstrap, for example `-e kubernetes_minor_version=v1.36`. It configures
 containerd to use systemd cgroups, enables the required kernel modules and
 networking sysctls, disables swap, and holds the Kubernetes packages to avoid
-unplanned upgrades. Cluster initialization and deployment of a pod network
-provider are separate steps.
+unplanned upgrades. The cleaner removes optional Helm and Docker packages,
+services, repositories, and signing keys from the nodes; it preserves
+containerd and the QEMU guest agent. Cluster initialization and deployment of a
+pod network provider are separate steps.
