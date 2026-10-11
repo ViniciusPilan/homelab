@@ -1,0 +1,82 @@
+---
+- name: Prepare Ubuntu hosts for k0s
+  hosts: controlplane:workers
+  become: true
+  gather_facts: true
+
+  vars:
+    k0s_version: "v1.36.4+k0s.1"
+    k0s_binary_sha256_amd64: "18c304d53cdd70095e99c6b859b269b4fef0bb84579d7e7185271a9135694a31"
+  tasks:
+    - name: Require Ubuntu on amd64
+      ansible.builtin.assert:
+        that:
+          - ansible_distribution == "Ubuntu"
+          - ansible_architecture == "x86_64"
+        fail_msg: This playbook currently supports Ubuntu on amd64 hosts.
+
+    - name: Install host prerequisites
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - iptables
+          - socat
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Configure required kernel modules to load at boot
+      ansible.builtin.copy:
+        dest: /etc/modules-load.d/k0s.conf
+        content: |
+          overlay
+          br_netfilter
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Load required kernel modules
+      ansible.builtin.modprobe:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - overlay
+        - br_netfilter
+
+    - name: Configure Kubernetes networking sysctls
+      ansible.builtin.copy:
+        dest: /etc/sysctl.d/99-k0s.conf
+        content: |
+          net.bridge.bridge-nf-call-iptables = 1
+          net.bridge.bridge-nf-call-ip6tables = 1
+          net.ipv4.ip_forward = 1
+        owner: root
+        group: root
+        mode: "0644"
+      register: k0s_sysctl_config
+
+    - name: Apply networking sysctls
+      ansible.builtin.command: sysctl --system
+      when: k0s_sysctl_config.changed
+      changed_when: true
+
+    - name: Disable active swap
+      ansible.builtin.command: swapoff -a
+      when: ansible_swaptotal_mb | int > 0
+      changed_when: true
+
+    - name: Disable swap entries in fstab
+      ansible.builtin.replace:
+        path: /etc/fstab
+        regexp: '^(\s*[^#\n]\S*\s+\S*\s+swap\s+.*)$'
+        replace: '# disabled for k0s: \1'
+
+    - name: Download pinned and checksum-verified k0s binary
+      ansible.builtin.get_url:
+        url: "https://github.com/k0sproject/k0s/releases/download/{{ k0s_version | replace('+', '%2B') }}/k0s-{{ k0s_version }}-amd64"
+        dest: /usr/local/bin/k0s
+        checksum: "sha256:{{ k0s_binary_sha256_amd64 }}"
+        owner: root
+        group: root
+        mode: "0755"

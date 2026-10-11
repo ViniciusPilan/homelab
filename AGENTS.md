@@ -10,24 +10,24 @@ Make small, correct, maintainable changes that satisfy the requested task.
 │   ├── deploy-cluster-tool/        # Add cluster tools using the Argo CD and Helm conventions
 │   └── shell-script-patterns/      # Shell script conventions for this repository
 │
-├── ansible-playbooks/              # Playbooks for configuring hosts
-│                                   #  (Docker installation, Kubernetes node preparation)
+├── ansible-playbooks/              # Playbooks for configuring hosts and installing k0s
 │
 ├── pki/                            # Certificate authority configuration and documentation
 │   ├── root-ca/                    # Root CA configuration and usage notes
 │   └── intermediate-ca/            # Intermediate CA configuration and usage notes
 │
-├── scripts/                        # Shell scripts for VM, cluster setup, and maintenance
-│   └── dev/                        # Development-specific cluster setup scripts
+├── scripts/                        # Scripts for VM, cluster setup, and maintenance
+│   └── dev/                        # Development cluster setup scripts
 │
 ├── systems/                        # Per-system configuration and deployment files
 │   ├── k8s-cluster/                # Kubernetes cluster configuration
-│   │   ├── provisioning/           # Cluster provisioning inputs and scripts
-│   │   │   ├── dev/                # Development cluster configuration and initialization
-│   │   │   └── iac/                # Per-environment OpenTofu VM configurations
+│   │   ├── provisioning/           # Cluster provisioning documentation and configuration
+│   │   │   ├── dev/                # Development cluster config and initialization script
+│   │   │   └── iac/                # Central OpenTofu config for VMs on Ajax and Heitor
+│   │   │       └── ansible/        # Generated node inventory and k0s cluster config
 │   │   └── tools/                  # Cluster add-on configuration (Helm values and Argo CD apps)
 │   │       ├── argo/               # Argo CD configuration and application definitions
-│   │       └── <tool>/             # Individual tools, such as Cilium, Istio, and Grafana
+│   │       └── <tool>/             # Individual add-on configuration, such as Cilium and Grafana
 │   │
 │   └── tools-server/               # Tools server configuration
 │       ├── apps/                   # Application deployment configuration (Docker Compose)

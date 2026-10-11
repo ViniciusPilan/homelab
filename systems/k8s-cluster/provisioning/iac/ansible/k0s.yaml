@@ -1,0 +1,16 @@
+apiVersion: k0s.k0sproject.io/v1beta1
+kind: ClusterConfig
+metadata:
+  name: homelab
+spec:
+  api:
+    # Bootstrap controller address; move this behind a stable TCP load balancer
+    # before adding a third controller for control-plane HA.
+    externalAddress: 192.168.12.21
+    sans:
+      - 192.168.12.21
+  network:
+    # Cilium is installed separately. Do not let k0s install Kube-router/Calico.
+    provider: custom
+    podCIDR: 10.244.0.0/16
+    serviceCIDR: 10.96.0.0/12

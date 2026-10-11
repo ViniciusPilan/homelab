@@ -7,6 +7,11 @@ locals {
     
 }
 
+provider "proxmox" {
+    endpoint = local.proxmox_endpoint
+    insecure = true
+}
+
 
 module "ansible_inventory" {
     source = "../../../tf-modules/ansible-inventory"
