@@ -1,6 +1,9 @@
 ---
 - name: Bootstrap the first k0s controller and create join tokens
-  hosts: bootstrap_controller
+  # The OpenTofu inventory puts both controllers in [controlplane]. The first
+  # controller in that group is controlplane01 (192.168.12.21) in the current
+  # VM configuration and is the cluster's bootstrap controller.
+  hosts: "{{ groups['controlplane'][0] }}"
   become: true
   gather_facts: false
   vars:
@@ -21,7 +24,7 @@
         owner: root
         group: root
         mode: "0600"
-        src: ../systems/k8s-cluster/provisioning/ansible/k0s.yaml
+        src: ../systems/k8s-cluster/provisioning/iac/ansible/k0s.yaml
 
     - name: Install and start the first controller
       ansible.builtin.command:
@@ -83,7 +86,7 @@
   become: true
   gather_facts: false
   vars:
-    k0s_bootstrap_host: "{{ groups['bootstrap_controller'][0] }}"
+    k0s_bootstrap_host: "{{ groups['controlplane'][0] }}"
     k0s_config_path: /etc/k0s/k0s.yaml
   tasks:
     - name: Create k0s configuration directory
@@ -97,7 +100,7 @@
 
     - name: Copy shared k0s configuration to the additional controller
       ansible.builtin.copy:
-        src: ../systems/k8s-cluster/provisioning/ansible/k0s.yaml
+        src: ../systems/k8s-cluster/provisioning/iac/ansible/k0s.yaml
         dest: "{{ k0s_config_path }}"
         owner: root
         group: root
@@ -141,7 +144,7 @@
   become: true
   gather_facts: false
   vars:
-    k0s_bootstrap_host: "{{ groups['bootstrap_controller'][0] }}"
+    k0s_bootstrap_host: "{{ groups['controlplane'][0] }}"
   tasks:
     - name: Create k0s configuration directory
       ansible.builtin.file:

@@ -68,7 +68,7 @@ function main(){
     cd /tmp || exit
     
     setupProxMoxNode
-    # downloadImage
+    downloadImage
     configureVMTemplate
 }
 

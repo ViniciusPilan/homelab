@@ -14,7 +14,44 @@ The cluster API address is `192.168.12.21`. This is a single endpoint on the
 bootstrap controller, so this layout is **not control-plane highly available**.
 Two controllers also do not provide etcd quorum during a controller failure.
 For HA, add a third controller and provide a stable TCP load balancer/VIP for
-the Kubernetes API before changing the API endpoint in `ansible/k0s.yaml`.
+the Kubernetes API before changing the API endpoint in `iac/ansible/k0s.yaml`.
+
+## TL;DR: create the cluster
+
+From the repository root, provision the VMs, prepare them, and install k0s:
+
+```sh
+cd systems/k8s-cluster/provisioning/iac
+export TF_VAR_proxmox_api_token_ajax='terraform@pve!provider=<AJAX_SECRET>'
+export TF_VAR_proxmox_api_token_heitor='terraform@pve!provider=<HEITOR_SECRET>'
+tofu init
+tofu plan
+tofu apply
+cd ../../../..
+
+ansible-playbook \
+  -i systems/k8s-cluster/provisioning/iac/ansible/inventory.ini \
+  --private-key ~/.ssh/homelab_vms \
+  ansible-playbooks/prepare-k0s-nodes.yml
+
+ansible-playbook \
+  -i systems/k8s-cluster/provisioning/iac/ansible/inventory.ini \
+  --private-key ~/.ssh/homelab_vms \
+  ansible-playbooks/install-k0s-cluster.yml
+```
+
+Securely copy the admin kubeconfig from `k8s-controlplane01` (`sudo k0s
+kubeconfig admin`) to your workstation, then install Cilium and the other core
+tools:
+
+```sh
+export KUBECONFIG=/path/to/secure/k0s-kubeconfig
+(cd scripts && bash installCoreTools.sh)
+kubectl get nodes -o wide
+```
+
+See the sections below for prerequisites, network requirements, and operational
+details.
 
 ## 1. Check prerequisites and networking
 
@@ -84,39 +121,29 @@ ansible-playbook \
   ansible-playbooks/install-k0s-cluster.yml
 ```
 
-It configures the first Heitor VM as the bootstrap controller, joins the Ajax
-controller, then joins both workers. Join tokens are generated during the run
+It bootstraps the first host in the generated `[controlplane]` inventory group
+(`k8s-controlplane01` at `192.168.12.21` in the current OpenTofu configuration),
+joins the other controller, then joins both workers. It reads the shared
+configuration from `provisioning/iac/ansible/k0s.yaml`. Join tokens are generated during the run
 and written with root-only permissions under `/etc/k0s/` on joining nodes.
 They are not printed in Ansible output. Keep Ansible output and controller
 access restricted.
 
-## 5. Install Cilium, then verify the cluster
+## 5. Install the core tools, then verify the cluster
 
 k0s is configured with `network.provider: custom`, so it does not install its
-built-in CNI. Install Cilium first using the dedicated script after setting
-`KUBECONFIG` to the administrator kubeconfig:
+built-in CNI. Set `KUBECONFIG` to the administrator kubeconfig, then run the
+core tools script from the `scripts` directory. It installs Cilium along with
+Kyverno, Istio, and Argo CD, then applies the Argo CD root applications:
 
 ```sh
 export KUBECONFIG=/path/to/secure/k0s-kubeconfig
-bash scripts/installCilium.sh
+(cd scripts && bash installCoreTools.sh)
 ```
 
-After Cilium is healthy, bootstrap Argo CD and its root application:
-
-```sh
-helm repo add argo https://argoproj.github.io/argo-helm
-helm repo update argo
-helm upgrade --install argocd argo/argo-cd \
-  --version 10.9.2 \
-  --namespace argocd --create-namespace \
-  --values systems/k8s-cluster/tools/argo/values.yaml --wait
-kubectl apply -f systems/k8s-cluster/tools/argo/argo-applications.yaml
-```
-
-Run these steps after the configuration has been committed and pushed to the
-branch referenced by Argo CD. The older `scripts/installCoreTools.sh` also
-installs Kyverno and Istio directly; use it only if you intend that full
-installation flow.
+The script requires `kubectl` and Helm to be installed and configured for this
+cluster. Ensure the configuration is committed and pushed to the branch
+referenced by Argo CD before applying its root applications.
 
 Get an admin kubeconfig on the controller with `sudo k0s kubeconfig admin` and
 copy it securely to the admin workstation. Verify:
