@@ -6,7 +6,7 @@ locals {
     proxmox_ssh_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ2lNdBomYBZ40nd/HgUFpG1qFyR5h2bWZM0rk3Cz9YB Key pair used to connect via SSH the Homelab VMs."
     proxmox_ssh_username   = "ubuntu"
 
-    vm_cpu_cores    = 3 
+    vm_cpu_cores    = 3
     vm_memory_mb    = 3072
     vm_disk_size_gb = 64
     vm_gateway      = "192.168.12.1"
@@ -19,7 +19,7 @@ locals {
     proxmox_ssh_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ2lNdBomYBZ40nd/HgUFpG1qFyR5h2bWZM0rk3Cz9YB Key pair used to connect via SSH the Homelab VMs."
     proxmox_ssh_username   = "ubuntu"
 
-    vm_cpu_cores    = 2 
+    vm_cpu_cores    = 2
     vm_memory_mb    = 3072
     vm_disk_size_gb = 18
     vm_gateway      = "192.168.12.1"
@@ -28,9 +28,40 @@ locals {
 
 
 module "ansible_inventory" {
-  source = "../../../../../tf-modules/ansible-inventory"
+  source = "../../../../tf-modules/ansible-inventory"
 
-
+  vms_groups = [
+    {
+      name = "controlplane"
+      vms = [
+        {
+          name     = module.controlplane01.vm.name
+          ip       = module.controlplane01.vm.ipv4
+          ssh_user = module.controlplane01.vm.ssh_user
+        },
+        {
+          name     = module.controlplane02.vm.name
+          ip       = module.controlplane02.vm.ipv4
+          ssh_user = module.controlplane02.vm.ssh_user
+        }
+      ]
+    },
+    {
+      name = "workers"
+      vms = [
+        {
+          name     = module.worker01.vm.name
+          ip       = module.worker01.vm.ipv4
+          ssh_user = module.worker01.vm.ssh_user
+        },
+        {
+          name     = module.worker02.vm.name
+          ip       = module.worker02.vm.ipv4
+          ssh_user = module.worker02.vm.ssh_user
+        }
+      ]
+    }
+  ]
 }
 
 
@@ -44,8 +75,8 @@ module "controlplane01" {
   ssh_public_key = local.heitor.proxmox_ssh_public_key
   ssh_username   = local.heitor.proxmox_ssh_username
 
-  vm_full_name    = "k8s-controlplane01"
-  vm_ip_cidr      = "192.168.12.21/24"
+  vm_full_name = "k8s-controlplane01"
+  vm_ip_cidr   = "192.168.12.21/24"
 
   vm_cpu_cores    = local.heitor.vm_cpu_cores
   vm_memory_mb    = local.heitor.vm_memory_mb
@@ -63,8 +94,8 @@ module "controlplane02" {
   ssh_public_key = local.ajax.proxmox_ssh_public_key
   ssh_username   = local.ajax.proxmox_ssh_username
 
-  vm_full_name    = "k8s-controlplane02"
-  vm_ip_cidr      = "192.168.12.31/24"
+  vm_full_name = "k8s-controlplane02"
+  vm_ip_cidr   = "192.168.12.31/24"
 
   vm_cpu_cores    = local.ajax.vm_cpu_cores
   vm_memory_mb    = local.ajax.vm_memory_mb
@@ -83,8 +114,8 @@ module "worker01" {
   ssh_public_key = local.heitor.proxmox_ssh_public_key
   ssh_username   = local.heitor.proxmox_ssh_username
 
-  vm_full_name    = "k8s-worker01"
-  vm_ip_cidr      = "192.168.12.22/24"
+  vm_full_name = "k8s-worker01"
+  vm_ip_cidr   = "192.168.12.22/24"
 
   vm_cpu_cores    = local.heitor.vm_cpu_cores
   vm_memory_mb    = local.heitor.vm_memory_mb
@@ -102,8 +133,8 @@ module "worker02" {
   ssh_public_key = local.ajax.proxmox_ssh_public_key
   ssh_username   = local.ajax.proxmox_ssh_username
 
-  vm_full_name    = "k8s-worker02"
-  vm_ip_cidr      = "192.168.12.32/24"
+  vm_full_name = "k8s-worker02"
+  vm_ip_cidr   = "192.168.12.32/24"
 
   vm_cpu_cores    = local.ajax.vm_cpu_cores
   vm_memory_mb    = local.ajax.vm_memory_mb

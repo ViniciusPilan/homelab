@@ -34,15 +34,12 @@ the Kubernetes API before changing the API endpoint in `ansible/k0s.yaml`.
 
 ## 2. Provision the VMs
 
-Review and apply the OpenTofu configuration on each Proxmox host:
+Review and apply the centralized OpenTofu configuration. It provisions the
+VMs on both Proxmox hosts and writes one inventory containing every cluster
+node:
 
 ```sh
-cd systems/k8s-cluster/provisioning/iac/heitor
-tofu init
-tofu plan
-tofu apply
-
-cd ../ajax
+cd systems/k8s-cluster/provisioning/iac
 tofu init
 tofu plan
 tofu apply
@@ -53,14 +50,13 @@ directories contain infrastructure details and must remain private.
 
 ## 3. Prepare all nodes
 
-Each Terraform configuration writes its inventory to that host's
-`ansible/inventory.ini`. Run Ansible with both generated inventory files so
-the `controlplane` and `workers` groups merge into the complete cluster:
+The centralized configuration writes the complete inventory to
+`systems/k8s-cluster/provisioning/iac/ansible/inventory.ini`. Use it for both
+node preparation and cluster installation:
 
 ```sh
 ansible-playbook \
-  -i systems/k8s-cluster/provisioning/iac/heitor/ansible/inventory.ini \
-  -i systems/k8s-cluster/provisioning/iac/ajax/ansible/inventory.ini \
+  -i systems/k8s-cluster/provisioning/iac/ansible/inventory.ini \
   --private-key ~/.ssh/homelab_vms \
   ansible-playbooks/prepare-k0s-nodes.yml
 ```
@@ -76,8 +72,7 @@ Run the cluster playbook from the repository root:
 
 ```sh
 ansible-playbook \
-  -i systems/k8s-cluster/provisioning/iac/heitor/ansible/inventory.ini \
-  -i systems/k8s-cluster/provisioning/iac/ajax/ansible/inventory.ini \
+  -i systems/k8s-cluster/provisioning/iac/ansible/inventory.ini \
   --private-key ~/.ssh/homelab_vms \
   ansible-playbooks/install-k0s-cluster.yml
 ```
