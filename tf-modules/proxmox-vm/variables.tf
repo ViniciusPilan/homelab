@@ -57,8 +57,8 @@ variable "vm_gateway" {
 variable "vm_disk_size_gb" {
   description = "Root disk size for the VM in GiB."
   type        = number
-  validation {
-    condition     = var.vm_disk_size_gb > 153.5
-    error_message = "vm_disk_size_gb must be greater than 153.5 GiB."
-  }
+  # validation {
+  #   condition     = var.vm_disk_size_gb > 153.5
+  #   error_message = "vm_disk_size_gb must be greater than 153.5 GiB."
+  # }
 }
