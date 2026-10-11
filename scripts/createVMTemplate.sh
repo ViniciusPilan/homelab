@@ -17,7 +17,7 @@ UBUNTU_IMAGE=resolute-server-cloudimg-amd64.img
 RESOURCES_CPU_CORES=2
 RESOURCES_CPU_SOCKETS=1
 RESOURCES_MEMORY_BYTES=3072
-RESOURCES_DISK_SIZE_GB=20
+RESOURCES_DISK_SIZE_GB=14.50
 
 
 function setupProxMoxNode() {
@@ -68,7 +68,7 @@ function main(){
     cd /tmp || exit
     
     setupProxMoxNode
-    downloadImage
+    # downloadImage
     configureVMTemplate
 }
 

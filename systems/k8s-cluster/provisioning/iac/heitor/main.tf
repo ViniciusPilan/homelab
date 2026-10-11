@@ -13,16 +13,6 @@ module "ansible_inventory" {
 
   vms_groups = [
     {
-      name = "bootstrap_controller"
-      vms = [
-        {
-          name     = module.controlplane01.vm.name
-          ip       = module.controlplane01.vm.ipv4
-          ssh_user = module.controlplane01.vm.ssh_user
-        }
-      ]
-    },
-    {
       name = "controlplane"
       vms = [
         {
@@ -58,8 +48,8 @@ module "controlplane01" {
 
   vm_full_name    = "k8s-controlplane01"
   vm_cpu_cores    = 2
-  vm_memory_mb    = 4096
-  vm_disk_size_gb = 154
+  vm_memory_mb    = 3072
+  vm_disk_size_gb = 18
   vm_ip_cidr      = "192.168.12.21/24"
   vm_gateway      = "192.168.12.1"
 }
@@ -76,8 +66,26 @@ module "worker01" {
 
   vm_full_name    = "k8s-worker01"
   vm_cpu_cores    = 2
-  vm_memory_mb    = 4096
-  vm_disk_size_gb = 154
+  vm_memory_mb    = 3072
+  vm_disk_size_gb = 120
+  vm_ip_cidr      = "192.168.12.22/24"
+  vm_gateway      = "192.168.12.1"
+}
+
+module "worker02" {
+  source = "../../../../../tf-modules/proxmox-vm"
+
+  proxmox_endpoint       = local.proxmox_endpoint
+  proxmox_node_name      = local.proxmox_node_name
+  proxmox_template_vm_id = local.proxmox_template_vm_id
+
+  ssh_public_key = local.proxmox_ssh_public_key
+  ssh_username   = local.proxmox_ssh_username
+
+  vm_full_name    = "k8s-worker01"
+  vm_cpu_cores    = 2
+  vm_memory_mb    = 3072
+  vm_disk_size_gb = 120
   vm_ip_cidr      = "192.168.12.22/24"
   vm_gateway      = "192.168.12.1"
 }
