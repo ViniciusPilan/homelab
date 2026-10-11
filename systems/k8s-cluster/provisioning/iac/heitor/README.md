@@ -1,8 +1,9 @@
 # Kubernetes VMs on Heitor
 
 This OpenTofu configuration clones VMs from the Proxmox template on the
-`heitor` node. It provisions the Kubernetes control plane and worker and writes
-their connection details to `ansible/inventory.ini` in separate groups.
+`heitor` node. It provisions `k8s-controlplane01` (`192.168.12.21`) and
+`k8s-worker01` (`192.168.12.22`) for the shared k0s cluster. Both use the
+`ubuntu` account and configured SSH key, with gateway `192.168.12.1`.
 
 Set the Proxmox API token before running OpenTofu:
 
@@ -13,33 +14,9 @@ tofu plan
 tofu apply
 ```
 
-The VMs use the `ubuntu` account and the configured SSH public key. Their
-addresses are `192.168.12.21` (control plane) and `192.168.12.22` (worker),
-with gateway `192.168.12.1`.
-
-## Prepare the Kubernetes nodes
-
-After the VMs are available and SSH access works, run this from the repository
-root to prepare both nodes with containerd and the kubeadm tools:
-
-```sh
-ansible-playbook \
-  -i ansible/inventory.ini \
-  --private-key ~/.ssh/homelab_vms \
-  ../../../../../ansible-playbooks/prepare-kubernetes-node.yml
-
-ansible-playbook \
-  -i ansible/inventory.ini \
-  --private-key ~/.ssh/homelab_vms \
-  ../../../../../ansible-playbooks/node-cleaner.yml
-```
-
-The playbook currently targets Ubuntu and defaults to Kubernetes `v1.37`.
-Override `kubernetes_minor_version` to match the cluster version you intend to
-bootstrap, for example `-e kubernetes_minor_version=v1.36`. It configures
-containerd to use systemd cgroups, enables the required kernel modules and
-networking sysctls, disables swap, and holds the Kubernetes packages to avoid
-unplanned upgrades. The cleaner removes optional Helm and Docker packages,
-services, repositories, and signing keys from the nodes; it preserves
-containerd and the QEMU guest agent. Cluster initialization and deployment of a
-pod network provider are separate steps.
+OpenTofu generates this host's Ansible inventory at `ansible/inventory.ini`.
+Pass it together with Ajax's generated inventory when running Ansible from the
+repository root. See the shared
+[k0s provisioning runbook](../../README.md) for all steps, including Ajax VMs,
+network prerequisites, Cilium, verification, and operations. Run `tofu apply`
+after VM address or name changes to regenerate this inventory.

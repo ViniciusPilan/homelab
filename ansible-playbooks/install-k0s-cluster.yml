@@ -1,0 +1,181 @@
+---
+- name: Bootstrap the first k0s controller and create join tokens
+  hosts: bootstrap_controller
+  become: true
+  gather_facts: false
+  vars:
+    k0s_config_path: /etc/k0s/k0s.yaml
+
+  tasks:
+    - name: Create k0s configuration directory
+      ansible.builtin.file:
+        path: /etc/k0s
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Install shared k0s cluster configuration
+      ansible.builtin.copy:
+        dest: "{{ k0s_config_path }}"
+        owner: root
+        group: root
+        mode: "0600"
+        src: ../systems/k8s-cluster/provisioning/ansible/k0s.yaml
+
+    - name: Install and start the first controller
+      ansible.builtin.command:
+        argv:
+          - /usr/local/bin/k0s
+          - install
+          - controller
+          - --config={{ k0s_config_path }}
+      args:
+        creates: /etc/systemd/system/k0scontroller.service
+
+    - name: Enable and start k0s controller service
+      ansible.builtin.systemd:
+        name: k0scontroller
+        enabled: true
+        state: started
+        daemon_reload: true
+
+    - name: Wait for the Kubernetes API
+      ansible.builtin.command: /usr/local/bin/k0s status
+      register: k0s_status
+      until: k0s_status.rc == 0
+      retries: 30
+      delay: 10
+      changed_when: false
+
+    - name: Create a controller join token
+      ansible.builtin.command:
+        argv:
+          - /usr/local/bin/k0s
+          - token
+          - create
+          - --role=controller
+          - --expiry=2h
+      register: k0s_controller_token
+      changed_when: false
+      no_log: true
+
+    - name: Create a worker join token
+      ansible.builtin.command:
+        argv:
+          - /usr/local/bin/k0s
+          - token
+          - create
+          - --role=worker
+          - --expiry=2h
+      register: k0s_worker_token
+      changed_when: false
+      no_log: true
+
+    - name: Store join tokens as run-scoped controller facts
+      ansible.builtin.set_fact:
+        k0s_controller_join_token: "{{ k0s_controller_token.stdout }}"
+        k0s_worker_join_token: "{{ k0s_worker_token.stdout }}"
+      no_log: true
+
+- name: Join the second k0s controller
+  hosts: controlplane
+  become: true
+  gather_facts: false
+  vars:
+    k0s_bootstrap_host: "{{ groups['bootstrap_controller'][0] }}"
+    k0s_config_path: /etc/k0s/k0s.yaml
+  tasks:
+    - name: Create k0s configuration directory
+      ansible.builtin.file:
+        path: /etc/k0s
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      when: inventory_hostname != k0s_bootstrap_host
+
+    - name: Copy shared k0s configuration to the additional controller
+      ansible.builtin.copy:
+        src: ../systems/k8s-cluster/provisioning/ansible/k0s.yaml
+        dest: "{{ k0s_config_path }}"
+        owner: root
+        group: root
+        mode: "0600"
+      when: inventory_hostname != k0s_bootstrap_host
+
+    - name: Write controller join token
+      ansible.builtin.copy:
+        content: "{{ hostvars[k0s_bootstrap_host].k0s_controller_join_token }}\n"
+        dest: /etc/k0s/controller-token
+        owner: root
+        group: root
+        mode: "0600"
+      when: inventory_hostname != k0s_bootstrap_host
+      no_log: true
+
+    - name: Install the additional controller with its join token
+      ansible.builtin.command:
+        argv:
+          - /usr/local/bin/k0s
+          - install
+          - controller
+          - --config={{ k0s_config_path }}
+          - --token-file=/etc/k0s/controller-token
+      args:
+        creates: /etc/systemd/system/k0scontroller.service
+      when: inventory_hostname != k0s_bootstrap_host
+      no_log: true
+      register: k0s_controller_install
+
+    - name: Start the additional controller service
+      ansible.builtin.systemd:
+        name: k0scontroller
+        enabled: true
+        state: started
+        daemon_reload: true
+      when: inventory_hostname != k0s_bootstrap_host and k0s_controller_install is changed
+
+- name: Join k0s workers
+  hosts: workers
+  become: true
+  gather_facts: false
+  vars:
+    k0s_bootstrap_host: "{{ groups['bootstrap_controller'][0] }}"
+  tasks:
+    - name: Create k0s configuration directory
+      ansible.builtin.file:
+        path: /etc/k0s
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Write worker join token
+      ansible.builtin.copy:
+        content: "{{ hostvars[k0s_bootstrap_host].k0s_worker_join_token }}\n"
+        dest: /etc/k0s/worker-token
+        owner: root
+        group: root
+        mode: "0600"
+      no_log: true
+
+    - name: Install worker using a join token
+      ansible.builtin.command:
+        argv:
+          - /usr/local/bin/k0s
+          - install
+          - worker
+          - --token-file=/etc/k0s/worker-token
+      args:
+        creates: /etc/systemd/system/k0sworker.service
+      register: k0s_worker_install
+      no_log: true
+
+    - name: Start worker service
+      ansible.builtin.systemd:
+        name: k0sworker
+        enabled: true
+        state: started
+        daemon_reload: true
+      when: k0s_worker_install is changed

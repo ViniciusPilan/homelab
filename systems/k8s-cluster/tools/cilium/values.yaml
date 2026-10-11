@@ -6,4 +6,4 @@ image:
   pullPolicy: IfNotPresent
 
 cni:
-  exclusive: false
+  exclusive: true

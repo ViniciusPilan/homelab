@@ -13,6 +13,16 @@ module "ansible_inventory" {
 
   vms_groups = [
     {
+      name = "bootstrap_controller"
+      vms = [
+        {
+          name     = module.controlplane01.vm.name
+          ip       = module.controlplane01.vm.ipv4
+          ssh_user = module.controlplane01.vm.ssh_user
+        }
+      ]
+    },
+    {
       name = "controlplane"
       vms = [
         {
