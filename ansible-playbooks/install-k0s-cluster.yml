@@ -33,6 +33,7 @@
           - install
           - controller
           - --config={{ k0s_config_path }}
+          - --disable-components=metrics-server
       args:
         creates: /etc/systemd/system/k0scontroller.service
 
@@ -125,6 +126,7 @@
           - controller
           - --config={{ k0s_config_path }}
           - --token-file=/etc/k0s/controller-token
+          - --disable-components=metrics-server
       args:
         creates: /etc/systemd/system/k0scontroller.service
       when: inventory_hostname != k0s_bootstrap_host
