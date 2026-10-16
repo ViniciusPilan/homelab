@@ -177,6 +177,8 @@ function installIstio() {
 function main() {
     checkRequirements
 
+    bash labelNodes.sh
+
     installCilium
     installKyverno
     installIstio
