@@ -7,6 +7,7 @@
   vars:
     k0s_version: "v1.36.4+k0s.1"
     k0s_binary_sha256_amd64: "18c304d53cdd70095e99c6b859b269b4fef0bb84579d7e7185271a9135694a31"
+
   tasks:
     - name: Require Ubuntu on amd64
       ansible.builtin.assert:

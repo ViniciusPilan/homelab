@@ -6,9 +6,9 @@ locals {
     proxmox_ssh_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ2lNdBomYBZ40nd/HgUFpG1qFyR5h2bWZM0rk3Cz9YB Key pair used to connect via SSH the Homelab VMs."
     proxmox_ssh_username   = "ubuntu"
 
-    vm_cpu_cores    = 3
-    vm_memory_mb    = 3072
-    vm_disk_size_gb = 64
+    vm_cpu_cores    = 4
+    vm_memory_mb    = 4096
+    vm_disk_size_gb = 128
     vm_gateway      = "192.168.12.1"
   }
 
@@ -20,7 +20,7 @@ locals {
     proxmox_ssh_username   = "ubuntu"
 
     vm_cpu_cores    = 2
-    vm_memory_mb    = 3072
+    vm_memory_mb    = 6144
     vm_disk_size_gb = 18
     vm_gateway      = "192.168.12.1"
   }
@@ -38,11 +38,6 @@ module "ansible_inventory" {
           name     = module.controlplane01.vm.name
           ip       = module.controlplane01.vm.ipv4
           ssh_user = module.controlplane01.vm.ssh_user
-        },
-        {
-          name     = module.controlplane02.vm.name
-          ip       = module.controlplane02.vm.ipv4
-          ssh_user = module.controlplane02.vm.ssh_user
         }
       ]
     },
@@ -58,6 +53,11 @@ module "ansible_inventory" {
           name     = module.worker02.vm.name
           ip       = module.worker02.vm.ipv4
           ssh_user = module.worker02.vm.ssh_user
+        },
+        {
+          name     = module.worker03.vm.name
+          ip       = module.worker03.vm.ipv4
+          ssh_user = module.worker03.vm.ssh_user
         }
       ]
     }
@@ -66,29 +66,6 @@ module "ansible_inventory" {
 
 
 module "controlplane01" {
-  source = "../../../../tf-modules/proxmox-vm"
-
-  providers = {
-    proxmox = proxmox.heitor
-  }
-
-  proxmox_endpoint       = local.heitor.proxmox_endpoint
-  proxmox_node_name      = local.heitor.proxmox_node_name
-  proxmox_template_vm_id = local.heitor.proxmox_template_vm_id
-
-  ssh_public_key = local.heitor.proxmox_ssh_public_key
-  ssh_username   = local.heitor.proxmox_ssh_username
-
-  vm_full_name = "k8s-controlplane01"
-  vm_ip_cidr   = "192.168.12.21/24"
-
-  vm_cpu_cores    = local.heitor.vm_cpu_cores
-  vm_memory_mb    = local.heitor.vm_memory_mb
-  vm_disk_size_gb = local.heitor.vm_disk_size_gb
-  vm_gateway      = local.heitor.vm_gateway
-}
-
-module "controlplane02" {
   source = "../../../../tf-modules/proxmox-vm"
 
   providers = {
@@ -102,7 +79,7 @@ module "controlplane02" {
   ssh_public_key = local.ajax.proxmox_ssh_public_key
   ssh_username   = local.ajax.proxmox_ssh_username
 
-  vm_full_name = "k8s-controlplane02"
+  vm_full_name = "k8s-controlplane01"
   vm_ip_cidr   = "192.168.12.31/24"
 
   vm_cpu_cores    = local.ajax.vm_cpu_cores
@@ -110,6 +87,7 @@ module "controlplane02" {
   vm_disk_size_gb = local.ajax.vm_disk_size_gb
   vm_gateway      = local.ajax.vm_gateway
 }
+
 
 
 module "worker01" {
@@ -127,7 +105,7 @@ module "worker01" {
   ssh_username   = local.heitor.proxmox_ssh_username
 
   vm_full_name = "k8s-worker01"
-  vm_ip_cidr   = "192.168.12.22/24"
+  vm_ip_cidr   = "192.168.12.21/24"
 
   vm_cpu_cores    = local.heitor.vm_cpu_cores
   vm_memory_mb    = local.heitor.vm_memory_mb
@@ -139,21 +117,44 @@ module "worker02" {
   source = "../../../../tf-modules/proxmox-vm"
 
   providers = {
-    proxmox = proxmox.ajax
+    proxmox = proxmox.heitor
   }
 
-  proxmox_endpoint       = local.ajax.proxmox_endpoint
-  proxmox_node_name      = local.ajax.proxmox_node_name
-  proxmox_template_vm_id = local.ajax.proxmox_template_vm_id
+  proxmox_endpoint       = local.heitor.proxmox_endpoint
+  proxmox_node_name      = local.heitor.proxmox_node_name
+  proxmox_template_vm_id = local.heitor.proxmox_template_vm_id
 
-  ssh_public_key = local.ajax.proxmox_ssh_public_key
-  ssh_username   = local.ajax.proxmox_ssh_username
+  ssh_public_key = local.heitor.proxmox_ssh_public_key
+  ssh_username   = local.heitor.proxmox_ssh_username
 
   vm_full_name = "k8s-worker02"
-  vm_ip_cidr   = "192.168.12.32/24"
+  vm_ip_cidr   = "192.168.12.22/24"
 
-  vm_cpu_cores    = local.ajax.vm_cpu_cores
-  vm_memory_mb    = local.ajax.vm_memory_mb
-  vm_disk_size_gb = local.ajax.vm_disk_size_gb
-  vm_gateway      = local.ajax.vm_gateway
+  vm_cpu_cores    = local.heitor.vm_cpu_cores
+  vm_memory_mb    = local.heitor.vm_memory_mb
+  vm_disk_size_gb = local.heitor.vm_disk_size_gb
+  vm_gateway      = local.heitor.vm_gateway
+}
+
+module "worker03" {
+  source = "../../../../tf-modules/proxmox-vm"
+
+  providers = {
+    proxmox = proxmox.heitor
+  }
+
+  proxmox_endpoint       = local.heitor.proxmox_endpoint
+  proxmox_node_name      = local.heitor.proxmox_node_name
+  proxmox_template_vm_id = local.heitor.proxmox_template_vm_id
+
+  ssh_public_key = local.heitor.proxmox_ssh_public_key
+  ssh_username   = local.heitor.proxmox_ssh_username
+
+  vm_full_name = "k8s-worker03"
+  vm_ip_cidr   = "192.168.12.23/24"
+
+  vm_cpu_cores    = local.heitor.vm_cpu_cores
+  vm_memory_mb    = local.heitor.vm_memory_mb
+  vm_disk_size_gb = local.heitor.vm_disk_size_gb
+  vm_gateway      = local.heitor.vm_gateway
 }

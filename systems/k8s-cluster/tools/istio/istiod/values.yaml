@@ -23,8 +23,6 @@ tolerations: []
 cpu:
   targetAverageUtilization: 80
 
-nodeSelector: {}
-
 topologySpreadConstraints: []
 
 # Whether to use an existing CNI installation
@@ -180,9 +178,6 @@ global:
 
     # Topology Spread Constraints for the waypoint proxy.
     topologySpreadConstraints: []
-
-    # Node labels for the waypoint proxy.
-    nodeSelector: {}
 
     # Tolerations for the waypoint proxy.
     tolerations: []

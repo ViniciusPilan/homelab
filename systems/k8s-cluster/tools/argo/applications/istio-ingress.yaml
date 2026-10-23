@@ -23,7 +23,7 @@ spec:
           - $values/systems/k8s-cluster/tools/istio/gateway/values.yaml
 
     - repoURL: https://github.com/ViniciusPilan/homelab.git
-      targetRevision: main
+      targetRevision: k8s-cluster-new-structure
       ref: values
 
   syncPolicy:

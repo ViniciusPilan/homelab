@@ -14,11 +14,15 @@
 
 
 # How to run:
-# $ cd cluster-provisioning/scripts
+# $ bash scripts/installCoreTools.sh (from the repository root)
 # $ bash installCoreTools.sh
 
 
-TOOLS_DIR="../systems/k8s-cluster/tools"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+TOOLS_DIR="${REPO_ROOT}/systems/k8s-cluster/tools"
+INTERMEDIATE_CA_CERT="${REPO_ROOT}/pki/intermediate-ca/certs/intermediate-ca.cert.pem"
+INTERMEDIATE_CA_KEY="${REPO_ROOT}/pki/intermediate-ca/private/intermediate-ca.key.pem"
 
 
 function checkInstalledBinary() {
@@ -50,11 +54,8 @@ function checkDockerIsRunning() {
 function checkRequirements() {
     echo "INFO: Checking the requirements"
 
-    # checkInstalledBinary "docker"
     checkInstalledBinary "kubectl"
     checkInstalledBinary "helm"
-
-    # checkDockerIsRunning
 
     echo "INFO: All requirements are satisfied."
 }
@@ -85,10 +86,10 @@ function installArgo() {
     helm repo add argo https://argoproj.github.io/argo-helm
 
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install argocd argo/argo-cd --values=$TOOLS_DIR/argo/values.yaml --namespace=argocd --create-namespace=true --wait --version 10.9.2
+    helm install argocd argo/argo-cd --values="${TOOLS_DIR}/argo/values.yaml" --namespace=argocd --create-namespace=true --wait --version 10.9.2
 
     echo "Step 03: create argo applications to manage all repository applications"
-    kubectl apply -f $TOOLS_DIR/argo/argo-applications.yaml
+    kubectl apply -f "${TOOLS_DIR}/argo/argo-applications.yaml"
 
     echo "Step 04: access ArgoCD"
     echo " - login: admin"
@@ -105,10 +106,10 @@ function installKyverno() {
     helm repo update
 
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install kyverno kyverno/kyverno -n kyverno --create-namespace=true --wait --values=$TOOLS_DIR/kyverno/values.yaml --version 3.9.1
+    helm install kyverno kyverno/kyverno -n kyverno --create-namespace=true --wait --values="${TOOLS_DIR}/kyverno/values.yaml" --version 3.9.1
 
     echo "Step 03: apply policies"
-    kubectl apply -f $TOOLS_DIR/kyverno/policies
+    kubectl apply -f "${TOOLS_DIR}/kyverno/policies"
 }
 
 
@@ -119,12 +120,15 @@ function installCertManager() {
     helm repo add jetstack https://charts.jetstack.io
     
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install cert-manager jetstack/cert-manager --version v1.21.2 --wait --create-namespace=true -n cert-manager --values=$TOOLS_DIR/certmanager/values.yaml
+    helm install cert-manager jetstack/cert-manager --version v1.21.2 --wait --create-namespace=true -n cert-manager --values="${TOOLS_DIR}/certmanager/values.yaml"
 }
 
 
 function createIntermediateCASecret() {
-    kubectl create secret tls ca-ingress-tls-secret --cert=../../ca-files/intermediate-ca/certs/intermediate-ca.cert.pem --key=../../homelab/ca-files/intermediate-ca/private/intermediate-ca.key.pem -n cert-manager
+    kubectl create secret tls ca-ingress-tls-secret \
+        --cert="${INTERMEDIATE_CA_CERT}" \
+        --key="${INTERMEDIATE_CA_KEY}" \
+        -n cert-manager
 }
 
 
@@ -135,10 +139,10 @@ function installIstioBase() {
     helm repo add istio https://istio-release.storage.googleapis.com/charts
     
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install istio-base istio/base --version 1.30.1 --wait --create-namespace=true -n istio-system --values=$TOOLS_DIR/istio/base/values.yaml
+    helm install istio-base istio/base --version 1.30.1 --wait --create-namespace=true -n istio-system --values="${TOOLS_DIR}/istio/base/values.yaml"
 
     echo "Step 03: install Helm release and wait all be ready to proceed"
-    helm install istio-cni istio/cni --version 1.30.1 --wait --create-namespace=true -n istio-system --values=$TOOLS_DIR/istio/cni/values.yaml
+    helm install istio-cni istio/cni --version 1.30.1 --wait --create-namespace=true -n istio-system --values="${TOOLS_DIR}/istio/cni/values.yaml"
 }
 
 
@@ -149,7 +153,7 @@ function installIstiod() {
     helm repo add istio https://istio-release.storage.googleapis.com/charts
     
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install istiod istio/istiod --version 1.30.1 --wait --create-namespace=true -n istio-system --values=$TOOLS_DIR/istio/istiod/values.yaml
+    helm install istiod istio/istiod --version 1.30.1 --wait --create-namespace=true -n istio-system --values="${TOOLS_DIR}/istio/istiod/values.yaml"
 }
 
 
@@ -161,7 +165,7 @@ function installIstioGateway() {
     helm repo add istio https://istio-release.storage.googleapis.com/charts
     
     echo "Step 02: install Helm release and wait all be ready to proceed"
-    helm install istio-ingress istio/gateway --version 1.30.1 --wait --create-namespace=true -n istio-system --values=$TOOLS_DIR/istio/gateway/values.yaml
+    helm install istio-ingress istio/gateway --version 1.30.1 --wait --create-namespace=true -n istio-system --values="${TOOLS_DIR}/istio/gateway/values.yaml"
 }
 
 
@@ -177,13 +181,9 @@ function installIstio() {
 function main() {
     checkRequirements
 
-    bash labelNodes.sh
-
     installCilium
     installKyverno
     installIstio
-    # installCertManager
-    # createIntermediateCASecret
     installArgo
 }
 

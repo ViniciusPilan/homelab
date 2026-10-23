@@ -1,63 +1,109 @@
 # Repository Engineering Guidelines
 
-## Objective
-Make small, correct, maintainable changes that satisfy the requested task.
+## Purpose
 
-## Directory structure
-```sh
+Make small, correct, maintainable changes that fit this homelab repository.
+Read the relevant configuration and documentation before editing, and preserve
+the existing deployment architecture unless the task asks to change it.
+
+## Repository layout
+
+```text
 .
-├── .agents/skills/                 # Repository-specific agent skills and workflows
-│   ├── deploy-cluster-tool/        # Add cluster tools using the Argo CD and Helm conventions
-│   └── shell-script-patterns/      # Shell script conventions for this repository
-│
-├── ansible-playbooks/              # Playbooks for configuring hosts and installing k0s
-│
-├── pki/                            # Certificate authority configuration and documentation
-│   ├── root-ca/                    # Root CA configuration and usage notes
-│   └── intermediate-ca/            # Intermediate CA configuration and usage notes
-│
-├── scripts/                        # Scripts for VM, cluster setup, and maintenance
-│   └── dev/                        # Development cluster setup scripts
-│
-├── systems/                        # Per-system configuration and deployment files
-│   ├── k8s-cluster/                # Kubernetes cluster configuration
-│   │   ├── provisioning/           # Cluster provisioning documentation and configuration
-│   │   │   ├── dev/                # Development cluster config and initialization script
-│   │   │   └── iac/                # Central OpenTofu config for VMs on Ajax and Heitor
-│   │   │       └── ansible/        # Generated node inventory and k0s cluster config
-│   │   └── tools/                  # Cluster add-on configuration (Helm values and Argo CD apps)
-│   │       ├── argo/               # Argo CD configuration and application definitions
-│   │       └── <tool>/             # Individual add-on configuration, such as Cilium and Grafana
-│   │
-│   └── tools-server/               # Tools server configuration
-│       ├── apps/                   # Application deployment configuration (Docker Compose)
-│       └── iac/                    # OpenTofu server configuration and Ansible inventory
-│
-└── tf-modules/                     # Reusable OpenTofu modules
-    ├── ansible-inventory/          # Generates Ansible inventories from host details
-    └── proxmox-vm/                 # Provisions VMs on Proxmox
+├── .agents/skills/                 # Repository workflows and conventions
+├── ansible-playbooks/              # Host preparation and k0s installation
+├── pki/                             # Root and intermediate CA configuration/docs
+├── scripts/                         # Cluster and host administration scripts
+├── systems/
+│   ├── k8s-cluster/
+│   │   ├── provisioning/            # Dev setup and Proxmox OpenTofu config
+│   │   └── tools/                   # Argo CD apps, Helm values, policies
+│   └── tools-server/
+│       ├── apps/                    # Docker Compose configuration
+│       └── iac/                     # Tools server OpenTofu config and inventory
+└── tf-modules/                      # Reusable VM and Ansible inventory modules
 ```
 
-## Before changing code
-1. Before make any change, first identify if a skill for that exists in the repository skills directory
-2. Read the relevant source files and existing documentation.
-3. Identify the project's architecture, conventions, and dependencies.
-4. Create an implementation plan for non-trivial tasks.
+The Kubernetes cluster uses k0s on Proxmox VMs. Cluster add-ons are declared
+as Argo CD Applications in `systems/k8s-cluster/tools/argo/applications/`,
+with tool-specific Helm values and documentation under `systems/k8s-cluster/tools/`.
+The `dev/` provisioning directory contains development-cluster configuration;
+`pro/` contains the current production cluster's OpenTofu configuration.
 
-## Implementation
-1. Prefer minimal, focused changes.
-2. Follow existing patterns and naming conventions.
-3. Do not introduce dependencies without justification.
-4. Do not modify unrelated files.
-5. Never expose secrets or overwrite user data.
-6. Do not commit, push, deploy, or run destructive operations unless explicitly requested.
+## Before changing files
+
+1. Check `.agents/skills/` for a workflow that applies to the task and read its
+   `SKILL.md`. In particular, use `deploy-cluster-tool` for a new cluster tool
+   and `shell-script-patterns` when creating or revising repository scripts.
+2. Read the target files and their related README or runbook. For provisioning
+   or deployment changes, inspect the corresponding Argo CD, Helm, OpenTofu,
+   or Ansible configuration as applicable.
+3. For non-trivial work, outline a brief implementation plan before editing.
+
+## Implementation conventions
+
+- Keep changes focused; follow the existing file layout, naming, and formatting.
+- Do not add dependencies without a clear need.
+- Keep credentials and private key material out of source files, command output,
+  and documentation. Use the repository's documented environment-variable or
+  secret-management patterns for sensitive values.
+- Treat OpenTofu state, generated inventories, and existing user configuration
+  as user data. Do not replace or discard them as part of unrelated work.
+- Do not commit, push, deploy, or run destructive operations unless explicitly
+  requested.
+- Do not edit unrelated files.
+
+## Area-specific guidance
+
+### Kubernetes tools
+
+- Follow `.agents/skills/deploy-cluster-tool/SKILL.md` when adding a tool.
+- Keep each Argo CD Application in
+  `systems/k8s-cluster/tools/argo/applications/` and values/documentation in
+  that tool's directory. Match existing source, destination, release, and sync
+  conventions; check whether the app is active rather than assuming every
+  manifest in the directory is enabled.
+- Keep the version-specific Helm default-values reference at the top of each
+  chart values file, as required by the skill.
+- Check related policies and dependencies when changing an add-on's behavior.
+
+### Shell scripts
+
+- Follow `.agents/skills/shell-script-patterns/SKILL.md` for script work.
+- Scripts are generally Bash. Document purpose, requirements, and invocation
+  context when relevant; quote expansions and make meaningful failures explicit.
+- Do not add strict-mode flags mechanically; choose error handling that suits
+  the script and its side effects.
+
+### OpenTofu and Ansible
+
+- Reusable VM and inventory logic belongs in `tf-modules/`; per-system
+  configuration stays under the relevant `systems/*/iac` or provisioning path.
+- Keep VM inputs, provider configuration, and generated inventory relationships
+  consistent with the existing modules and runbooks.
+- Preserve pinned versions and integrity checks where used. Review plans and
+  understand resource effects before recommending or running an apply.
+- Ansible playbooks should retain clear host targeting, privilege requirements,
+  and idempotent tasks where practical. Never print secret values.
+
+### PKI and Compose
+
+- Keep CA usage and lifecycle guidance alongside the relevant files under
+  `pki/`; never add private keys or issued secret material to documentation.
+- Keep tools-server service definitions in its Compose configuration and follow
+  the existing deployment approach.
 
 ## Validation
-1. Identify the appropriate tests and static checks.
-2. Suggest to the user the validation plan for the change
+
+- Identify the most relevant static checks for the files changed (for example,
+  YAML parsing, `bash -n`, `tofu fmt -check`, or Ansible syntax checks).
+- Do not run tests or checks unless the user asks for verification. Instead,
+  report the appropriate checks for the user to run and any checks that were
+  actually performed.
+- Do not run `tofu apply`, deploy cluster resources, or alter live systems
+  unless explicitly requested.
 
 ## Completion report
-Summarize:
-- What changed and why.
-- Which tests and checks user should make.
-- Any known limitations or remaining risks.
+
+Summarize what changed and why, the checks performed or recommended, and any
+known limitations or remaining risks.
