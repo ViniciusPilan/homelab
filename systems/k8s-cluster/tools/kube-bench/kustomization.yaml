@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - job.yaml
+
+configMapGenerator:
+  - name: kube-bench-config
+    files:
+      - cfg/config.yaml
+  - name: kube-bench-profile
+    files:
+      - cfg/k0s-1.0/config.yaml
+      - cfg/k0s-1.0/controlplane.yaml
+      - cfg/k0s-1.0/etcd.yaml
+      - cfg/k0s-1.0/master.yaml
+      - cfg/k0s-1.0/node.yaml
+      - cfg/k0s-1.0/policies.yaml
