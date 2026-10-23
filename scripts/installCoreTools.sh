@@ -50,11 +50,8 @@ function checkDockerIsRunning() {
 function checkRequirements() {
     echo "INFO: Checking the requirements"
 
-    # checkInstalledBinary "docker"
     checkInstalledBinary "kubectl"
     checkInstalledBinary "helm"
-
-    # checkDockerIsRunning
 
     echo "INFO: All requirements are satisfied."
 }
@@ -177,13 +174,9 @@ function installIstio() {
 function main() {
     checkRequirements
 
-    bash labelNodes.sh
-
     installCilium
     installKyverno
     installIstio
-    # installCertManager
-    # createIntermediateCASecret
     installArgo
 }
 
