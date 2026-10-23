@@ -6,9 +6,9 @@ spec:
   api:
     # Bootstrap controller address; move this behind a stable TCP load balancer
     # before adding a third controller for control-plane HA.
-    externalAddress: 192.168.12.21
+    externalAddress: 192.168.12.31
     sans:
-      - 192.168.12.21
+      - 192.168.12.31
   network:
     # Cilium is installed separately. Do not let k0s install Kube-router/Calico.
     provider: custom
