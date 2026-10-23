@@ -64,3 +64,9 @@ Review the k0s backup and restore procedure before relying on the cluster, and
 back up application persistent data separately from the k0s controller state.
 Change the k0s version and its SHA-256 checksum together in
 `ansible-playbooks/prepare-k0s-nodes.yml` when upgrading.
+
+## To install CNI
+Run the following script:
+```sh
+$ bash scripts/installCoreTools.sh
+```
