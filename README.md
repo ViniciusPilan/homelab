@@ -23,3 +23,16 @@ The following tools are declared as active Argo CD applications in
 Mimir and cert-manager have application manifests in the same directory, but
 their manifests are currently commented out and are not active Argo CD
 applications.
+
+
+# TO DOs
+
+kube-bench
+
+Create storageclass provider
+Create Garage
+Create Prometheus
+Create Alloy
+Create Loki
+Create Grafana 
+Create Grafana MCP
