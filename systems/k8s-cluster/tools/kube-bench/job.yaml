@@ -10,10 +10,26 @@ spec:
         app: kube-bench
     spec:
       containers:
-        - command: ["kube-bench"]
+        - command:
+            - kube-bench
+            - run
+            - --config-dir
+            - /opt/kube-bench/cfg
+            - --benchmark
+            - k0s-1.0
           image: docker.io/aquasec/kube-bench:v0.16.0
           name: kube-bench
           volumeMounts:
+            - mountPath: /opt/kube-bench/cfg/config.yaml
+              name: kube-bench-config
+              subPath: config.yaml
+              readOnly: true
+            - mountPath: /opt/kube-bench/cfg/k0s-1.0
+              name: kube-bench-profile
+              readOnly: true
+            - mountPath: /var/lib/k0s
+              name: var-lib-k0s
+              readOnly: true
             - name: var-lib-cni
               mountPath: /var/lib/cni
               readOnly: true
@@ -51,8 +67,19 @@ spec:
               name: opt-cni-bin
               readOnly: true
       hostPID: true
+      # nodeSelector:
+      #   kubernetes.io/hostname: k8s-controlplane01
       restartPolicy: Never
       volumes:
+        - name: kube-bench-config
+          configMap:
+            name: kube-bench-config
+        - name: kube-bench-profile
+          configMap:
+            name: kube-bench-profile
+        - hostPath:
+            path: /var/lib/k0s
+          name: var-lib-k0s
         - name: var-lib-cni
           hostPath:
             path: /var/lib/cni
