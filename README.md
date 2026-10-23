@@ -28,6 +28,9 @@ applications.
 # TO DOs
 
 kube-bench
+kubesec?
+popeye?
+k8sgpt
 
 Create storageclass provider
 Create Garage
@@ -36,3 +39,9 @@ Create Alloy
 Create Loki
 Create Grafana 
 Create Grafana MCP
+
+Secret Operator
+
+Policy as a code
+- recs
+- non root (verificar se ja nao ta sendo validao no baseline do security admission controller)
