@@ -43,10 +43,6 @@ global:
     defaultDenyIngress: false
 
 
-  # -- Default node selector for all components
-  nodeSelector:
-    kubernetes.io/os: linux
-
   # -- Default tolerations for all components
   tolerations: []
 

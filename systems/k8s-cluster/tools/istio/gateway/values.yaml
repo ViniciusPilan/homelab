@@ -116,9 +116,6 @@ labels:
 # Annotations to apply to all resources
 annotations: {}
 
-nodeSelector:
-  tier: base
-
 tolerations: []
 
 topologySpreadConstraints: []
