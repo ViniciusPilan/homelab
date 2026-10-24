@@ -1,4 +1,4 @@
-"""Small JSON API for today's hourly and tomorrow's average temperature."""
+"""Small JSON API for today's hourly and tomorrow's daily weather."""
 
 from datetime import date
 import unicodedata
@@ -29,7 +29,7 @@ CITY_PRESETS = {
     },
 }
 
-app = FastAPI(title="Weather API", description="Temperature forecasts from Open-Meteo")
+app = FastAPI(title="Weather API", description="Temperature and precipitation forecasts from Open-Meteo")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -64,7 +64,7 @@ async def get_weather(
     longitude: float | None = Query(default=None, ge=-180, le=180),
     timezone: str = "auto",
 ) -> dict:
-    """Return today's hourly and tomorrow's mean temperatures by city or coordinates."""
+    """Return today's hourly forecast and tomorrow's daily summary by city or coordinates."""
     city_name = None
     if city is not None:
         if latitude is not None or longitude is not None:
@@ -89,8 +89,8 @@ async def get_weather(
     params = {
         "latitude": latitude,
         "longitude": longitude,
-        "hourly": "temperature_2m",
-        "daily": "temperature_2m_mean",
+        "hourly": "temperature_2m,precipitation_probability,precipitation",
+        "daily": "temperature_2m_mean,precipitation_probability_max,precipitation_sum",
         "forecast_days": 2,
         "timezone": timezone,
     }
@@ -108,23 +108,42 @@ async def get_weather(
         tomorrow = date.fromisoformat(forecast["daily"]["time"][1])
         hourly_times = forecast["hourly"]["time"]
         hourly_temperatures = forecast["hourly"]["temperature_2m"]
+        hourly_rain_probabilities = forecast["hourly"]["precipitation_probability"]
+        hourly_precipitation = forecast["hourly"]["precipitation"]
         tomorrow_mean = forecast["daily"]["temperature_2m_mean"][1]
+        tomorrow_rain_probability = forecast["daily"]["precipitation_probability_max"][1]
+        tomorrow_precipitation = forecast["daily"]["precipitation_sum"][1]
     except (KeyError, IndexError, TypeError, ValueError) as exc:
         raise HTTPException(status_code=502, detail="Open-Meteo returned an incomplete forecast") from exc
 
-    hourly = [
-        {"time": time, "temperature_c": temperature}
-        for time, temperature in zip(hourly_times, hourly_temperatures)
-        if time.startswith(today.isoformat())
-    ]
+    hourly = []
+    for time, temperature, rain_probability, precipitation in zip(
+        hourly_times,
+        hourly_temperatures,
+        hourly_rain_probabilities,
+        hourly_precipitation,
+    ):
+        if time.startswith(today.isoformat()):
+            hourly.append({
+                "time": time,
+                "temperature_c": temperature,
+                "precipitation_probability_percent": rain_probability,
+                "precipitation_mm": precipitation,
+            })
 
     result = {
         "latitude": forecast.get("latitude", latitude),
         "longitude": forecast.get("longitude", longitude),
         "timezone": forecast.get("timezone", timezone),
         "temperature_unit": forecast.get("hourly_units", {}).get("temperature_2m", "°C"),
+        "precipitation_unit": forecast.get("hourly_units", {}).get("precipitation", "mm"),
         "today": {"date": today.isoformat(), "hourly": hourly},
-        "tomorrow": {"date": tomorrow.isoformat(), "average_temperature": tomorrow_mean},
+        "tomorrow": {
+            "date": tomorrow.isoformat(),
+            "average_temperature": tomorrow_mean,
+            "maximum_precipitation_probability_percent": tomorrow_rain_probability,
+            "precipitation_sum_mm": tomorrow_precipitation,
+        },
     }
     if city_name is not None:
         result["city"] = city_name
