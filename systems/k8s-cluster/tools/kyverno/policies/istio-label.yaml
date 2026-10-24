@@ -33,7 +33,7 @@ spec:
           Object{
             metadata: Object.metadata{
               labels: {
-                "istio-injection": variables.istioNamespaces.exists(namespace, namespace == object.metadata.name) ? "enabled" : "disabled"
+                "istio-injection": variables.istioNamespaces.exists(ns, ns == object.metadata.name) ? "enabled" : "disabled"
               }
             }
           }
