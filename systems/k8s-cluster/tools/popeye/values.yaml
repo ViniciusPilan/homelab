@@ -1,4 +1,6 @@
 # Full chart values for Popeye version 0.3.0: https://github.com/adnoctem/charts/blob/popeye-0.3.0/charts/popeye/values.yaml
+automountServiceAccountToken: true
+
 popeye:
   args:
     # Avoid passing this flag as the container command; the image then starts
