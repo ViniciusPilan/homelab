@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="hourly.css" />
     <script src="config.js"></script>
     <script src="app.js" defer></script>
   </head>
@@ -31,12 +32,11 @@
           <div class="card-heading"><div><p class="eyebrow">TODAY · <span id="today-date">—</span></p><h2 id="city-name">Loading forecast…</h2></div><span class="sun-icon" aria-hidden="true">☼</span></div>
           <div class="current-reading"><strong id="current-temp">—</strong><div><span class="reading-caption">CURRENT FORECAST</span><span id="today-range" class="range-reading">High —° <i>·</i> Low —°</span></div></div>
           <div class="chart-wrap"><div class="chart-labels"><span id="chart-high">HIGH —°</span><span id="chart-low">LOW —°</span></div><svg id="temperature-chart" viewBox="0 0 720 190" role="img" aria-label="Today's hourly temperature chart" preserveAspectRatio="none"></svg><div id="chart-times" class="chart-times"></div></div>
-          <div id="hourly-list" class="hourly-list" aria-label="Hourly forecast"></div>
         </article>
 
         <aside class="side-column">
+          <article class="card hourly-forecast-card"><div class="hourly-panel-heading"><p class="eyebrow">HOUR BY HOUR</p><span id="hourly-date">TODAY</span></div><div id="hourly-list" class="hourly-forecast-list" aria-label="Hourly temperatures for today"></div></article>
           <article class="card tomorrow-card"><p class="eyebrow">TOMORROW · <span id="tomorrow-date">—</span></p><div class="tomorrow-main"><span class="cloud-icon" aria-hidden="true">☁</span><strong id="tomorrow-temp">—<small>°</small></strong></div><p class="tomorrow-label">MEAN TEMPERATURE</p><div class="tomorrow-rule"></div><p class="tomorrow-copy">A quick look at what<br />the day has in store.</p></article>
-          <article class="card detail-card"><p class="eyebrow">AT A GLANCE</p><div class="detail-row"><span>Current hour</span><strong id="feels-like">—°</strong></div><div class="detail-row"><span>Forecast timezone</span><strong id="timezone">—</strong></div><div class="detail-row"><span>Coordinates</span><strong id="coordinates">—</strong></div></article>
           <div class="source-note"><span class="source-spark">✳</span><span>Forecast data by <strong>Open-Meteo</strong><br /><span id="updated-at">Connecting to your weather API…</span></span><button id="refresh-button" aria-label="Refresh forecast" title="Refresh forecast">↻</button></div>
         </aside>
       </section>

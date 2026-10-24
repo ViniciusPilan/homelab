@@ -40,10 +40,13 @@ function drawChart(points, timezone) {
   document.querySelector("#chart-high").textContent = `HIGH ${numberFormat.format(high)}°`;
   document.querySelector("#chart-low").textContent = `LOW ${numberFormat.format(low)}°`;
   document.querySelector("#today-range").innerHTML = `High ${numberFormat.format(high)}° <i>·</i> Low ${numberFormat.format(low)}°`;
-  const currentHour = localHour(timezone); const hours = points.slice(Math.max(0, currentHour - 1), Math.max(0, currentHour - 1) + 6);
-  document.querySelector("#hourly-list").innerHTML = hours.map((point) => {
+  const currentHour = localHour(timezone);
+  document.querySelector("#hourly-list").innerHTML = points.map((point) => {
+    const hour = Number(point.time.slice(11, 13));
     const time = new Intl.DateTimeFormat(undefined, { hour: "numeric", hour12: true, timeZone: "UTC" }).format(new Date(`${point.time}:00Z`));
-    return `<div class="hourly-item"><span>${time}</span><span class="mini-sun">☼</span><strong>${numberFormat.format(point.temperature_c)}°</strong></div>`;
+    const currentClass = hour === currentHour ? " is-current" : "";
+    const currentLabel = hour === currentHour ? '<span class="current-hour-label">NOW</span>' : "";
+    return `<div class="hourly-forecast-row${currentClass}"><span class="hourly-forecast-time">${time}${currentLabel}</span><strong>${numberFormat.format(point.temperature_c)}°</strong></div>`;
   }).join("");
 }
 
@@ -60,9 +63,7 @@ async function loadForecast() {
     document.querySelector("#tomorrow-date").textContent = formatDate(forecast.tomorrow.date);
     document.querySelector("#current-temp").textContent = `${numberFormat.format(current?.temperature_c ?? values[0])}°`;
     document.querySelector("#tomorrow-temp").innerHTML = `${numberFormat.format(forecast.tomorrow.average_temperature)}<small>°</small>`;
-    document.querySelector("#feels-like").textContent = `${numberFormat.format(current?.temperature_c ?? values[0])}°`;
-    document.querySelector("#timezone").textContent = forecast.timezone;
-    document.querySelector("#coordinates").textContent = `${Number(forecast.latitude).toFixed(2)}, ${Number(forecast.longitude).toFixed(2)}`;
+    document.querySelector("#hourly-date").textContent = formatDate(forecast.today.date).toUpperCase();
     document.querySelector("#updated-at").textContent = `Updated ${new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(new Date())}`;
     drawChart(hourly, forecast.timezone);
   } catch (error) {

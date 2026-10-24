@@ -1,0 +1,11 @@
+.hourly-forecast-card{padding:20px 17px 13px}
+.hourly-panel-heading{display:flex;align-items:center;justify-content:space-between;padding:0 6px 12px}
+.hourly-panel-heading>span{font-size:9px;font-weight:700;letter-spacing:.7px;color:#9aa59e}
+.hourly-forecast-list{max-height:260px;min-height:0;overflow-y:auto;scrollbar-color:#d6e0d8 transparent;scrollbar-width:thin}
+.hourly-forecast-row{display:flex;align-items:center;justify-content:space-between;min-height:37px;padding:0 10px;border-top:1px solid #edf0ed;border-radius:8px;color:#748078;font-size:12px}
+.hourly-forecast-row strong{font-size:13px;color:#3d4a42}
+.hourly-forecast-time{display:flex;align-items:center;gap:9px}
+.hourly-forecast-row.is-current{min-height:39px;margin:2px 0;background:#294f41;color:#fff;font-weight:700;box-shadow:0 4px 12px #294f4126}
+.hourly-forecast-row.is-current strong{color:#fff}
+.current-hour-label{padding:3px 6px;border-radius:5px;background:#ffffff25;color:#fff;font-size:8px;font-weight:700;letter-spacing:.7px}
+@media(max-width:760px){.side-column{display:flex}.hourly-forecast-card{grid-column:auto}}
