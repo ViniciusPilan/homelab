@@ -118,3 +118,12 @@ Example full response:
 
 The hourly and daily values are forecasts from Open-Meteo. The `temperature_2m_mean`
 field is the provider's daily mean aggregation.
+
+
+TO IMPROVE
+git ignore
+Dockerfile
+dia de amanha deve vir completo igual hj
+media do dia de hj e amanha (temp e chuva)
+botao pra switch entre hj e amanha na pagina
+painel de media deve ser igual para qualquer dia de ref (deve trazer as médias de hj e amanha) - ja o painel principal e a lista sempre de acordo com o dia de referencia.
