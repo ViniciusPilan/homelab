@@ -21,18 +21,10 @@ spec:
         resources:
           - namespaces
 
-  matchConditions:
-    - name: exclude-system-namespaces
-      expression: |
-        ![
-          "kube-system",
-          "kube-public",
-          "kube-node-lease",
-          "kyverno",
-          "istio-system",
-          "cert-manager",
-          "argocd"
-        ].exists(n, n == object.metadata.name)
+  variables:
+    - name: istioNamespaces
+      # Add namespace names here to enable Istio sidecar injection.
+      expression: '["monitoring", "app"]'
 
   mutations:
     - patchType: ApplyConfiguration
@@ -41,7 +33,7 @@ spec:
           Object{
             metadata: Object.metadata{
               labels: {
-                "istio-injection": "enabled"
+                "istio-injection": variables.istioNamespaces.exists(namespace, namespace == object.metadata.name) ? "enabled" : "disabled"
               }
             }
           }
