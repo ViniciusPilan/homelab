@@ -20,7 +20,7 @@ spec:
           - $values/systems/k8s-cluster/tools/popeye/values.yaml
 
     - repoURL: https://github.com/ViniciusPilan/homelab.git
-      targetRevision: deploy-popeye
+      targetRevision: main
       ref: values
 
   syncPolicy:
