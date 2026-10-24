@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#eef4f1" />
+    <title>Weather | Fieldnote</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Fieldnote weather home"><span class="brand-mark">✳</span> fieldnote<span class="brand-dot">.</span></a>
+        <div class="topbar-note"><span class="live-dot"></span> LOCAL WEATHER, MADE SIMPLE</div>
+      </header>
+
+      <section class="intro">
+        <div><p class="eyebrow">YOUR DAILY OUTLOOK</p><h1>A little more in tune<br />with the <em>weather.</em></h1></div>
+        <label class="city-picker"><span>FORECAST FOR</span><select id="city-select" aria-label="Choose a city"></select><span class="select-chevron">⌄</span></label>
+      </section>
+
+      <div id="notice" class="notice" role="status" hidden></div>
+
+      <section class="forecast-grid" aria-label="Temperature forecast">
+        <article class="card today-card">
+          <div class="card-heading"><div><p class="eyebrow">TODAY · <span id="today-date">—</span></p><h2 id="city-name">Loading forecast…</h2></div><span class="sun-icon" aria-hidden="true">☼</span></div>
+          <div class="current-reading"><strong id="current-temp">—</strong><div><span class="reading-caption">CURRENT FORECAST</span><span id="today-range" class="range-reading">High —° <i>·</i> Low —°</span></div></div>
+          <div class="chart-wrap"><div class="chart-labels"><span id="chart-high">HIGH —°</span><span id="chart-low">LOW —°</span></div><svg id="temperature-chart" viewBox="0 0 720 190" role="img" aria-label="Today's hourly temperature chart" preserveAspectRatio="none"></svg><div id="chart-times" class="chart-times"></div></div>
+          <div id="hourly-list" class="hourly-list" aria-label="Hourly forecast"></div>
+        </article>
+
+        <aside class="side-column">
+          <article class="card tomorrow-card"><p class="eyebrow">TOMORROW · <span id="tomorrow-date">—</span></p><div class="tomorrow-main"><span class="cloud-icon" aria-hidden="true">☁</span><strong id="tomorrow-temp">—<small>°</small></strong></div><p class="tomorrow-label">MEAN TEMPERATURE</p><div class="tomorrow-rule"></div><p class="tomorrow-copy">A quick look at what<br />the day has in store.</p></article>
+          <article class="card detail-card"><p class="eyebrow">AT A GLANCE</p><div class="detail-row"><span>Current hour</span><strong id="feels-like">—°</strong></div><div class="detail-row"><span>Forecast timezone</span><strong id="timezone">—</strong></div><div class="detail-row"><span>Coordinates</span><strong id="coordinates">—</strong></div></article>
+          <div class="source-note"><span class="source-spark">✳</span><span>Forecast data by <strong>Open-Meteo</strong><br /><span id="updated-at">Connecting to your weather API…</span></span><button id="refresh-button" aria-label="Refresh forecast" title="Refresh forecast">↻</button></div>
+        </aside>
+      </section>
+      <footer>Take the day as it comes. <span>FIELDNOTE WEATHER</span></footer>
+    </main>
+  </body>
+</html>
