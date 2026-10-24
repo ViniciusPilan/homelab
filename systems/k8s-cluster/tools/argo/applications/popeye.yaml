@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: popeye
+  namespace: argocd
+spec:
+  project: default
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: popeye
+
+  sources:
+    - repoURL: https://adnoctem.github.io/charts
+      chart: popeye
+      targetRevision: 0.3.0
+      helm:
+        releaseName: popeye
+        valueFiles:
+          - $values/systems/k8s-cluster/tools/popeye/values.yaml
+
+    - repoURL: https://github.com/ViniciusPilan/homelab.git
+      targetRevision: main
+      ref: values
+
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
