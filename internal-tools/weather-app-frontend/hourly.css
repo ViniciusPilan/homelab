@@ -1,11 +1,35 @@
 .hourly-forecast-card{padding:20px 17px 13px}
 .hourly-panel-heading{display:flex;align-items:center;justify-content:space-between;padding:0 6px 12px}
 .hourly-panel-heading>span{font-size:9px;font-weight:700;letter-spacing:.7px;color:#9aa59e}
+.hourly-column-labels{display:grid;grid-template-columns:minmax(65px,1fr) 68px 39px;padding:0 8px 5px;color:#a2aca6;font-size:8px;font-weight:700;letter-spacing:.8px}
+.hourly-column-labels span:nth-child(2){text-align:center}
+.hourly-column-labels span:last-child{text-align:right}
 .hourly-forecast-list{max-height:260px;min-height:0;overflow-y:auto;scrollbar-color:#d6e0d8 transparent;scrollbar-width:thin}
-.hourly-forecast-row{display:flex;align-items:center;justify-content:space-between;min-height:37px;padding:0 10px;border-top:1px solid #edf0ed;border-radius:8px;color:#748078;font-size:12px}
-.hourly-forecast-row strong{font-size:13px;color:#3d4a42}
+.hourly-forecast-row{display:grid;grid-template-columns:minmax(65px,1fr) 68px 39px;align-items:center;min-height:42px;padding:0 8px;border-top:1px solid #edf0ed;border-radius:8px;color:#748078;font-size:12px}
+.hourly-forecast-row strong{font-size:12px;color:#3d4a42}
 .hourly-forecast-time{display:flex;align-items:center;gap:9px}
+.hourly-rain{display:flex;flex-direction:column;align-items:center;gap:1px;color:#6c8b94}
+.hourly-rain strong{font-size:10px;color:inherit}
+.hourly-rain small{font-size:8px;color:#99a6a3}
+.hourly-forecast-row .hourly-temperature{justify-self:end;font-size:13px}
 .hourly-forecast-row.is-current{min-height:39px;margin:2px 0;background:#294f41;color:#fff;font-weight:700;box-shadow:0 4px 12px #294f4126}
 .hourly-forecast-row.is-current strong{color:#fff}
+.hourly-forecast-row.is-current .hourly-rain{color:#d0e2e4}
+.hourly-forecast-row.is-current .hourly-rain small{color:#bdd0ce}
 .current-hour-label{padding:3px 6px;border-radius:5px;background:#ffffff25;color:#fff;font-size:8px;font-weight:700;letter-spacing:.7px}
+.tomorrow-rain{display:flex;flex-direction:column;gap:7px;margin:13px 0 17px;color:#c4d2c9;font-size:11px}
+.tomorrow-rain span{display:flex;justify-content:space-between}
+.tomorrow-rain strong{color:#fff;font-weight:600}
+.precipitation-chart-panel{margin-top:12px;padding:17px 18px 12px;border:0;border-radius:14px;background:#fff}
+.precipitation-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.precipitation-heading>div{display:flex;flex-direction:column;gap:4px}
+.precipitation-heading .eyebrow{color:#668b9d}
+.precipitation-heading>div>span{color:#8b9da4;font-size:10px}
+.precipitation-chart-wrap{margin-top:7px}
+.precipitation-chart-wrap .chart-labels{color:#7a9ba9}
+#precipitation-high{color:#3789b1}
+#precipitation-chart{display:block;width:100%;height:166px;overflow:visible}
+.precipitation-line{fill:none;stroke:#4e9ec2;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+.precipitation-dot{fill:#fff;stroke:#3789b1;stroke-width:2.5}
+.precipitation-chart-panel .chart-times{color:#879da6}
 @media(max-width:760px){.side-column{display:flex}.hourly-forecast-card{grid-column:auto}}

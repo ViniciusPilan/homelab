@@ -14,7 +14,7 @@ function localHour(timezone) {
   return Number(new Intl.DateTimeFormat("en", { hour: "2-digit", hourCycle: "h23", timeZone: timezone }).format(new Date()));
 }
 
-function drawChart(points, timezone) {
+function drawChart(points, timezone, precipitationUnit) {
   const svg = document.querySelector("#temperature-chart");
   const chartTimes = document.querySelector("#chart-times");
   svg.replaceChildren(); chartTimes.replaceChildren();
@@ -46,8 +46,77 @@ function drawChart(points, timezone) {
     const time = new Intl.DateTimeFormat(undefined, { hour: "numeric", hour12: true, timeZone: "UTC" }).format(new Date(`${point.time}:00Z`));
     const currentClass = hour === currentHour ? " is-current" : "";
     const currentLabel = hour === currentHour ? '<span class="current-hour-label">NOW</span>' : "";
-    return `<div class="hourly-forecast-row${currentClass}"><span class="hourly-forecast-time">${time}${currentLabel}</span><strong>${numberFormat.format(point.temperature_c)}°</strong></div>`;
+    const probability = Number.isFinite(point.precipitation_probability_percent) ? `${numberFormat.format(point.precipitation_probability_percent)}%` : "—";
+    const precipitation = Number.isFinite(point.precipitation_mm) ? `${point.precipitation_mm.toFixed(1)} ${precipitationUnit}` : "—";
+    return `<div class="hourly-forecast-row${currentClass}"><span class="hourly-forecast-time">${time}${currentLabel}</span><span class="hourly-rain"><strong>${probability}</strong><small>${precipitation}</small></span><strong class="hourly-temperature">${numberFormat.format(point.temperature_c)}°</strong></div>`;
   }).join("");
+  drawPrecipitationChart(points);
+}
+
+function drawPrecipitationChart(points) {
+  const svg = document.querySelector("#precipitation-chart");
+  const times = document.querySelector("#precipitation-times");
+  svg.replaceChildren();
+  times.replaceChildren();
+
+  const probabilities = points.map((point) => point.precipitation_probability_percent);
+  const validValues = probabilities.filter(Number.isFinite);
+  const peak = validValues.length ? Math.max(...validValues) : null;
+  const low = validValues.length ? Math.min(...validValues) : null;
+  document.querySelector("#precipitation-high").textContent = peak === null ? "HIGH —%" : `HIGH ${numberFormat.format(peak)}%`;
+  document.querySelector("#precipitation-low").textContent = low === null ? "LOW —%" : `LOW ${numberFormat.format(low)}%`;
+  if (!points.length || !validValues.length) return;
+
+  const ns = "http://www.w3.org/2000/svg";
+  const spread = Math.max(peak - low, 4);
+  const min = Math.max(0, low - spread * 0.25);
+  const max = Math.min(100, peak + spread * 0.25);
+  const xFor = (index) => 12 + (index / Math.max(points.length - 1, 1)) * 696;
+  const yFor = (value) => 166 - ((value - min) / Math.max(max - min, 1)) * 136;
+
+  const coords = probabilities.map((value, index) => Number.isFinite(value) ? { x: xFor(index), y: yFor(value) } : null);
+  const segments = [];
+  let activeSegment = [];
+  coords.forEach((point) => {
+    if (point) activeSegment.push(point);
+    else if (activeSegment.length) { segments.push(activeSegment); activeSegment = []; }
+  });
+  if (activeSegment.length) segments.push(activeSegment);
+
+  const defs = document.createElementNS(ns, "defs");
+  const gradient = document.createElementNS(ns, "linearGradient");
+  gradient.id = "precipitation-fill";
+  gradient.setAttribute("x1", "0"); gradient.setAttribute("x2", "0");
+  gradient.setAttribute("y1", "0"); gradient.setAttribute("y2", "1");
+  [["0%", "0.28"], ["100%", "0"]].forEach(([offset, opacity]) => {
+    const stop = document.createElementNS(ns, "stop");
+    stop.setAttribute("offset", offset); stop.setAttribute("stop-color", "#4e9ec2"); stop.setAttribute("stop-opacity", opacity);
+    gradient.append(stop);
+  });
+  defs.append(gradient); svg.append(defs);
+
+  segments.forEach((segment) => {
+    const path = segment.map((point, index) => `${index ? "L" : "M"}${point.x},${point.y}`).join(" ");
+    if (segment.length > 1) {
+      const area = document.createElementNS(ns, "path");
+      area.setAttribute("d", `${path} L${segment.at(-1).x},190 L${segment[0].x},190 Z`);
+      area.setAttribute("fill", "url(#precipitation-fill)"); svg.append(area);
+    }
+    const line = document.createElementNS(ns, "path");
+    line.setAttribute("d", path); line.setAttribute("class", "precipitation-line"); svg.append(line);
+  });
+
+  [0, 6, 12, 18, 23].filter((index) => index < points.length).forEach((index) => {
+    const point = coords[index];
+    if (point) {
+      const dot = document.createElementNS(ns, "circle");
+      dot.setAttribute("cx", point.x); dot.setAttribute("cy", point.y); dot.setAttribute("r", "3.5");
+      dot.setAttribute("class", "precipitation-dot"); svg.append(dot);
+    }
+    const label = document.createElement("span");
+    label.textContent = new Intl.DateTimeFormat(undefined, { hour: "numeric", hour12: true, timeZone: "UTC" }).format(new Date(`${points[index].time}:00Z`));
+    times.append(label);
+  });
 }
 
 async function loadForecast() {
@@ -63,9 +132,11 @@ async function loadForecast() {
     document.querySelector("#tomorrow-date").textContent = formatDate(forecast.tomorrow.date);
     document.querySelector("#current-temp").textContent = `${numberFormat.format(current?.temperature_c ?? values[0])}°`;
     document.querySelector("#tomorrow-temp").innerHTML = `${numberFormat.format(forecast.tomorrow.average_temperature)}<small>°</small>`;
+    document.querySelector("#tomorrow-rain-probability").textContent = Number.isFinite(forecast.tomorrow.maximum_precipitation_probability_percent) ? `${numberFormat.format(forecast.tomorrow.maximum_precipitation_probability_percent)}%` : "—";
+    document.querySelector("#tomorrow-precipitation").textContent = Number.isFinite(forecast.tomorrow.precipitation_sum_mm) ? `${forecast.tomorrow.precipitation_sum_mm.toFixed(1)} ${forecast.precipitation_unit || "mm"}` : "—";
     document.querySelector("#hourly-date").textContent = formatDate(forecast.today.date).toUpperCase();
     document.querySelector("#updated-at").textContent = `Updated ${new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(new Date())}`;
-    drawChart(hourly, forecast.timezone);
+    drawChart(hourly, forecast.timezone, forecast.precipitation_unit || "mm");
   } catch (error) {
     showError(`Could not load the forecast. ${error.message}. Check that the weather API is running, then try again.`);
   } finally { refreshButton.disabled = false; }
