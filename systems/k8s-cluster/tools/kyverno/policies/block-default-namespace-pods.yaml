@@ -1,0 +1,19 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: block-default-namespace-pods
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: block-pods-in-default
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - default
+      validate:
+        message: "Pods are not allowed in the default namespace."
+        deny: {}
