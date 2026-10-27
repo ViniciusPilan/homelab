@@ -23,7 +23,7 @@ ENDPOINTS = {
 }
 
 
-def get_content_from_html_page(target_endpoint):
+def get_content_from_html_page(target_endpoint: str):
     """
     This function will reach a endpoint and get the html content.
     """
