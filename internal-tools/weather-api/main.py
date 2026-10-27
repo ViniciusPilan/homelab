@@ -4,6 +4,7 @@ from typing import Any
 import requests
 import uvicorn
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
@@ -17,6 +18,12 @@ CITIES_PRESET = {
 }
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET"],
+    allow_headers=["Accept"],
+)
 
 
 @app.get("/{city}")
