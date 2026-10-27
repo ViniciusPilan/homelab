@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta
 
 import requests
+import uvicorn
 from fastapi import FastAPI, HTTPException
 
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 REQUEST_TIMEOUT_SECONDS = 10
+PORT = 8000
 
 CITIES_PRESET = {
     "sao-manuel": (-22.73111, -48.57056),
@@ -65,3 +67,7 @@ def get_weather(city: str) -> dict[str, list[dict[str, str | float | int | None]
             )
 
     return {"today": forecast[today.isoformat()], "tomorrow": forecast[tomorrow.isoformat()]}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, port=PORT)
