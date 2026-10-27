@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException
 
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
+REQUEST_TIMEOUT_SECONDS = 10
 
 CITIES_PRESET = {
     "sao-manuel": (-22.73111, -48.57056),
@@ -16,7 +17,7 @@ app = FastAPI()
 
 
 @app.get("/{city}")
-def get_weather(city: str):
+def get_weather(city: str) -> dict[str, list[dict[str, str | float | int | None]]]:
     """Return hourly temperature and rainfall forecast for today and tomorrow."""
     if city not in CITIES_PRESET:
         raise HTTPException(status_code=404, detail="City not found")
@@ -32,7 +33,7 @@ def get_weather(city: str):
                 "forecast_days": 2,
                 "timezone": "auto",
             },
-            timeout=10,
+            timeout=REQUEST_TIMEOUT_SECONDS,
         )
         response.raise_for_status()
         hourly = response.json()["hourly"]
