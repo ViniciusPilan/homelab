@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6f2">
+  <title>Weather Outlook</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Weather Outlook home"><span class="brand-mark" aria-hidden="true">☼</span><span>fieldnotes<span class="brand-sub"> / weather</span></span></a>
+      <span class="live-label"><span class="live-dot"></span> LOCAL FORECAST</span>
+    </header>
+
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">A clearer look at the hours ahead</p>
+        <h1 id="page-title">Weather, at a glance<span class="title-period">.</span></h1>
+        <p class="intro-copy">Temperature and rainfall forecasts, hour by hour.</p>
+      </div>
+      <div class="controls">
+        <label class="control-label" for="city-select">LOCATION</label>
+        <select id="city-select" aria-label="Choose a city">
+          <option value="sao-manuel">São Manuel</option>
+          <option value="barretos">Barretos</option>
+          <option value="botucatu">Botucatu</option>
+        </select>
+      </div>
+    </section>
+
+    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+    <div id="loading" class="loading-state" role="status">Loading the forecast<span class="loading-dots">…</span></div>
+
+    <div id="forecast-content" hidden>
+      <nav class="day-switch" aria-label="Forecast day">
+        <button class="day-tab is-active" type="button" data-day="today" aria-pressed="true">Today</button>
+        <button class="day-tab" type="button" data-day="tomorrow" aria-pressed="false">Tomorrow</button>
+        <span class="updated-at" id="updated-at"></span>
+      </nav>
+
+      <section class="summary-grid" id="summary-grid" aria-label="Selected day summary"></section>
+
+      <section class="charts-grid" aria-label="Hourly weather charts">
+        <article class="panel chart-panel main-chart-panel">
+          <div class="panel-heading">
+            <div><p class="eyebrow" id="main-chart-kicker">TODAY · HOURLY</p><h2 id="main-chart-title">The day ahead</h2></div>
+            <span class="chart-badge">24 HOUR VIEW</span>
+          </div>
+          <div class="chart-legend"><span><i class="legend-line"></i> Temperature</span><span><i class="legend-bar"></i> Rainfall</span></div>
+          <div class="chart-wrap" id="main-chart"></div>
+          <p class="chart-note">Temperature in °C · rainfall in mm per hour</p>
+        </article>
+        <article class="panel chart-panel companion-panel">
+          <div class="panel-heading">
+            <div><p class="eyebrow" id="companion-kicker">TOMORROW · PREVIEW</p><h2 id="companion-title">A look ahead</h2></div>
+            <span class="compass-icon" aria-hidden="true">↗</span>
+          </div>
+          <div class="chart-legend"><span><i class="legend-line"></i> Temperature</span><span><i class="legend-bar"></i> Rainfall</span></div>
+          <div class="chart-wrap companion-chart" id="companion-chart"></div>
+          <div class="companion-summary" id="companion-summary"></div>
+        </article>
+      </section>
+
+      <section class="panel hourly-panel">
+        <div class="panel-heading table-heading">
+          <div><p class="eyebrow" id="table-kicker">TODAY · HOUR BY HOUR</p><h2>Hourly forecast</h2></div>
+          <span class="table-hint"><span class="current-dot"></span> Current hour</span>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th scope="col">LOCAL TIME</th><th scope="col">TEMPERATURE</th><th scope="col">RAIN CHANCE</th><th scope="col">RAINFALL</th></tr></thead>
+            <tbody id="hourly-rows"></tbody>
+          </table>
+        </div>
+      </section>
+      <footer class="footer"><span>Forecast provided by Open-Meteo</span><span id="footer-location"></span></footer>
+    </div>
+  </main>
+</body>
+</html>

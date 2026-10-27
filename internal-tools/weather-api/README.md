@@ -19,6 +19,11 @@ python3 main.py
 
 The API listens at `http://127.0.0.1:8000`.
 
+The API allows cross-origin browser `GET` requests so the static frontend can
+be served from a different origin. It returns public forecast data and does
+not use cookies or other credentials. When hosting the frontend remotely,
+configure its `?api=` URL with an API address that the browser can reach.
+
 ## Request and response
 
 Send a `GET` request to `/sao-manuel`, `/barretos`, or `/botucatu`. The JSON
