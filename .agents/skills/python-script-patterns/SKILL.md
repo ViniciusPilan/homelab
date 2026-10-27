@@ -17,6 +17,7 @@ Use this skill when creating or revising Python scripts in this repository. Read
 - Use standard-library modules where practical. If an external package is needed, declare it in the script's project requirements file rather than relying on an undeclared local installation. Follow the example's virtual-environment and `python3` invocation approach when documenting how to run a standalone script.
 - Handle expected failures explicitly and report useful context. Do not copy the example's bare response truthiness check as a general HTTP error-handling pattern; use the client library's status/error API and suitable timeouts when making network requests.
 - Preserve a script's intended working directory and runtime assumptions, and document them when they affect how it is run.
+- Create a readme file in the project explaining how to execute the script, what are the dependencies, what is the expected input and output of the execution.
 
 ## Scope
 
