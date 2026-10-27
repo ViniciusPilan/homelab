@@ -22,9 +22,10 @@ The API listens at `http://127.0.0.1:8000`.
 ## Request and response
 
 Send a `GET` request to `/sao-manuel`, `/barretos`, or `/botucatu`. The JSON
-response contains `today` and `tomorrow` arrays. Each hourly item includes its
-local timestamp, temperature in Celsius, precipitation probability in percent,
-and precipitation amount in millimeters.
+response contains `today` and `tomorrow` objects. Each has an `hourly` array
+with the local timestamp, temperature in Celsius, precipitation probability in
+percent, and precipitation amount in millimeters. Each also has a `summary`
+with average, maximum, and minimum values for all three variables.
 
 For example:
 
@@ -36,14 +37,28 @@ The response has this shape:
 
 ```json
 {
-  "today": [
-    {
-      "time": "2026-10-27T00:00",
-      "temperature_c": 18.5,
-      "precipitation_probability_percent": 10,
-      "precipitation_mm": 0.0
+  "today": {
+    "hourly": [
+      {
+        "time": "2026-10-27T00:00",
+        "temperature_c": 18.5,
+        "precipitation_probability_percent": 10,
+        "precipitation_mm": 0.0
+      }
+    ],
+    "summary": {
+      "temperature_c": {"average": 18.5, "max": 18.5, "min": 18.5},
+      "precipitation_probability_percent": {"average": 10.0, "max": 10, "min": 10},
+      "precipitation_mm": {"average": 0.0, "max": 0.0, "min": 0.0}
     }
-  ],
-  "tomorrow": []
+  },
+  "tomorrow": {
+    "hourly": [],
+    "summary": {
+      "temperature_c": {"average": null, "max": null, "min": null},
+      "precipitation_probability_percent": {"average": null, "max": null, "min": null},
+      "precipitation_mm": {"average": null, "max": null, "min": null}
+    }
+  }
 }
 ```

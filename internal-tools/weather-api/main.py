@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Any
 
 import requests
 import uvicorn
@@ -19,7 +20,7 @@ app = FastAPI()
 
 
 @app.get("/{city}")
-def get_weather(city: str) -> dict[str, list[dict[str, str | float | int | None]]]:
+def get_weather(city: str) -> dict[str, Any]:
     """Return hourly temperature and rainfall forecast for today and tomorrow."""
     if city not in CITIES_PRESET:
         raise HTTPException(status_code=404, detail=f"Unsupported city: {city}")
@@ -66,7 +67,28 @@ def get_weather(city: str) -> dict[str, list[dict[str, str | float | int | None]
                 }
             )
 
-    return {"today": forecast[today.isoformat()], "tomorrow": forecast[tomorrow.isoformat()]}
+    return {
+        "today": make_day(forecast[today.isoformat()]),
+        "tomorrow": make_day(forecast[tomorrow.isoformat()]),
+    }
+
+
+def make_day(hourly_points: list[dict[str, Any]]) -> dict[str, Any]:
+    """Add daily averages and extremes for each hourly weather variable."""
+    variables = {
+        "temperature_c": "temperature_c",
+        "precipitation_probability_percent": "precipitation_probability_percent",
+        "precipitation_mm": "precipitation_mm",
+    }
+    summary = {}
+    for name, field in variables.items():
+        values = [point[field] for point in hourly_points if point[field] is not None]
+        summary[name] = {
+            "average": round(sum(values) / len(values), 2) if values else None,
+            "max": max(values) if values else None,
+            "min": min(values) if values else None,
+        }
+    return {"hourly": hourly_points, "summary": summary}
 
 
 if __name__ == "__main__":
