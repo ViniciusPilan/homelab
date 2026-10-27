@@ -20,7 +20,7 @@ app = FastAPI()
 def get_weather(city: str) -> dict[str, list[dict[str, str | float | int | None]]]:
     """Return hourly temperature and rainfall forecast for today and tomorrow."""
     if city not in CITIES_PRESET:
-        raise HTTPException(status_code=404, detail="City not found")
+        raise HTTPException(status_code=404, detail=f"Unsupported city: {city}")
 
     latitude, longitude = CITIES_PRESET[city]
     try:
@@ -37,8 +37,14 @@ def get_weather(city: str) -> dict[str, list[dict[str, str | float | int | None]
         )
         response.raise_for_status()
         hourly = response.json()["hourly"]
-    except (requests.RequestException, ValueError, KeyError) as error:
-        raise HTTPException(status_code=502, detail="Could not fetch weather forecast") from error
+    except requests.RequestException as error:
+        raise HTTPException(
+            status_code=502, detail=f"Open-Meteo request failed: {error}"
+        ) from error
+    except (ValueError, KeyError, IndexError, TypeError) as error:
+        raise HTTPException(
+            status_code=502, detail="Open-Meteo returned an invalid forecast"
+        ) from error
 
     today = datetime.fromisoformat(hourly["time"][0]).date()
     tomorrow = today + timedelta(days=1)

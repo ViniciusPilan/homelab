@@ -2,7 +2,8 @@
 
 Small FastAPI service that returns hourly temperature, rain probability, and
 rainfall for today and tomorrow in the supported cities. Forecast data comes
-from Open-Meteo.
+from Open-Meteo. Runtime dependencies are FastAPI, Requests, and Uvicorn; their
+versions are pinned in `requirements.txt`.
 
 ## Run locally
 
@@ -24,3 +25,25 @@ Send a `GET` request to `/sao-manuel`, `/barretos`, or `/botucatu`. The JSON
 response contains `today` and `tomorrow` arrays. Each hourly item includes its
 local timestamp, temperature in Celsius, precipitation probability in percent,
 and precipitation amount in millimeters.
+
+For example:
+
+```sh
+curl http://127.0.0.1:8000/botucatu
+```
+
+The response has this shape:
+
+```json
+{
+  "today": [
+    {
+      "time": "2026-10-27T00:00",
+      "temperature_c": 18.5,
+      "precipitation_probability_percent": 10,
+      "precipitation_mm": 0.0
+    }
+  ],
+  "tomorrow": []
+}
+```
