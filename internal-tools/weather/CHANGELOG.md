@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.3](https://github.com/ViniciusPilan/homelab/compare/weather-v0.2.2...weather-v0.2.3) (2026-10-28)
+
+
+### Bug Fixes
+
+* Add a blank line for better code readability in app.js ([c3d1960](https://github.com/ViniciusPilan/homelab/commit/c3d1960cefcea9b0d6215589749277f8736b28dc))
+* Add a blank line for improved code readability in app.js ([7a92822](https://github.com/ViniciusPilan/homelab/commit/7a92822b3b07de988b02cda5a1c4d5150717abd7))
+
 ## [0.2.2](https://github.com/ViniciusPilan/homelab/compare/weather-v0.2.1...weather-v0.2.2) (2026-10-28)
 
 
