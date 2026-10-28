@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/ViniciusPilan/homelab/compare/weather-v0.2.1...weather-v0.2.2) (2026-10-28)
+
+
+### Bug Fixes
+
+* Update changelog path in release configuration and remove redundant changelog file ([9181046](https://github.com/ViniciusPilan/homelab/commit/9181046075ed5cbf01e17fbad87b4302f8a3b6dc))
+
 ## [0.2.1](https://github.com/ViniciusPilan/homelab/compare/weather-v0.2.0...weather-v0.2.1) (2026-10-28)
 
 
