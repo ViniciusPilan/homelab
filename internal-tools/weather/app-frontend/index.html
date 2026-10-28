@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6f2">
+  <title>Clima em foco</title>
+  <link rel="stylesheet" href="styles.css?v=10">
+  <script src="app.js?v=10" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow" data-i18n="eyebrow">Uma visão clara das próximas horas</p>
+        <h1 id="page-title" data-i18n="title">Previsão do tempo<span class="title-period">.</span></h1>
+        <p class="intro-copy" data-i18n="intro">Temperatura e chuva, hora a hora.</p>
+      </div>
+      <div class="controls">
+        <label class="control-label" for="language-select" data-i18n="languageLabel">IDIOMA</label>
+        <select id="language-select" aria-label="Idioma" data-i18n-aria="languageSelectLabel">
+          <option value="pt-BR">Português (Brasil)</option>
+          <option value="en-US">English (US)</option>
+        </select>
+        <label class="control-label" for="city-select" data-i18n="locationLabel">LOCAL</label>
+        <select id="city-select" aria-label="Choose a city">
+          <option value="sao-manuel">São Manuel</option>
+          <option value="barretos">Barretos</option>
+          <option value="botucatu">Botucatu</option>
+        </select>
+      </div>
+    </section>
+
+    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+    <div id="loading" class="loading-state" role="status"><span data-i18n="loading">Carregando a previsão</span><span class="loading-dots">…</span></div>
+
+    <div id="forecast-content" hidden>
+      <nav class="day-switch" aria-label="Dia da previsão" data-i18n-aria="dayNavLabel">
+        <button class="day-tab is-active" type="button" data-day="today" aria-pressed="true" data-i18n="today">Hoje</button>
+        <button class="day-tab" type="button" data-day="tomorrow" aria-pressed="false" data-i18n="tomorrow">Amanhã</button>
+        <span class="updated-at" id="updated-at"></span>
+      </nav>
+
+      <section class="summary-grid" id="summary-grid" aria-label="Resumo do dia selecionado" data-i18n-aria="summaryLabel"></section>
+
+      <section class="charts-grid" aria-label="Gráfico e tabela da previsão por hora" data-i18n-aria="forecastLabel">
+        <article class="panel chart-panel main-chart-panel">
+          <div class="panel-heading">
+            <div><p class="eyebrow" id="main-chart-kicker"></p><h2 id="main-chart-title">Previsão do dia</h2></div>
+            <span class="chart-badge" data-i18n="chartBadge">VISÃO DE 24 HORAS</span>
+          </div>
+          <div class="chart-legend"><span><i class="legend-line"></i><span data-i18n="temperature">Temperatura</span></span><span><i class="legend-bar"></i><span data-i18n="rainfall">Chuva</span></span></div>
+          <div class="chart-wrap" id="main-chart"></div>
+          <p class="chart-note" data-i18n="chartNote">Temperatura em °C · chuva em mm por hora</p>
+        </article>
+
+        <section class="panel hourly-panel" aria-label="Previsão por hora" data-i18n-aria="hourlyLabel">
+          <div class="panel-heading table-heading">
+            <div><p class="eyebrow" id="table-kicker"></p><h2 data-i18n="hourlyTitle">Previsão por hora</h2></div>
+            <span class="table-hint"><span class="current-dot"></span><span data-i18n="currentHour">Hora atual</span></span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th scope="col" data-i18n="localTime">HORA LOCAL</th><th scope="col" data-i18n="temperature">TEMPERATURA</th><th scope="col" data-i18n="rainChance">CHANCE DE CHUVA</th><th scope="col" data-i18n="rainfall">CHUVA</th></tr></thead>
+              <tbody id="hourly-rows"></tbody>
+            </table>
+          </div>
+        </section>
+
+      </section>
+
+      <footer class="footer"><span data-i18n="provider">Previsão fornecida por Open-Meteo</span><span id="footer-location"></span></footer>
+    </div>
+  </main>
+</body>
+</html>

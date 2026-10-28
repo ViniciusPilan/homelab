@@ -1,0 +1,92 @@
+# Weather API
+
+Small FastAPI service that returns hourly temperature, rain probability, and
+rainfall for today and tomorrow in the supported cities. Forecast data comes
+from Open-Meteo. Runtime dependencies are FastAPI, Requests, and Uvicorn; their
+versions are pinned in `requirements.txt`.
+
+## Run locally
+
+From this directory, create and activate a virtual environment, install the
+requirements, and start the API:
+
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python3 main.py
+```
+
+The API reads its bind address from `HOST` (default `0.0.0.0`) and port from
+`PORT` (default `8000`). To override them when running locally, set those
+environment variables before starting `main.py`.
+
+## Run in a container
+
+Build and start the API from this directory:
+
+```sh
+docker build -t weather-api .
+docker run --rm -p 8000:8000 weather-api
+```
+
+The container defaults to `HOST=0.0.0.0` and `PORT=8000`. Set `HOST` and
+`PORT` to override these values. Publish the matching container port when
+changing `PORT`, for example:
+
+```sh
+docker run --rm -e HOST=0.0.0.0 -e PORT=8080 -p 8080:8080 weather-api
+```
+
+The service binds to all container interfaces so it is reachable through the
+published port. The API needs outbound internet access to fetch forecasts from
+Open-Meteo.
+
+The API allows cross-origin browser `GET` requests so the static frontend can
+be served from a different origin. It returns public forecast data and does
+not use cookies or other credentials. When hosting the frontend remotely,
+configure its `?api=` URL with an API address that the browser can reach.
+
+## Request and response
+
+Send a `GET` request to `/sao-manuel`, `/barretos`, or `/botucatu`. The JSON
+response contains `today` and `tomorrow` objects. Each has an `hourly` array
+with the local timestamp, temperature in Celsius, precipitation probability in
+percent, and precipitation amount in millimeters. Each also has a `summary`
+with average, maximum, and minimum values for all three variables.
+
+For example:
+
+```sh
+curl http://127.0.0.1:8000/botucatu
+```
+
+The response has this shape:
+
+```json
+{
+  "today": {
+    "hourly": [
+      {
+        "time": "2026-10-27T00:00",
+        "temperature_c": 18.5,
+        "precipitation_probability_percent": 10,
+        "precipitation_mm": 0.0
+      }
+    ],
+    "summary": {
+      "temperature_c": {"average": 18.5, "max": 18.5, "min": 18.5},
+      "precipitation_probability_percent": {"average": 10.0, "max": 10, "min": 10},
+      "precipitation_mm": {"average": 0.0, "max": 0.0, "min": 0.0}
+    }
+  },
+  "tomorrow": {
+    "hourly": [],
+    "summary": {
+      "temperature_c": {"average": null, "max": null, "min": null},
+      "precipitation_probability_percent": {"average": null, "max": null, "min": null},
+      "precipitation_mm": {"average": null, "max": null, "min": null}
+    }
+  }
+}
+```
