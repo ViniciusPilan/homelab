@@ -1,0 +1,64 @@
+name: Validate weather PR title
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "internal-tools/weather/**"
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate title and breaking changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check title format and breaking change details
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { title, body = '' } = context.payload.pull_request;
+            const match = title.match(/^(feat!|feat|fix):\s+.+$/);
+
+            if (!match) {
+              core.setFailed(
+                'Use one of these PR title formats: "feat!: <what is changing>", "feat: <what is changing>", or "fix: <what is changing>".'
+              );
+              return;
+            }
+
+            if (match[1] === 'feat!') {
+              const lines = body.split(/\r?\n/);
+              const headingIndex = lines.findIndex((line) =>
+                /^#{1,6}\s+breaking changes\s*$/i.test(line)
+              );
+              const nextHeadingIndex = lines.findIndex(
+                (line, index) => index > headingIndex && /^#{1,6}\s+/.test(line)
+              );
+              const sectionLines = headingIndex < 0
+                ? []
+                : lines.slice(headingIndex + 1, nextHeadingIndex < 0 ? undefined : nextHeadingIndex);
+              const content = sectionLines
+                .join('\n')
+                .replace(/<!--[\s\S]*?-->/g, '')
+                .trim();
+              const override = body.match(/BEGIN_COMMIT_OVERRIDE\s*([\s\S]*?)\s*END_COMMIT_OVERRIDE/);
+              const overrideBody = override?.[1]?.trim() ?? '';
+
+              if (
+                !content ||
+                !overrideBody.match(/^feat!:\s+.+/i) ||
+                !overrideBody.match(/^BREAKING CHANGE:\s*\S[\s\S]*/im)
+              ) {
+                core.setFailed(
+                  'Major changes need a non-empty "## Breaking Changes" section and a Release Please commit override containing "feat!: ..." and a "BREAKING CHANGE: ..." footer.'
+                );
+              }
+            }
