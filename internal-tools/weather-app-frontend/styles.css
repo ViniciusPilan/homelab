@@ -32,3 +32,69 @@ html,body{height:100%;overflow:hidden}.shell{height:100vh;height:100dvh;display:
 
 /* With the adjacent-day card removed, keep only the chart and table row. */
 .charts-grid{grid-template-areas:"main table";grid-template-rows:minmax(0,1fr)}.main-chart-panel{grid-area:main}.hourly-panel{grid-area:table}@media(max-width:700px){.charts-grid{grid-template-areas:"main table";grid-template-rows:minmax(0,1fr)}}
+
+/* Mobile uses a natural scrolling page and full-width forecast sections. */
+@media(max-width:700px){
+  html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
+  .shell{height:auto;min-height:100vh;min-height:100dvh;display:block;overflow:visible;padding:0 20px}
+  .topbar{height:58px;min-height:58px}
+  .intro{padding:24px 0 20px;align-items:flex-start;flex-direction:column;gap:15px}
+  .intro h1{font-size:clamp(28px,7vw,38px);letter-spacing:-1.4px}
+  .intro .eyebrow{font-size:9px}
+  .intro-copy{display:block;margin-top:7px;font-size:13px}
+  .controls{width:100%;min-width:0}
+  .control-label{font-size:9px}
+  select{padding:12px 38px 12px 14px;font-size:13px}
+  #forecast-content:not([hidden]){display:block}
+  .day-switch{min-height:43px;gap:2px}
+  .day-tab{padding:12px 16px;font-size:13px}
+  .updated-at{font-size:9px}
+  .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:14px 0}
+  .summary-card{min-height:106px;padding:13px 14px}
+  .metric-label{font-size:8px;letter-spacing:.6px}
+  .metric-main{margin:12px 0 4px}
+  .metric-value{font-size:24px}
+  .metric-detail{font-size:9px}
+  .charts-grid{display:flex;flex-direction:column;gap:12px;margin:0 0 12px}
+  .chart-panel,.hourly-panel{display:block;min-height:0;padding:18px 16px}
+  .chart-panel .panel-heading h2,.hourly-panel .panel-heading h2{font-size:16px}
+  .chart-panel .eyebrow,.hourly-panel .eyebrow{font-size:8px;letter-spacing:.8px}
+  .chart-badge{display:inline-block;font-size:7px}
+  .chart-legend{gap:15px;margin-top:15px;font-size:10px}
+  .chart-wrap,.chart-panel .chart-wrap{height:190px;min-height:0;margin-top:7px}
+  .chart-note{font-size:9px}
+  .table-heading{margin-bottom:13px}
+  .table-hint{font-size:9px}
+  .table-scroll{max-height:none;overflow:visible}
+  .table-scroll table,.table-scroll tbody{display:block;width:100%}
+  .table-scroll thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .table-scroll tbody tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 5px;margin:0;padding:12px 10px;border:1px solid #edf0eb;border-bottom:0;background:#fff}
+  .table-scroll tbody tr:first-child{border-radius:8px 8px 0 0}
+  .table-scroll tbody tr:last-child{border-bottom:1px solid #edf0eb;border-radius:0 0 8px 8px}
+  .table-scroll tbody tr.current-hour{background:#edf5ef}
+  .table-scroll tbody td{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;padding:0;text-align:left;font-size:11px;white-space:nowrap}
+  .table-scroll tbody td:first-child{grid-column:1/-1;padding-bottom:7px;border-bottom:1px solid #f0f2ee;color:#34463b;font-size:12px;font-weight:600}
+  .table-scroll tbody td:first-child:before{display:none}
+  .table-scroll tbody td[data-label]:before{content:attr(data-label);color:#919b93;font:500 8px 'DM Mono',monospace;letter-spacing:.2px}
+  .footer{min-height:38px;gap:10px;padding:12px 2px 18px;font-size:9px}
+}
+@media(max-width:380px){
+  .shell{padding-right:14px;padding-left:14px}
+  .summary-grid{gap:7px}
+  .summary-card{padding:11px 10px}
+  .metric-value{font-size:22px}
+  .chart-panel,.hourly-panel{padding-right:12px;padding-left:12px}
+  .chart-wrap,.chart-panel .chart-wrap{height:170px}
+  .table-scroll tbody tr{padding:11px 8px}
+  .table-scroll tbody td{font-size:10px}
+  .table-scroll tbody td[data-label]:before{font-size:7px}
+}
+
+.controls{display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:0 10px}
+.controls .control-label{align-self:end}
+.controls .control-label:nth-of-type(1){grid-row:1;grid-column:1}
+.controls #language-select{grid-row:2;grid-column:1}
+.controls .control-label:nth-of-type(2){grid-row:1;grid-column:2}
+.controls #city-select{grid-row:2;grid-column:2}
+.controls select{min-width:0}
+@media(max-width:700px){.controls{grid-template-columns:1fr 1.35fr;gap:0 8px}}
