@@ -12,23 +12,30 @@ the existing deployment architecture unless the task asks to change it.
 .
 ├── .agents/skills/                 # Repository workflows and conventions
 ├── ansible-playbooks/              # Host preparation and k0s installation
-├── pki/                             # Root and intermediate CA configuration/docs
-├── scripts/                         # Cluster and host administration scripts
+├── examples/python-coding/         # Example Python project structure
+├── internal-tools/weather/         # Weather tool API and frontend
+├── pki/
+│   ├── root-ca/                     # Root CA configuration and documentation
+│   └── intermediate-ca/             # Intermediate CA configuration and documentation
+├── scripts/                         # Cluster, host, and development scripts
 ├── systems/
-│   ├── k8s-cluster/
-│   │   ├── provisioning/            # Dev setup and Proxmox OpenTofu config
-│   │   └── tools/                   # Argo CD apps, Helm values, policies
-│   └── tools-server/
-│       ├── apps/                    # Docker Compose configuration
-│       └── iac/                     # Tools server OpenTofu config and inventory
-└── tf-modules/                      # Reusable VM and Ansible inventory modules
+│   └── k8s-cluster/
+│       ├── provisioning/
+│       │   ├── dev/                 # Development-cluster provisioning
+│       │   └── pro/                 # Production-cluster provisioning and Ansible
+│       └── tools/                   # Cluster add-ons, Argo CD apps, and policies
+└── tf-modules/
+    ├── ansible-inventory/           # Reusable Ansible inventory module
+    └── proxmox-vm/                  # Reusable Proxmox VM module
 ```
 
-The Kubernetes cluster uses k0s on Proxmox VMs. Cluster add-ons are declared
-as Argo CD Applications in `systems/k8s-cluster/tools/argo/applications/`,
-with tool-specific Helm values and documentation under `systems/k8s-cluster/tools/`.
-The `dev/` provisioning directory contains development-cluster configuration;
-`pro/` contains the current production cluster's OpenTofu configuration.
+The Kubernetes cluster uses k0s on Proxmox VMs. Development and production
+provisioning configuration live in `systems/k8s-cluster/provisioning/dev/` and
+`systems/k8s-cluster/provisioning/pro/`. Cluster add-ons are organized under
+`systems/k8s-cluster/tools/`, with Argo CD Applications in
+`systems/k8s-cluster/tools/argo/applications/`. The repository also contains
+the standalone weather tool in `internal-tools/weather/` and reusable OpenTofu
+modules in `tf-modules/`.
 
 ## Before changing files
 
