@@ -25,7 +25,7 @@ jobs:
         with:
           script: |
             const { title, body = '' } = context.payload.pull_request;
-            const match = title.match(/^(feat!|feat|fix|chore):\s+.+$/);
+            const match = title.match(/^(feat!|feat|fix|chore)(?:\([^\r\n()]+\))?:\s+.+$/);
 
             if (!match) {
               core.setFailed(
