@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f6f2">
   <title>Weather Outlook</title>
-  <link rel="stylesheet" href="styles.css?v=6">
-  <script src="app.js?v=6" defer></script>
+  <link rel="stylesheet" href="styles.css?v=9">
+  <script src="app.js?v=8" defer></script>
 </head>
 <body>
   <main class="shell">
@@ -43,7 +43,7 @@
 
       <section class="summary-grid" id="summary-grid" aria-label="Selected day summary"></section>
 
-      <section class="charts-grid" aria-label="Hourly weather charts">
+      <section class="charts-grid" aria-label="Hourly weather chart and forecast table">
         <article class="panel chart-panel main-chart-panel">
           <div class="panel-heading">
             <div><p class="eyebrow" id="main-chart-kicker">TODAY · HOURLY</p><h2 id="main-chart-title">The day ahead</h2></div>
@@ -53,27 +53,22 @@
           <div class="chart-wrap" id="main-chart"></div>
           <p class="chart-note">Temperature in °C · rainfall in mm per hour</p>
         </article>
-        <article class="panel chart-panel companion-panel">
-          <div class="panel-heading">
-            <div><p class="eyebrow" id="companion-kicker">TOMORROW · PREVIEW</p><h2 id="companion-title">A look ahead</h2></div>
-            <span class="compass-icon" aria-hidden="true">↗</span>
+
+        <section class="panel hourly-panel" aria-label="Hourly forecast table">
+          <div class="panel-heading table-heading">
+            <div><p class="eyebrow" id="table-kicker">TODAY · HOUR BY HOUR</p><h2>Hourly forecast</h2></div>
+            <span class="table-hint"><span class="current-dot"></span> Current hour</span>
           </div>
-          <div class="companion-summary" id="companion-summary" aria-label="Adjacent day average weather"></div>
-        </article>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th scope="col">LOCAL TIME</th><th scope="col">TEMPERATURE</th><th scope="col">RAIN CHANCE</th><th scope="col">RAINFALL</th></tr></thead>
+              <tbody id="hourly-rows"></tbody>
+            </table>
+          </div>
+        </section>
+
       </section>
 
-      <section class="panel hourly-panel">
-        <div class="panel-heading table-heading">
-          <div><p class="eyebrow" id="table-kicker">TODAY · HOUR BY HOUR</p><h2>Hourly forecast</h2></div>
-          <span class="table-hint"><span class="current-dot"></span> Current hour</span>
-        </div>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th scope="col">LOCAL TIME</th><th scope="col">TEMPERATURE</th><th scope="col">RAIN CHANCE</th><th scope="col">RAINFALL</th></tr></thead>
-            <tbody id="hourly-rows"></tbody>
-          </table>
-        </div>
-      </section>
       <footer class="footer"><span>Forecast provided by Open-Meteo</span><span id="footer-location"></span></footer>
     </div>
   </main>

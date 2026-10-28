@@ -91,21 +91,11 @@ function renderTable(dayData, selectedDay) {
 function render() {
   if (!state.forecast) return;
   const selected = state.forecast[state.selectedDay];
-  const adjacentKey = state.selectedDay === 'today' ? 'tomorrow' : 'today';
-  const adjacent = state.forecast[adjacentKey];
   const city = CITY_NAMES[state.city];
   const selectedLabel = labelForDay(state.selectedDay);
-  const adjacentLabel = labelForDay(adjacentKey);
-  const summary = adjacent.summary;
   $('#main-chart-kicker').textContent = `${selectedLabel.toUpperCase()} · HOURLY`;
   $('#main-chart-title').textContent = state.selectedDay === 'today' ? 'The day ahead' : 'Tomorrow, hour by hour';
   $('#main-chart').innerHTML = chartSvg(selected.hourly, false, true);
-  $('#companion-kicker').textContent = `${adjacentLabel.toUpperCase()} · ${state.selectedDay === 'today' ? 'PREVIEW' : 'LOOK BACK'}`;
-  $('#companion-title').textContent = state.selectedDay === 'today' ? 'A look ahead' : 'Today in brief';
-  $('#companion-summary').innerHTML = `
-    <div class="adjacent-metric adjacent-temperature"><span class="adjacent-label">AVERAGE TEMPERATURE</span><strong>${number(summary.temperature_c?.average, 1)}<small>°C</small></strong><span class="adjacent-detail">Low ${number(summary.temperature_c?.min, 1)}° <i>·</i> High ${number(summary.temperature_c?.max, 1)}°</span></div>
-    <div class="adjacent-metric adjacent-rain"><span class="adjacent-label">AVERAGE RAINFALL</span><strong>${number(summary.precipitation_mm?.average, 1)}<small> mm</small></strong><span class="adjacent-detail">per hour</span></div>
-    <div class="adjacent-metric adjacent-probability"><span class="adjacent-label">AVERAGE RAIN CHANCE</span><strong>${number(summary.precipitation_probability_percent?.average)}<small>%</small></strong><span class="adjacent-detail">across the day</span></div>`;
   $('#table-kicker').textContent = `${selectedLabel.toUpperCase()} · HOUR BY HOUR`;
   $('#footer-location').textContent = `${city} · times shown in local time`;
   $('#updated-at').textContent = `Updated ${new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(state.updatedAt)}`;
