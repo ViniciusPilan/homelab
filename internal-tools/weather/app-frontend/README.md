@@ -1,39 +1,23 @@
 # Weather app frontend
 
-Static HTML, CSS, and JavaScript frontend for `internal-tools/weather-api`.
+Static HTML, CSS, and JavaScript frontend for `internal-tools/weather/api`.
+When run with the provided Compose file, the browser requests the same-origin
+`/api/{city}` path and Nginx forwards it to the `api` service over the Docker
+network. This keeps the backend container address out of browser requests.
 
 ## Run locally
 
-Start the API using the instructions in `../weather-api/README.md`, then serve
-this directory with any static file server. For example:
+Start the full stack from `internal-tools/weather`:
 
 ```sh
-python3 -m http.server 8080
+docker compose up --build
 ```
 
-Open `http://127.0.0.1:8080`. The frontend requests
-`http://127.0.0.1:8000/{city}` by default. To use a different API base URL,
-append `?api=https://weather-api.example.com` to the frontend URL.
+Open `http://127.0.0.1:8081`. The API remains available directly on
+`http://127.0.0.1:8000` for local debugging. The frontend accepts an optional
+browser-reachable API base URL using `?api=https://weather-api.example.com`.
 
-## Run in an Nginx container
-
-Build and start the frontend from this directory:
-
-```sh
-docker build -t weather-app-frontend .
-docker run --rm -p 8080:80 \
-  -e API_HOST=127.0.0.1 \
-  -e API_PORT=8000 \
-  weather-app-frontend
-```
-
-Open `http://127.0.0.1:8080`. To connect to an API at a different address,
-set `API_HOST` and `API_PORT` when starting the container. `API_HOST` must be
-an address the user's browser can reach. The default is `127.0.0.1:8000`. You
-can also override the container settings per page by appending a browser-
-reachable URL as the `api` query parameter, for example:
-`http://127.0.0.1:8080/?api=https://weather-api.example.com`.
-
-The API allows cross-origin browser requests. For a remotely hosted frontend,
-set `?api=` to an API address reachable by the browser; the default
-`127.0.0.1` address refers to the device running the browser.
+To serve the frontend separately from Compose, configure the web server to
+proxy `/api/` to the API service, or pass a browser-reachable API URL in the
+`api` query parameter. A Docker-only hostname such as `api` cannot be resolved
+by a visitor's browser.

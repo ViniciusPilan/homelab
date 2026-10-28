@@ -1,1 +1,0 @@
-window.WEATHER_API_BASE = "http://${API_HOST}:${API_PORT}";
