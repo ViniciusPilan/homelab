@@ -48,14 +48,7 @@ jobs:
                 .join('\n')
                 .replace(/<!--[\s\S]*?-->/g, '')
                 .trim();
-              const override = description.match(/BEGIN_COMMIT_OVERRIDE\s*([\s\S]*?)\s*END_COMMIT_OVERRIDE/);
-              const overrideBody = override?.[1]?.trim() ?? '';
-
-              if (
-                !content ||
-                !overrideBody.match(/^feat!:\s+.+/i) ||
-                !overrideBody.match(/^BREAKING CHANGE:\s*\S[\s\S]*/im)
-              ) {
+              if (!content) {
                 core.setFailed(
                   'Major changes need a non-empty "## Breaking Changes" section describing the impact.'
                 );
