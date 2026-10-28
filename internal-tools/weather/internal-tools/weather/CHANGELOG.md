@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/ViniciusPilan/homelab/compare/weather-v0.2.0...weather-v0.2.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* adjust page title ([dff19e4](https://github.com/ViniciusPilan/homelab/commit/dff19e4c409f74494a98c760eaacf88489b775e7))
+
 ## [0.2.0](https://github.com/ViniciusPilan/homelab/compare/weather-v0.1.0...weather-v0.2.0) (2026-10-28)
 
 
