@@ -25,11 +25,11 @@ jobs:
         with:
           script: |
             const { title, body = '' } = context.payload.pull_request;
-            const match = title.match(/^(feat!|feat|fix):\s+.+$/);
+            const match = title.match(/^(feat!|feat|fix|chore)(?:\([^\r\n()]+\))?:\s+.+$/);
 
             if (!match) {
               core.setFailed(
-                'Use one of these PR title formats: "feat!: <what is changing>", "feat: <what is changing>", or "fix: <what is changing>".'
+                'Use one of these PR title formats: "feat!: <what is changing>", "feat: <what is changing>", "fix: <what is changing>", or "chore: <what is changing>".'
               );
               return;
             }
