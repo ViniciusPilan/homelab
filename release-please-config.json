@@ -4,7 +4,7 @@
       "release-type": "simple",
       "component": "weather",
       "version-file": "version.txt",
-      "changelog-path": "internal-tools/weather/CHANGELOG.md",
+      "changelog-path": "CHANGELOG.md",
       "include-v-in-tag": true
     }
   }
