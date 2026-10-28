@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 REQUEST_TIMEOUT_SECONDS = 10
+HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8000"))
 
 CITIES_PRESET = {
@@ -100,4 +101,4 @@ def make_day(hourly_points: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=PORT)
+    uvicorn.run(app, host=HOST, port=PORT)

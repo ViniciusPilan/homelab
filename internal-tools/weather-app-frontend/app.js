@@ -1,4 +1,4 @@
-const API_BASE = new URLSearchParams(window.location.search).get('api') || 'http://127.0.0.1:8000';
+const API_BASE = new URLSearchParams(window.location.search).get('api') || window.WEATHER_API_BASE || 'http://127.0.0.1:8000';
 const CITY_NAMES = { 'sao-manuel': 'São Manuel', barretos: 'Barretos', botucatu: 'Botucatu' };
 const translations = {
   'pt-BR': {

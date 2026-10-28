@@ -17,7 +17,9 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
-The API listens at `http://127.0.0.1:8000`.
+The API reads its bind address from `HOST` (default `0.0.0.0`) and port from
+`PORT` (default `8000`). To override them when running locally, set those
+environment variables before starting `main.py`.
 
 ## Run in a container
 
@@ -28,11 +30,12 @@ docker build -t weather-api .
 docker run --rm -p 8000:8000 weather-api
 ```
 
-The container listens on port `8000`. Set `PORT` and publish the matching
-container port to use a different port, for example:
+The container defaults to `HOST=0.0.0.0` and `PORT=8000`. Set `HOST` and
+`PORT` to override these values. Publish the matching container port when
+changing `PORT`, for example:
 
 ```sh
-docker run --rm -e PORT=8080 -p 8080:8080 weather-api
+docker run --rm -e HOST=0.0.0.0 -e PORT=8080 -p 8080:8080 weather-api
 ```
 
 The service binds to all container interfaces so it is reachable through the
