@@ -19,6 +19,26 @@ python3 main.py
 
 The API listens at `http://127.0.0.1:8000`.
 
+## Run in a container
+
+Build and start the API from this directory:
+
+```sh
+docker build -t weather-api .
+docker run --rm -p 8000:8000 weather-api
+```
+
+The container listens on port `8000`. Set `PORT` and publish the matching
+container port to use a different port, for example:
+
+```sh
+docker run --rm -e PORT=8080 -p 8080:8080 weather-api
+```
+
+The service binds to all container interfaces so it is reachable through the
+published port. The API needs outbound internet access to fetch forecasts from
+Open-Meteo.
+
 The API allows cross-origin browser `GET` requests so the static frontend can
 be served from a different origin. It returns public forecast data and does
 not use cookies or other credentials. When hosting the frontend remotely,
