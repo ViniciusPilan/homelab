@@ -159,6 +159,7 @@ async function loadForecast() {
   }
 }
 
+
 citySelect.addEventListener('change', loadForecast);
 languageSelect.addEventListener('change', () => {
   state.language = languageSelect.value;
