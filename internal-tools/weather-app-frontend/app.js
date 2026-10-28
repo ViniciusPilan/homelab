@@ -39,7 +39,7 @@ function renderSummary(dayData) {
   $('#summary-grid').innerHTML = cards.map((card) => `<article class="summary-card tone-${card.tone}"><span class="metric-icon" aria-hidden="true">${card.icon}</span><div class="metric-label">${card.label}</div><div class="metric-main"><span class="metric-value">${card.value}</span><span class="metric-unit">${card.unit}</span></div><div class="metric-detail">${card.detail}</div></article>`).join('');
 }
 
-function chartSvg(points, compact = false) {
+function chartSvg(points, compact = false, filled = false) {
   if (!points.length) return '<div class="empty-chart">Forecast data is not available yet.</div>';
   const width = 720;
   const height = compact ? 180 : 218;
@@ -71,10 +71,12 @@ function chartSvg(points, compact = false) {
     return value > 0 ? `<rect x="${x(index) - barW / 2}" y="${barY}" width="${barW}" height="${barH}" rx="2" fill="#a7c5d7" opacity=".78"><title>${formatDate(point.time, { hour: '2-digit', minute: '2-digit' })}: ${value} mm rainfall</title></rect>` : '';
   }).join('');
   const line = points.map((point, index) => `${index ? 'L' : 'M'}${x(index).toFixed(1)},${yTemp(Number(point.temperature_c) || 0).toFixed(1)}`).join(' ');
+  const area = filled ? `<path d="${line} L${x(points.length - 1).toFixed(1)},${(margin.top + innerH).toFixed(1)} L${x(0).toFixed(1)},${(margin.top + innerH).toFixed(1)} Z" fill="url(#temperature-area)"/>` : '';
+  const gradient = filled ? '<defs><linearGradient id="temperature-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#75a183" stop-opacity=".30"/><stop offset="100%" stop-color="#75a183" stop-opacity=".025"/></linearGradient></defs>' : '';
   const dots = points.map((point, index) => `<circle cx="${x(index)}" cy="${yTemp(Number(point.temperature_c) || 0)}" r="${compact ? 2.2 : 2.7}" fill="#28634f"><title>${formatDate(point.time, { hour: '2-digit', minute: '2-digit' })}: ${number(point.temperature_c, 1)}°C</title></circle>`).join('');
   const labels = tickIndices.map((index) => `<text x="${x(index)}" y="${height - 8}" text-anchor="middle" fill="#929c94" font-size="9">${formatDate(points[index].time, { hour: '2-digit' })}</text>`).join('');
   const rainLabel = `<text x="${width - margin.right + 7}" y="${margin.top + 5}" text-anchor="start" fill="#9aa39d" font-size="8">${number(maxRain, 0)} mm</text>`;
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Hourly temperature and rainfall chart"><title>Hourly temperature and rainfall</title>${grid}${bars}<path d="${line}" fill="none" stroke="#28634f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}${rainLabel}</svg>`;
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Hourly temperature and rainfall chart"><title>Hourly temperature and rainfall</title>${gradient}${grid}${bars}${area}<path d="${line}" fill="none" stroke="#28634f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}${rainLabel}</svg>`;
 }
 
 function renderTable(dayData, selectedDay) {
@@ -97,11 +99,13 @@ function render() {
   const summary = adjacent.summary;
   $('#main-chart-kicker').textContent = `${selectedLabel.toUpperCase()} · HOURLY`;
   $('#main-chart-title').textContent = state.selectedDay === 'today' ? 'The day ahead' : 'Tomorrow, hour by hour';
-  $('#main-chart').innerHTML = chartSvg(selected.hourly);
+  $('#main-chart').innerHTML = chartSvg(selected.hourly, false, true);
   $('#companion-kicker').textContent = `${adjacentLabel.toUpperCase()} · ${state.selectedDay === 'today' ? 'PREVIEW' : 'LOOK BACK'}`;
   $('#companion-title').textContent = state.selectedDay === 'today' ? 'A look ahead' : 'Today in brief';
-  $('#companion-chart').innerHTML = chartSvg(adjacent.hourly, true);
-  $('#companion-summary').innerHTML = `<span>High <strong>${number(summary.temperature_c?.max, 1)}°</strong></span><span>Low <strong>${number(summary.temperature_c?.min, 1)}°</strong></span><span>Rain <strong>${number(adjacent.hourly.reduce((total, point) => total + (Number(point.precipitation_mm) || 0), 0), 1)} mm</strong></span>`;
+  $('#companion-summary').innerHTML = `
+    <div class="adjacent-metric adjacent-temperature"><span class="adjacent-label">AVERAGE TEMPERATURE</span><strong>${number(summary.temperature_c?.average, 1)}<small>°C</small></strong><span class="adjacent-detail">Low ${number(summary.temperature_c?.min, 1)}° <i>·</i> High ${number(summary.temperature_c?.max, 1)}°</span></div>
+    <div class="adjacent-metric adjacent-rain"><span class="adjacent-label">AVERAGE RAINFALL</span><strong>${number(summary.precipitation_mm?.average, 1)}<small> mm</small></strong><span class="adjacent-detail">per hour</span></div>
+    <div class="adjacent-metric adjacent-probability"><span class="adjacent-label">AVERAGE RAIN CHANCE</span><strong>${number(summary.precipitation_probability_percent?.average)}<small>%</small></strong><span class="adjacent-detail">across the day</span></div>`;
   $('#table-kicker').textContent = `${selectedLabel.toUpperCase()} · HOUR BY HOUR`;
   $('#footer-location').textContent = `${city} · times shown in local time`;
   $('#updated-at').textContent = `Updated ${new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(state.updatedAt)}`;
