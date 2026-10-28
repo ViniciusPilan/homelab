@@ -22,7 +22,8 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const { title, body = '' } = context.payload.pull_request;
+            const { title, body } = context.payload.pull_request;
+            const description = body ?? '';
             const match = title.match(/^(feat!|feat|fix|chore|doc|refactor)(?:\([^\r\n()]+\))?:\s+.+$/);
 
             if (!match) {
@@ -33,7 +34,7 @@ jobs:
             }
 
             if (match[1] === 'feat!') {
-              const lines = body.split(/\r?\n/);
+              const lines = description.split(/\r?\n/);
               const headingIndex = lines.findIndex((line) =>
                 /^#{1,6}\s+breaking changes\s*$/i.test(line)
               );
@@ -47,7 +48,7 @@ jobs:
                 .join('\n')
                 .replace(/<!--[\s\S]*?-->/g, '')
                 .trim();
-              const override = body.match(/BEGIN_COMMIT_OVERRIDE\s*([\s\S]*?)\s*END_COMMIT_OVERRIDE/);
+              const override = description.match(/BEGIN_COMMIT_OVERRIDE\s*([\s\S]*?)\s*END_COMMIT_OVERRIDE/);
               const overrideBody = override?.[1]?.trim() ?? '';
 
               if (
