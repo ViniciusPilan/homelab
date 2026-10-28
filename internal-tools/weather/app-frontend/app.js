@@ -17,6 +17,7 @@ const errorBanner = $('#error-banner');
 const loading = $('#loading');
 const content = $('#forecast-content');
 
+
 function number(value, digits = 0) {
   return value == null || !Number.isFinite(Number(value)) ? '—' : new Intl.NumberFormat(state.language, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(Number(value));
 }
