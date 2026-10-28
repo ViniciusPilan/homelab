@@ -1,11 +1,9 @@
-name: Validate weather PR title
+name: Validate PR title
 
 on:
   pull_request:
     branches:
       - main
-    paths:
-      - "internal-tools/weather/**"
     types:
       - opened
       - edited
@@ -25,11 +23,11 @@ jobs:
         with:
           script: |
             const { title, body = '' } = context.payload.pull_request;
-            const match = title.match(/^(feat!|feat|fix|chore)(?:\([^\r\n()]+\))?:\s+.+$/);
+            const match = title.match(/^(feat!|feat|fix|chore|doc|refactor)(?:\([^\r\n()]+\))?:\s+.+$/);
 
             if (!match) {
               core.setFailed(
-                'Use one of these PR title formats: "feat!: <what is changing>", "feat: <what is changing>", "fix: <what is changing>", or "chore: <what is changing>".'
+                'Use one of these PR title formats: "feat!: <what is changing>", "feat: <what is changing>", "fix: <what is changing>", "chore: <what is changing>", "doc: <what is changing>", or "refactor: <what is changing>".'
               );
               return;
             }
@@ -58,7 +56,7 @@ jobs:
                 !overrideBody.match(/^BREAKING CHANGE:\s*\S[\s\S]*/im)
               ) {
                 core.setFailed(
-                  'Major changes need a non-empty "## Breaking Changes" section and a Release Please commit override containing "feat!: ..." and a "BREAKING CHANGE: ..." footer.'
+                  'Major changes need a non-empty "## Breaking Changes" section describing the impact.'
                 );
               }
             }
