@@ -7,12 +7,14 @@ spec:
   background: true
   rules:
     - name: require-container-resources
+      skipBackgroundRequests: true
       match:
         any:
           - resources:
               kinds:
                 - Pod
       validate:
+        allowExistingViolations: true
         message: "Every container must define CPU and memory requests and limits."
         pattern:
           spec:
