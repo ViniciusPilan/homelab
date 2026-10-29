@@ -7,9 +7,7 @@ on:
       - main
     paths:
       - "internal-tools/weather/**"
-      - ".release-please-manifest.json"
-      - "release-please-config.json"
-      - ".github/workflows/weather-release.yml"
+
 
 permissions:
   contents: write
@@ -36,8 +34,6 @@ jobs:
 
   publish:
     name: Publish ${{ matrix.component }}
-    needs: release
-    if: needs.release.outputs.release_created == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
