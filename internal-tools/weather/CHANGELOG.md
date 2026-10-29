@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/ViniciusPilan/homelab/compare/weather-v0.3.1...weather-v1.0.0) (2026-10-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* Create v1 for weather app ([#37](https://github.com/ViniciusPilan/homelab/issues/37))
+
+### Features
+
+* Create v1 for weather app ([#37](https://github.com/ViniciusPilan/homelab/issues/37)) ([f5ce84c](https://github.com/ViniciusPilan/homelab/commit/f5ce84c47b1369be128101e9bb2c246ef069de29))
+
 ## [0.3.1](https://github.com/ViniciusPilan/homelab/compare/weather-v0.3.0...weather-v0.3.1) (2026-10-29)
 
 
