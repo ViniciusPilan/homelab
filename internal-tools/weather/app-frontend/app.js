@@ -70,6 +70,7 @@ function renderSummary(dayData) {
 
 function chartSvg(points, compact = false, filled = false) {
   if (!points.length) return `<div class="empty-chart">${t('emptyChart')}</div>`;
+  
   const width = 720;
   const height = compact ? 180 : 218;
   const margin = { top: 14, right: 34, bottom: 32, left: 34 };
