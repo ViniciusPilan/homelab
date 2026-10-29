@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/ViniciusPilan/homelab/compare/weather-v0.3.0...weather-v0.3.1) (2026-10-29)
+
+
+### Bug Fixes
+
+* ensure __pycache__ is ignored in weather app ([#35](https://github.com/ViniciusPilan/homelab/issues/35)) ([d048057](https://github.com/ViniciusPilan/homelab/commit/d048057bdd8beabc4cf95512bd957968ef931d43))
+
 ## [0.3.0](https://github.com/ViniciusPilan/homelab/compare/weather-v0.2.3...weather-v0.3.0) (2026-10-29)
 
 
