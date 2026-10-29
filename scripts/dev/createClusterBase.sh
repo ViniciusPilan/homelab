@@ -57,7 +57,7 @@ function checkRequirements() {
 
 function createClusterBase() {
     echo "INFO: Starting the cluster creation process" 
-    kind create cluster --config=../config.yaml --name=k8s-cluster
+    kind create cluster --config=config.yaml --name=k8s-cluster
  
     echo "INFO: Waiting nodes be ready to proceed"
     kubectl wait --for=condition=Ready nodes --all --timeout=5m
