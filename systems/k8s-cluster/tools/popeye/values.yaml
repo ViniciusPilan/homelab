@@ -2,6 +2,14 @@
 serviceAccount:
   automount: true
 
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
 popeye:
   args:
     # Avoid passing this flag as the container command; the image then starts
