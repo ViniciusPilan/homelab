@@ -27,7 +27,8 @@ END_COMMIT_OVERRIDE
 
 After weather app changes merge, Release Please opens or updates one release
 PR. Merging it updates `version.txt` and `CHANGELOG.md`, creates a `v`-prefixed
-GitHub release, and builds both images with the version tag and `latest`:
+GitHub release, and builds both images for `linux/amd64` and `linux/arm64` with
+the version tag and `latest`:
 
 - `ghcr.io/<owner>/weather-api:<version>`
 - `ghcr.io/<owner>/weather-app-frontend:<version>`
