@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0](https://github.com/ViniciusPilan/homelab/compare/weather-v0.2.3...weather-v0.3.0) (2026-10-29)
+
+
+### Features
+
+* support multi-architecture builds for weather app images ([31b0813](https://github.com/ViniciusPilan/homelab/commit/31b08133a470480c68777471ed106df506966159))
+* support multi-architecture builds for weather app images ([252e78e](https://github.com/ViniciusPilan/homelab/commit/252e78e9e2cffbf06ff5291c5fd38ba14d105a75))
+
 ## [0.2.3](https://github.com/ViniciusPilan/homelab/compare/weather-v0.2.2...weather-v0.2.3) (2026-10-28)
 
 
