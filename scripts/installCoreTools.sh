@@ -174,7 +174,7 @@ function installIstio() {
 
     installIstioBase
     installIstiod
-    installIstioGateway
+    # installIstioGateway
 }
 
 
