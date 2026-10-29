@@ -10,32 +10,42 @@ the existing deployment architecture unless the task asks to change it.
 
 ```text
 .
-├── .agents/skills/                 # Repository workflows and conventions
-├── ansible-playbooks/              # Host preparation and k0s installation
-├── examples/python-coding/         # Example Python project structure
-├── internal-tools/weather/         # Weather tool API and frontend
+├── .agents/skills/                  # Repository workflows and conventions
+├── .github/workflows/               # PR title and weather release workflows
+├── ansible-playbooks/               # Host preparation and k0s installation
+├── examples/python-coding/          # Example Python project structure
+├── internal-tools/weather/          # Weather API, frontend, and Compose setup
 ├── pki/
 │   ├── root-ca/                     # Root CA configuration and documentation
 │   └── intermediate-ca/             # Intermediate CA configuration and documentation
 ├── scripts/                         # Cluster, host, and development scripts
-├── systems/
-│   └── k8s-cluster/
-│       ├── provisioning/
-│       │   ├── dev/                 # Development-cluster provisioning
-│       │   └── pro/                 # Production-cluster provisioning and Ansible
-│       └── tools/                   # Cluster add-ons, Argo CD apps, and policies
+├── systems/k8s-cluster/
+│   ├── provisioning/
+│   │   ├── dev/                     # Development-cluster configuration
+│   │   └── pro/                     # Production OpenTofu config and generated Ansible inventory
+│   └── tools/
+│       ├── argo/                    # Argo CD root configuration and Applications
+│       ├── kube-bench/              # Kustomize job and kube-bench configuration
+│       └── <tool>/                  # Helm values, manifests, policies, and documentation
 └── tf-modules/
     ├── ansible-inventory/           # Reusable Ansible inventory module
     └── proxmox-vm/                  # Reusable Proxmox VM module
 ```
 
-The Kubernetes cluster uses k0s on Proxmox VMs. Development and production
-provisioning configuration live in `systems/k8s-cluster/provisioning/dev/` and
-`systems/k8s-cluster/provisioning/pro/`. Cluster add-ons are organized under
-`systems/k8s-cluster/tools/`, with Argo CD Applications in
-`systems/k8s-cluster/tools/argo/applications/`. The repository also contains
-the standalone weather tool in `internal-tools/weather/` and reusable OpenTofu
-modules in `tf-modules/`.
+The Kubernetes cluster uses k0s on Proxmox VMs. Development configuration and
+production OpenTofu provisioning live in
+`systems/k8s-cluster/provisioning/dev/` and
+`systems/k8s-cluster/provisioning/pro/`; the production inventory is generated
+under `pro/ansible/`. Host preparation and cluster installation playbooks live
+in the top-level `ansible-playbooks/` directory. Cluster add-ons are organized
+under `systems/k8s-cluster/tools/`: Argo CD Applications are in
+`tools/argo/applications/`, chart overrides and tool documentation are in
+their respective directories, and kube-bench is deployed from raw manifests
+using Kustomize. Check `tools/argo/argo-applications.yaml` and the individual
+Application manifests to determine what is active. The repository also
+contains the weather service in `internal-tools/weather/`, CA configuration
+under `pki/`, reusable OpenTofu modules in `tf-modules/`, and GitHub Actions
+workflows under `.github/workflows/`.
 
 ## Before changing files
 
