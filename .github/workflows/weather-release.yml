@@ -19,9 +19,9 @@ jobs:
     name: Create or update release PR
     runs-on: ubuntu-latest
     outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
-      version: ${{ steps.release.outputs.version }}
+      release_created: ${{ steps.release.outputs['internal-tools/weather--release_created'] }}
+      tag_name: ${{ steps.release.outputs['internal-tools/weather--tag_name'] }}
+      version: ${{ steps.release.outputs['internal-tools/weather--version'] }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
