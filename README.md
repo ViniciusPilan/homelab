@@ -33,12 +33,6 @@ popeye?
 k8sgpt
 
 Create storageclass provider
-Create Garage
-Create Prometheus
-Create Alloy
-Create Loki
-Create Grafana 
-Create Grafana MCP
 
 Secret Operator
 
