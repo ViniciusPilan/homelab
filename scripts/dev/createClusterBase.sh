@@ -73,7 +73,6 @@ function installGatewayCRDs() {
 function main() {
     checkRequirements
     createClusterBase
-    installGatewayCRDs
 }
 
 main

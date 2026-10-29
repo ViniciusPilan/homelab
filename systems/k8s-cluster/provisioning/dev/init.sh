@@ -5,15 +5,15 @@
 # This script will create the cluster with the project patterns and base tools.
 
 # How to run:
-# $ cd cluster-provisioning
+# $ cd systems/k8s-cluster/provisioning/dev
 # $ bash init.sh
 
 
 function main() {
     cd scripts
 
-    bash createClusterBase.sh
-    bash installCoreTools.sh
+    bash ../../../../scripts/dev/createClusterBase.sh
+    bash ../../../../scripts/installCoreTools.sh
 }
 
 main
