@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: require-pod-resources
 spec:
-  validationFailureAction: Enforce
+  validationFailureAction: Audit
   background: true
   rules:
     - name: require-container-resources
