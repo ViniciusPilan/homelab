@@ -20,22 +20,36 @@ The following tools are declared as active Argo CD applications in
 | kube-prometheus-stack (Prometheus base) | Installs Prometheus Operator CRDs and Kubernetes component monitoring resources. Prometheus is enabled in agent mode; Alertmanager, bundled Grafana, kube-state-metrics, node exporter, and default rules are disabled. |
 | Metrics Server | Collects resource usage metrics for Kubernetes nodes and pods, used by features such as `kubectl top` and resource-based autoscaling. |
 
-Mimir and cert-manager have application manifests in the same directory, but
-their manifests are currently commented out and are not active Argo CD
-applications.
-
 
 # TO DOs
 
-kube-bench
-kubesec?
-popeye?
 k8sgpt
-
-Create storageclass provider
-
-Secret Operator
 
 Policy as a code
 - recs
 - non root (verificar se ja nao ta sendo validao no baseline do security admission controller)
+
+Examples:
+- javascript coding
+
+Workflows:
+- We should have a global workflow named files validator that trigges specific actions for kubesec and yamllint only if have yaml files in the PR 
+    - It's better than our current scenario because now every PR starts the yaml validator workflow (even with no yaml manifests)
+    - Our current scenario already runs linters only in the yaml manifests, but a workflow named yaml lint and yaml sec validation for all PRs could make wrong point of view.
+
+skill:
+- javascript coding
+- create sec reports (AI analyzes popeye and kube-bench logs to create smart reports)
+
+apps:
+- Brazilian financial market summary dashboard
+- trivy image scan
+- signed images
+- build multistage
+- hardning
+
+Cluster:
+- nodepools
+- ingress
+- Create storageclass provider
+- Secret Operator
