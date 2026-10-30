@@ -11,13 +11,17 @@ the existing deployment architecture unless the task asks to change it.
 ```text
 .
 ├── .agents/skills/                  # Repository workflows and conventions
-├── .github/workflows/               # PR title and weather release workflows
+├── .github/workflows/               # YAML lint, Kubesec, PR title, and weather release workflows
 ├── ansible-playbooks/               # Host preparation and k0s installation
-├── examples/python-coding/          # Example Python project structure
+├── examples/
+│   ├── python-coding/                # Example Python project structure
+│   └── shell-coding/                 # Example shell script conventions
 ├── internal-tools/weather/          # Weather API, frontend, and Compose setup
 ├── pki/
 │   ├── root-ca/                     # Root CA configuration and documentation
 │   └── intermediate-ca/             # Intermediate CA configuration and documentation
+├── release-please-config.json       # Release Please package configuration
+├── .release-please-manifest.json    # Current release versions
 ├── scripts/                         # Cluster, host, and development scripts
 ├── systems/k8s-cluster/
 │   ├── provisioning/
