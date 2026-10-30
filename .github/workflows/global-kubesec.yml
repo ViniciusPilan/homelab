@@ -72,6 +72,7 @@ jobs:
               sys.exit(0)
 
           with tempfile.TemporaryDirectory() as scan_dir:
+              pathlib.Path(scan_dir).chmod(0o755)
               scan_files = []
               for source in yaml_files:
                   try:
@@ -95,6 +96,7 @@ jobs:
                       output = pathlib.Path(scan_dir) / f"manifest-{len(scan_files) + 1}.yaml"
                       with output.open("w", encoding="utf-8") as stream:
                           yaml.safe_dump(document, stream, sort_keys=False)
+                      output.chmod(0o644)
                       scan_files.append(output.name)
 
               if not scan_files:
