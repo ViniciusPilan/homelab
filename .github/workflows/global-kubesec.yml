@@ -1,0 +1,27 @@
+name: Validate Kubernetes manifests with Kubesec
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    name: Scan Kubernetes manifests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Scan manifests with Kubesec
+        run: |
+          docker run --rm \
+            -v "$PWD:/work:ro" \
+            -w /work \
+            kubesec/kubesec:v2 \
+            scan systems/k8s-cluster/tools/kube-bench/cronjob.yaml --format table
