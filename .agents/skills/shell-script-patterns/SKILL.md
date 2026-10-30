@@ -1,30 +1,26 @@
 ---
 name: shell-script-patterns
-description: Create or revise shell scripts that follow the user's established Bash conventions from their k8s-cluster repository.
+description: Create or revise Bash scripts to closely follow examples/shell-coding/addTerraformUser.sh.
 metadata:
-  short-description: Write shell scripts in the user's style
+  short-description: Write Bash scripts in the user's preferred style
 ---
 
 # Shell script patterns
 
-Use this skill when creating or revising shell scripts to match the conventions in the user's `k8s-cluster` repository. The observed examples are Bash scripts; use Bash unless the user asks for another shell.
+Use this skill when creating or revising Bash scripts in this repository. Treat `examples/shell-coding/addTerraformUser.sh` as the primary style reference and keep new scripts close to its structure and direct, straightforward style.
 
-## Repository conventions
+## Preferred structure and style
 
-- Start scripts with `#!/bin/bash`.
-- Add a short comment header describing `Purpose`, and include `Requirements` and `How to run` when relevant. The examples document important execution context, such as running on a Proxmox host or from a particular directory.
-- Put configurable values near the top as uppercase variables with underscores, such as `UBUNTU_IMAGE` and `RESOURCES_CPU_CORES`.
-- Organize work into named functions, usually camelCase, and put orchestration in `main()` at the end, followed by a direct `main` call.
-- Use short comments to identify meaningful steps within setup functions.
-- Report progress with simple `INFO:` and numbered `Step 01:` style `echo` messages when a script has multiple visible stages.
-- Check required executables with `command -v`; check service readiness with its own relevant command (the examples use `docker info`). Report failures clearly and exit nonzero.
-- Keep commands and options readable across lines where that improves clarity. Quote variable expansions, especially in paths, command arguments, and values that may contain spaces.
-- Treat relative paths and working-directory assumptions as part of the script interface. Document them in `How to run`; use an explicit `cd ... || exit` when the script intentionally operates from a fixed directory.
+- Begin with `#!/bin/bash`, followed by a brief purpose header. Include `Requirements` and `How to run` sections when execution context or prerequisites matter.
+- Put configuration values near the top, using uppercase variable names with underscores where appropriate.
+- Define focused functions with camelCase names. Keep operations grouped by purpose, then define `main()` near the end and invoke it directly with `main`.
+- Use local variables inside functions, including Bash arrays for lists of arguments or values. Expand arrays as `"${array[@]}"` so each item remains a separate argument.
+- Use short comments to label meaningful operations within functions, as in `# User`, `# Role`, and `# API token` in the reference script.
+- Use explicit, readable command invocations and line continuations when they make arguments easier to scan. Quote variable expansions in command arguments and paths, even if the reference has some unquoted expansions.
+- Avoid adding decorative output, numbered progress messages, or generic prerequisite-check scaffolding unless the script's purpose calls for them.
+- Do not add `set -euo pipefail` mechanically. Handle failures explicitly where they matter so an unsuccessful operation is not silently treated as success.
+- Document working-directory or host assumptions in the header. If the script must change to a fixed directory, make that change explicit and handle a failed `cd`.
 
-## Writing a new script
+## Writing or revising a script
 
-First identify its purpose, prerequisites, execution location, and run command. Then create a Bash script using only the conventions that fit the task: a one-shot helper does not need progress messages or prerequisite checks if they add no value. Keep configuration near the top, put logical operations in functions, and call them through `main()`.
-
-Preserve the repository's direct, readable style. The examples do not consistently use strict-mode flags, so do not add `set -euo pipefail` mechanically; choose error handling suited to the operations and ensure failures that matter cannot be silently treated as success. Likewise, avoid copying incidental spacing or unsafe unquoted expansions from older scripts.
-
-Do not assume existing helper names are globally available: the repository repeats checks in standalone scripts. Prefer local helpers for a self-contained script unless the user asks for shared sourcing or refactoring.
+Read `examples/shell-coding/addTerraformUser.sh` before editing when its conventions are relevant. Identify the script's purpose, required environment, and invocation context; then follow the reference's header, configuration, function grouping, comments, and `main()` flow. Adapt only where the task requires it, and keep the result self-contained unless shared helpers are already part of the design or explicitly requested.
