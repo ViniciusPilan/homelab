@@ -42,6 +42,7 @@ skill:
 - create sec reports (AI analyzes popeye and kube-bench logs to create smart reports)
 
 apps:
+- Weather as pod in kubernetes
 - Brazilian financial market summary dashboard
 - trivy image scan
 - signed images
@@ -49,6 +50,7 @@ apps:
 - hardning
 
 Cluster:
+- ghcr configured via image registry secret
 - nodepools
 - ingress
 - Create storageclass provider

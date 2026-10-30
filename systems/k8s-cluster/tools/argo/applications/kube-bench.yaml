@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-bench
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/ViniciusPilan/homelab.git
+    targetRevision: main
+    path: systems/k8s-cluster/tools/kube-bench
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
