@@ -4,6 +4,7 @@ kind: CronJob
 metadata:
   name: kube-bench
 spec:
+  restartPolicy: Never
   jobTemplate:
     template:
       metadata:
