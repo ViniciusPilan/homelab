@@ -53,7 +53,7 @@ jobs:
               print("No changed Kubernetes tool manifests to scan.")
               sys.exit(0)
 
-          subprocess.run(
+          result = subprocess.run(
               [
                   "docker", "run", "--rm",
                   "-v", f"{os.getcwd()}:/work:ro",
@@ -61,6 +61,18 @@ jobs:
                   "kubesec/kubesec:v2",
                   "scan", *manifests, "--format", "table",
               ],
-              check=True,
+              capture_output=True,
+              text=True,
           )
+
+          if result.stdout:
+              sys.stdout.write(result.stdout)
+          if result.stderr:
+              sys.stderr.write(result.stderr)
+          if result.returncode:
+              print(
+                  f"Kubesec scan failed with exit code {result.returncode}.",
+                  file=sys.stderr,
+              )
+              sys.exit(result.returncode)
           PY
