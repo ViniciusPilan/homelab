@@ -109,7 +109,7 @@ jobs:
                       "-v", f"{scan_dir}:/scan:ro",
                       "kubesec/kubesec:v2",
                       "scan", *(f"/scan/{name}" for name in scan_files),
-                      "--format", "table",
+                      "--format", "json",
                   ]
               )
 
