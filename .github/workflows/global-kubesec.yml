@@ -29,6 +29,7 @@ jobs:
           python -m pip install pyyaml
           python - <<'PY'
           import os
+          import json
           import pathlib
           import subprocess
           import sys
@@ -72,6 +73,7 @@ jobs:
               sys.exit(0)
 
           with tempfile.TemporaryDirectory() as scan_dir:
+              pathlib.Path(scan_dir).chmod(0o755)
               scan_files = []
               for source in yaml_files:
                   try:
@@ -95,6 +97,7 @@ jobs:
                       output = pathlib.Path(scan_dir) / f"manifest-{len(scan_files) + 1}.yaml"
                       with output.open("w", encoding="utf-8") as stream:
                           yaml.safe_dump(document, stream, sort_keys=False)
+                      output.chmod(0o644)
                       scan_files.append(output.name)
 
               if not scan_files:
@@ -107,11 +110,35 @@ jobs:
                       "-v", f"{scan_dir}:/scan:ro",
                       "kubesec/kubesec:v2",
                       "scan", *(f"/scan/{name}" for name in scan_files),
-                      "--format", "table",
-                  ]
+                      "--format", "json",
+                      "--schema-location",
+                      "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master",
+                  ],
+                  capture_output=True,
+                  text=True,
               )
+              print(result.stdout, end="")
+              if result.stderr:
+                  print(result.stderr, file=sys.stderr, end="")
 
               if result.returncode:
+                  try:
+                      reports = json.loads(result.stdout)
+                  except json.JSONDecodeError:
+                      reports = []
+
+                  if reports and all(
+                      report.get("valid") is True
+                      and report.get("score") == 0
+                      and not report.get("scoring")
+                      for report in reports
+                  ):
+                      print(
+                          "Kubesec schema validation passed; no scoring rules "
+                          "apply to these manifest(s)."
+                      )
+                      sys.exit(0)
+
                   print(
                       f"Kubesec scan failed with exit code {result.returncode}.",
                       file=sys.stderr,
