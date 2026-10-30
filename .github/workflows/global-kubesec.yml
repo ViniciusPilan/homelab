@@ -17,11 +17,50 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Scan manifests with Kubesec
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          docker run --rm \
-            -v "$PWD:/work:ro" \
-            -w /work \
-            kubesec/kubesec:v2 \
-            scan systems/k8s-cluster/tools/kube-bench/cronjob.yaml --format table
+          python - <<'PY'
+          import os
+          import pathlib
+          import subprocess
+          import sys
+
+          if os.environ["EVENT_NAME"] == "pull_request":
+              changed = subprocess.check_output(
+                  [
+                      "git", "diff", "--name-only", "--diff-filter=ACMRT",
+                      f"{os.environ['BASE_SHA']}...{os.environ['HEAD_SHA']}",
+                  ],
+                  text=True,
+              ).splitlines()
+              manifests = [
+                  path for path in changed
+                  if path.startswith("systems/k8s-cluster/tools/")
+                  and pathlib.PurePosixPath(path).suffix in {".yaml", ".yml"}
+                  and pathlib.Path(path).is_file()
+              ]
+          else:
+              manifests = ["systems/k8s-cluster/tools/kube-bench/cronjob.yaml"]
+
+          if not manifests:
+              print("No changed Kubernetes tool manifests to scan.")
+              sys.exit(0)
+
+          subprocess.run(
+              [
+                  "docker", "run", "--rm",
+                  "-v", f"{os.getcwd()}:/work:ro",
+                  "-w", "/work",
+                  "kubesec/kubesec:v2",
+                  "scan", *manifests, "--format", "table",
+              ],
+              check=True,
+          )
+          PY
