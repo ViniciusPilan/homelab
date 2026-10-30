@@ -21,6 +21,13 @@ spec:
                 - k0s-1.0
               image: docker.io/aquasec/kube-bench:v0.16.0
               name: kube-bench
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
               volumeMounts:
                 - mountPath: /opt/kube-bench/cfg/config.yaml
                   name: kube-bench-config
