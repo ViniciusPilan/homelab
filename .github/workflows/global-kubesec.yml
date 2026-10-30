@@ -110,6 +110,8 @@ jobs:
                       "kubesec/kubesec:v2",
                       "scan", *(f"/scan/{name}" for name in scan_files),
                       "--format", "json",
+                      "--schema-location",
+                      "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master",
                   ]
               )
 
