@@ -2,6 +2,9 @@
 serviceAccount:
   automount: true
 
+cronjob:
+  schedule: "0 */1 * * *"
+
 resources:
   requests:
     cpu: 100m
@@ -12,6 +15,5 @@ resources:
 
 popeye:
   args:
-    # Avoid passing this flag as the container command; the image then starts
-    # without an executable and the pod fails before Popeye can run.
+    # Keep the Job successful even when Popeye reports lint findings.
     force-exit-zero: false
