@@ -24,11 +24,18 @@ jobs:
           script: |
             const { title, body } = context.payload.pull_request;
             const description = body ?? '';
-            const match = title.match(/^(feat!|feat|fix|chore|doc|refactor)(?:\([^\r\n()]+\))?:\s+.+$/);
+            const titlePattern = new RegExp(
+              '^(feat!|feat|fix|chore|doc|refactor)' +
+              '(?:\\([^\\r\\n()]+\\))?:\\s+.+$'
+            );
+            const match = title.match(titlePattern);
 
             if (!match) {
               core.setFailed(
-                'Use one of these PR title formats: "feat!: <what is changing>", "feat: <what is changing>", "fix: <what is changing>", "chore: <what is changing>", "doc: <what is changing>", or "refactor: <what is changing>".'
+                'Use these PR title formats: "feat!: <what is changing>", ' +
+                '"feat: <what is changing>", "fix: <what is changing>", ' +
+                '"chore: <what is changing>", "doc: <what is changing>", or ' +
+                '"refactor: <what is changing>".'
               );
               return;
             }
@@ -43,14 +50,18 @@ jobs:
               );
               const sectionLines = headingIndex < 0
                 ? []
-                : lines.slice(headingIndex + 1, nextHeadingIndex < 0 ? undefined : nextHeadingIndex);
+                : lines.slice(
+                    headingIndex + 1,
+                    nextHeadingIndex < 0 ? undefined : nextHeadingIndex
+                  );
               const content = sectionLines
                 .join('\n')
                 .replace(/<!--[\s\S]*?-->/g, '')
                 .trim();
               if (!content) {
                 core.setFailed(
-                  'Major changes need a non-empty "## Breaking Changes" section describing the impact.'
+                  'Major changes need a non-empty "## Breaking Changes" ' +
+                  'describing the impact.'
                 );
               }
             }

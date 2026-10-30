@@ -1,0 +1,72 @@
+name: Validate YAML files
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint YAML
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install yamllint
+        run: python -m pip install yamllint==1.35.1
+
+      - name: Validate YAML files
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python - <<'PY'
+          import os
+          import pathlib
+          import subprocess
+          import sys
+
+          if os.environ["EVENT_NAME"] == "pull_request":
+              changed = subprocess.check_output(
+                  [
+                      "git", "diff", "--name-only", "--diff-filter=ACMRT",
+                      f"{os.environ['BASE_SHA']}...{os.environ['HEAD_SHA']}",
+                  ],
+                  text=True,
+              ).splitlines()
+              yaml_files = [
+                  path for path in changed
+                  if pathlib.PurePosixPath(path).suffix in {".yaml", ".yml"}
+                  and pathlib.Path(path).is_file()
+              ]
+          else:
+              yaml_files = [
+                  str(path) for path in pathlib.Path(".").rglob("*")
+                  if path.is_file() and path.suffix in {".yaml", ".yml"}
+              ]
+
+          if not yaml_files:
+              print("No changed YAML files to lint.")
+              sys.exit(0)
+
+          subprocess.run(
+              ["yamllint", "--strict", "-d", "relaxed", *yaml_files],
+              check=True,
+          )
+          PY
