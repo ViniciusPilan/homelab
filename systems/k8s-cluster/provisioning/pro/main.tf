@@ -58,6 +58,11 @@ module "ansible_inventory" {
           name     = module.worker03.vm.name
           ip       = module.worker03.vm.ipv4
           ssh_user = module.worker03.vm.ssh_user
+        },
+        {
+          name     = module.worker04.vm.name
+          ip       = module.worker04.vm.ipv4
+          ssh_user = module.worker04.vm.ssh_user
         }
       ]
     }
@@ -157,4 +162,27 @@ module "worker03" {
   vm_memory_mb    = local.heitor.vm_memory_mb
   vm_disk_size_gb = local.heitor.vm_disk_size_gb
   vm_gateway      = local.heitor.vm_gateway
+}
+
+module "worker04" {
+  source = "../../../../tf-modules/proxmox-vm"
+
+  providers = {
+    proxmox = proxmox.ajax
+  }
+
+  proxmox_endpoint       = local.ajax.proxmox_endpoint
+  proxmox_node_name      = local.ajax.proxmox_node_name
+  proxmox_template_vm_id = local.ajax.proxmox_template_vm_id
+
+  ssh_public_key = local.ajax.proxmox_ssh_public_key
+  ssh_username   = local.ajax.proxmox_ssh_username
+
+  vm_full_name = "k8s-worker04"
+  vm_ip_cidr   = "192.168.12.32/24"
+
+  vm_cpu_cores    = local.ajax.vm_cpu_cores
+  vm_memory_mb    = "3072"
+  vm_disk_size_gb = local.ajax.vm_disk_size_gb
+  vm_gateway      = local.ajax.vm_gateway
 }
