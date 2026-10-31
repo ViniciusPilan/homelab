@@ -55,3 +55,5 @@ Cluster:
 - ingress
 - Create storageclass provider
 - Secret Operator
+- metrics system
+- popeye + kyverno + kube-bench

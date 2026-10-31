@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Popeye cluster health report</title>
+  <style>
+    :root{color-scheme:light dark;--bg:#f4f6f8;--panel:#fff;--ink:#17212b;--muted:#586574;--line:#d8dee6;--red:#b42318;--amber:#9a6700;--green:#067647;--blue:#175cd3;--shadow:#0000000a}
+    @media(prefers-color-scheme:dark){:root{--bg:#111820;--panel:#1b2530;--ink:#edf2f7;--muted:#a5b2c0;--line:#354352;--red:#ff8b82;--amber:#f3c969;--green:#6ce9a6;--blue:#84adff;--shadow:#00000020}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:1120px;margin:36px auto;padding:0 20px}h1{margin:0;font-size:clamp(1.8rem,4vw,2.5rem);line-height:1.2}h2{font-size:1.2rem;margin:0 0 12px}p{margin:8px 0}.muted,.foot{color:var(--muted)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;margin:18px 0;box-shadow:0 2px 8px var(--shadow)}.note{border-left:5px solid var(--amber)}.good{border-left:5px solid var(--green)}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin:18px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}.card strong{display:block;font-size:1.65rem;line-height:1.3}.card span{color:var(--muted)}.card.warn strong{color:var(--amber)}.card.pass strong{color:var(--green)}.card.info strong{color:var(--blue)}.pill{display:inline-block;font-size:.75rem;font-weight:700;padding:3px 8px;border-radius:999px}.pill.warn{color:var(--amber);background:#fffaeb}.pill.pass{color:var(--green);background:#ecfdf3}.table-wrap{overflow:auto;max-height:65vh;border:1px solid var(--line);border-radius:8px}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}thead th{position:sticky;top:0;background:var(--panel);white-space:nowrap}thead button{border:0;background:none;color:inherit;font:inherit;font-weight:700;padding:0;cursor:pointer}tbody tr:last-child td{border-bottom:0}code{font-size:.92em}.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}.controls input,.controls select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--ink)}.controls input{min-width:min(280px,100%)}.coverage{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}.coverage div{padding:10px 12px;border:1px solid var(--line);border-radius:8px}.bar{height:10px;border-radius:99px;background:#e6eaf0;overflow:hidden;margin:8px 0}.bar span{display:block;height:100%;background:var(--amber)}.foot{font-size:.88rem}.source{overflow-wrap:anywhere}@media print{body{background:#fff;color:#111}main{max-width:none;margin:0}.panel,.card{box-shadow:none;break-inside:avoid}.table-wrap{max-height:none;overflow:visible}thead th{position:static}.controls{display:none}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Popeye cluster health</h1>
+    <p class="muted">Latest completed scan: <code>popeye-29890920</code> · 2026-10-31 14:00 UTC · Popeye <code>v0.22.1</code></p>
+  </header>
+
+  <section class="panel good">
+    <h2>Overall result: A (100)</h2>
+    <p>Popeye reported healthy connectivity and MetricServer checks. It found no critical or error level findings. Two warnings remain on Istio CA ConfigMaps.</p>
+  </section>
+
+  <section class="panel note">
+    <h2>Read the score with scan coverage in mind</h2>
+    <p>This run lists <strong>5 scanned objects</strong>: 3 ConfigMaps, 1 Namespace, and 1 Service. Deployments, Pods, Jobs, and most other resource categories show <strong>0 scanned</strong>. The A score describes this scan output; the limited object coverage means it should not be treated as a comprehensive workload audit.</p>
+    <p>Both findings say Popeye could not locate a resource reference for the ConfigMap. That does not prove either ConfigMap is unused. Confirm Istio’s trust and certificate configuration before making changes.</p>
+  </section>
+
+  <section class="cards" aria-label="Scan totals">
+    <div class="card info"><strong>A · 100</strong><span>Cluster score</span></div>
+    <div class="card warn"><strong>2</strong><span>Warnings</span></div>
+    <div class="card pass"><strong>3</strong><span>Passed checks / objects</span></div>
+    <div class="card"><strong>5</strong><span>Objects listed as scanned</span></div>
+  </section>
+
+  <section class="panel">
+    <h2>Findings</h2>
+    <p class="muted">Search, filter, or sort the findings. Click a column heading to sort.</p>
+    <div class="controls">
+      <label for="query">Search</label><input id="query" type="search" placeholder="Namespace, resource, code…">
+      <label for="severity">Severity</label><select id="severity"><option value="ALL">All severities</option><option value="warning">Warnings</option></select>
+      <span id="result-count" class="muted" aria-live="polite"></span>
+    </div>
+    <div class="table-wrap">
+      <table id="findings">
+        <thead><tr><th><button data-key="severity">Severity ↕</button></th><th><button data-key="namespace">Namespace ↕</button></th><th><button data-key="resource">Resource ↕</button></th><th><button data-key="code">Code ↕</button></th><th>Finding and suggested review</th></tr></thead>
+        <tbody>
+          <tr data-severity="warning" data-namespace="default" data-resource="ConfigMap/istio-ca-crl" data-code="POP-400"><td><span class="pill warn">Warning</span></td><td>default</td><td><code>ConfigMap/istio-ca-crl</code></td><td><code>POP-400</code></td><td><strong>Used? Unable to locate resource reference.</strong><br>Check whether Istio or another component consumes this CRL ConfigMap. Keep it if it is part of the CA or trust distribution path.</td></tr>
+          <tr data-severity="warning" data-namespace="default" data-resource="ConfigMap/istio-ca-root-cert" data-code="POP-400"><td><span class="pill warn">Warning</span></td><td>default</td><td><code>ConfigMap/istio-ca-root-cert</code></td><td><code>POP-400</code></td><td><strong>Used? Unable to locate resource reference.</strong><br>Check Istio’s root certificate distribution and workload trust configuration before considering cleanup.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Scan coverage</h2>
+    <p class="muted">Categories with findings or positive object counts are shown below. Several workload categories in the log had zero scanned objects.</p>
+    <div class="coverage">
+      <div><strong>ConfigMaps</strong><div class="bar" aria-label="2 warnings among 3 scanned"><span style="width:67%"></span></div><span class="muted">3 scanned · 2 warnings · 1 clean</span></div>
+      <div><strong>Namespaces</strong><div class="bar" aria-label="1 clean object"><span style="width:100%;background:var(--green)"></span></div><span class="muted">1 scanned · 1 clean (default)</span></div>
+      <div><strong>Services</strong><div class="bar" aria-label="1 clean object"><span style="width:100%;background:var(--green)"></span></div><span class="muted">1 scanned · 1 clean (default/kubernetes)</span></div>
+      <div><strong>Connectivity / MetricServer</strong><div class="bar" aria-label="both checks passed"><span style="width:100%;background:var(--green)"></span></div><span class="muted">Both checks passed</span></div>
+      <div><strong>Deployments / Pods / Jobs</strong><div class="bar" aria-label="zero scanned"><span style="width:0"></span></div><span class="muted">0 scanned in this log</span></div>
+    </div>
+  </section>
+
+  <p class="foot source">Source: logs for completed Kubernetes Job <code>popeye-29890920</code> in namespace <code>popeye</code>. Scan timestamp: <code>2026-10-31T14:00:01Z</code>. This report reflects that single run and is not live-linked to the cluster. To refresh the data, inspect the latest completed job using <code>kubectl -n popeye logs job/&lt;job-name&gt;</code> and update this report.</p>
+</main>
+<script>
+  const body = document.querySelector('#findings tbody');
+  const rows = [...body.rows];
+  const query = document.getElementById('query');
+  const severity = document.getElementById('severity');
+  const count = document.getElementById('result-count');
+  function update(){
+    const term = query.value.trim().toLowerCase();
+    let visible = 0;
+    rows.forEach(row => {
+      const match = (severity.value === 'ALL' || row.dataset.severity === severity.value) && row.innerText.toLowerCase().includes(term);
+      row.hidden = !match;
+      if(match) visible++;
+    });
+    count.textContent = `${visible} of ${rows.length} findings`;
+  }
+  query.addEventListener('input', update);
+  severity.addEventListener('change', update);
+  document.querySelectorAll('thead button[data-key]').forEach(button => {
+    let ascending = true;
+    button.addEventListener('click', () => {
+      const key = button.dataset.key;
+      rows.sort((a,b) => a.dataset[key].localeCompare(b.dataset[key]) * (ascending ? 1 : -1));
+      rows.forEach(row => body.appendChild(row));
+      ascending = !ascending;
+    });
+  });
+  update();
+</script>
+</body>
+</html>
