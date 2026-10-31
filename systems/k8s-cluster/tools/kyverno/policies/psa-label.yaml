@@ -29,7 +29,8 @@ spec:
           "kube-public",
           "kube-node-lease",
           "kyverno",
-          "istio-system"
+          "istio-system",
+          "kube-bench"
         ].exists(n, n == object.metadata.name)
 
   mutations:
