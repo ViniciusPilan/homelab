@@ -14,6 +14,7 @@ function main() {
 
     bash ../../../../scripts/dev/createClusterBase.sh
     bash ../../../../scripts/installCoreTools.sh
+    bash ../../../../scripts/labelNodes.sh
 }
 
 main
