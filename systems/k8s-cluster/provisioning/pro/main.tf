@@ -69,7 +69,6 @@ module "ansible_inventory" {
   ]
 }
 
-
 module "controlplane01" {
   source = "../../../../tf-modules/proxmox-vm"
 
@@ -92,8 +91,6 @@ module "controlplane01" {
   vm_disk_size_gb = local.ajax.vm_disk_size_gb
   vm_gateway      = local.ajax.vm_gateway
 }
-
-
 
 module "worker01" {
   source = "../../../../tf-modules/proxmox-vm"
