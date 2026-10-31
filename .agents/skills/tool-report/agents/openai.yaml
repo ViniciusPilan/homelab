@@ -1,0 +1,3 @@
+interface:
+  display_name: "Tool Reports"
+  short_description: "Create interactive HTML reports from tool logs"

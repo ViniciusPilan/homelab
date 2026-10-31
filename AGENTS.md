@@ -14,6 +14,7 @@ the existing deployment architecture unless the task asks to change it.
 ├── .github/workflows/               # YAML lint, Kubesec, PR title, and weather release workflows
 ├── ansible-playbooks/               # Host preparation and k0s installation
 ├── examples/
+│   ├── html-page-for-reports/        # Reusable interactive report template
 │   ├── python-coding/                # Example Python project structure
 │   └── shell-coding/                 # Example shell script conventions
 ├── internal-tools/weather/          # Weather API, frontend, and Compose setup
@@ -113,6 +114,20 @@ workflows under `.github/workflows/`.
   `pki/`; never add private keys or issued secret material to documentation.
 - Keep tools-server service definitions in its Compose configuration and follow
   the existing deployment approach.
+
+### HTML reports
+
+- Follow `.agents/skills/tool-report/SKILL.md` whenever creating or refreshing a
+  report for a repository or cluster tool.
+- When creating a report from scanner, security, or operational logs, start
+  from
+  `examples/html-page-for-reports/html-report-template.html`. Replace its
+  placeholders with findings from the current run, preserve interactive
+  search/filter/sort, and
+  state the run scope, source, and any limitations that affect interpretation.
+- Keep generated reports alongside the relevant tool or dataset unless the task
+  asks for another location. Reports are snapshots unless explicitly connected
+  to a live data source.
 
 ## Validation
 

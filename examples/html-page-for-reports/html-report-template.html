@@ -1,0 +1,151 @@
+<!doctype html>
+<!--
+  Generic, standalone interactive report template.
+
+  Before use, replace every {{PLACEHOLDER}} with report-specific content.
+  Repeat metric cards, target rows, coverage cards, and finding rows as needed.
+  Finding row attributes must use the exact status and target values shown in
+  the filter options. Escape any log-derived text before inserting it into HTML.
+  Remove optional sections that do not apply. Keep the run scope and data-source
+  caveats visible so scores and findings are not read beyond their evidence.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>{{REPORT_TITLE}}</title>
+  <style>
+    :root{color-scheme:light dark;--bg:#f4f6f8;--panel:#fff;--ink:#17212b;--muted:#586574;--line:#d8dee6;--red:#b42318;--amber:#9a6700;--green:#067647;--blue:#175cd3;--shadow:#0000000a}
+    @media(prefers-color-scheme:dark){:root{--bg:#111820;--panel:#1b2530;--ink:#edf2f7;--muted:#a5b2c0;--line:#354352;--red:#ff8b82;--amber:#f3c969;--green:#6ce9a6;--blue:#84adff;--shadow:#00000020}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:1180px;margin:36px auto;padding:0 20px}h1{margin:0 0 4px;font-size:clamp(1.8rem,4vw,2.5rem)}h2{font-size:1.2rem;margin:0 0 12px}p{margin:8px 0}.muted,.foot{color:var(--muted)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;margin:18px 0;box-shadow:0 2px 8px var(--shadow)}.alert{border-left:5px solid var(--red)}.note{border-left:5px solid var(--amber)}.good{border-left:5px solid var(--green)}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:18px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}.card strong{display:block;font-size:1.65rem}.card span{color:var(--muted)}.card.fail strong{color:var(--red)}.card.warn strong{color:var(--amber)}.card.pass strong{color:var(--green)}.card.info strong{color:var(--blue)}.pill{display:inline-block;font-size:.75rem;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap}.pill.pass{color:var(--green);background:#ecfdf3}.pill.fail{color:var(--red);background:#fef3f2}.pill.warn{color:var(--amber);background:#fffaeb}.pill.info{color:var(--blue);background:#eff8ff}.table-wrap{overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:8px}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}thead th{position:sticky;top:0;background:var(--panel);white-space:nowrap}thead button{border:0;background:none;color:inherit;font:inherit;font-weight:700;padding:0;cursor:pointer}tbody tr:last-child td{border-bottom:0}code{font-size:.92em;white-space:nowrap}.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}.controls input,.controls select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--ink)}.controls input{min-width:min(280px,100%)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.coverage-item{padding:12px;border:1px solid var(--line);border-radius:8px}.bar{height:10px;border-radius:99px;background:#e6eaf0;overflow:hidden;margin:8px 0}.bar span{display:block;height:100%;background:var(--amber)}.foot{font-size:.88rem;overflow-wrap:anywhere}@media print{body{background:#fff;color:#111}main{max-width:none;margin:0}.panel,.card{box-shadow:none;break-inside:avoid}.table-wrap{max-height:none;overflow:visible}thead th{position:static}.controls{display:none}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>{{REPORT_TITLE}}</h1>
+    <p class="muted">{{REPORT_CONTEXT}} · Run <code>{{RUN_ID}}</code> · {{RUN_TIMESTAMP}} · {{TOOL_NAME}} <code>{{TOOL_VERSION}}</code></p>
+  </header>
+
+  <!-- Use good for a clean run, note for review needed, or alert for serious risk. -->
+  <section class="panel {{SUMMARY_CLASS}}">
+    <h2>{{SUMMARY_HEADING}}</h2>
+    <p>{{SUMMARY_BODY}}</p>
+  </section>
+
+  <!-- Include this section when run scope, incomplete checks, or interpretation caveats matter. -->
+  <section class="panel note">
+    <h2>Scope and interpretation</h2>
+    <p>{{SCOPE_AND_CAVEATS}}</p>
+  </section>
+
+  <section class="cards" aria-label="Report summary">
+    <!-- Duplicate a card for each useful metric. Use pass, fail, warn, or info to color the value. -->
+    <div class="card {{METRIC_1_CLASS}}"><strong>{{METRIC_1_VALUE}}</strong><span>{{METRIC_1_LABEL}}</span></div>
+    <div class="card {{METRIC_2_CLASS}}"><strong>{{METRIC_2_VALUE}}</strong><span>{{METRIC_2_LABEL}}</span></div>
+    <div class="card {{METRIC_3_CLASS}}"><strong>{{METRIC_3_VALUE}}</strong><span>{{METRIC_3_LABEL}}</span></div>
+    <div class="card {{METRIC_4_CLASS}}"><strong>{{METRIC_4_VALUE}}</strong><span>{{METRIC_4_LABEL}}</span></div>
+  </section>
+
+  <!-- Optional overview table. Replace or remove if there is no useful grouping. -->
+  <section class="panel">
+    <h2>{{GROUP_SUMMARY_TITLE}}</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Group</th><th>Pass</th><th>Fail</th><th>Warn</th><th>Info</th></tr></thead>
+        <tbody>
+          <!-- Repeat this row for every namespace, node, resource family, or section. -->
+          <tr><th>{{GROUP_NAME}}</th><td>{{GROUP_PASS}}</td><td>{{GROUP_FAIL}}</td><td>{{GROUP_WARN}}</td><td>{{GROUP_INFO}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Findings</h2>
+    <p class="muted">Search findings, filter by status or group, and click a column heading to sort.</p>
+    <div class="controls">
+      <label for="search">Search</label><input id="search" type="search" placeholder="ID, resource, or description">
+      <label for="status">Status</label>
+      <select id="status"><option value="ALL">All statuses</option><option value="FAIL">FAIL</option><option value="WARN">WARN</option><option value="INFO">INFO</option><option value="PASS">PASS</option></select>
+      <label for="group">Group</label><select id="group"><option value="ALL">All groups</option><!-- Add one option per distinct group, matching data-group values below. --><option value="{{GROUP_VALUE}}">{{GROUP_LABEL}}</option></select>
+      <span id="result-count" class="muted" aria-live="polite"></span>
+    </div>
+    <div class="table-wrap">
+      <table id="findings">
+        <thead><tr><th><button data-key="status">Status ↕</button></th><th><button data-key="group">Group ↕</button></th><th><button data-key="id">ID ↕</button></th><th>Finding</th><th>Review notes</th></tr></thead>
+        <tbody>
+          <!--
+            Repeat for each finding. data-status must be PASS, FAIL, WARN, or INFO.
+            data-group must match an option in the Group filter. Escape log text.
+          -->
+          <tr data-status="{{STATUS}}" data-group="{{GROUP_VALUE}}" data-id="{{FINDING_ID}}">
+            <td><span class="pill {{STATUS_CLASS}}">{{STATUS}}</span></td>
+            <td>{{GROUP_LABEL}}</td>
+            <td><code>{{FINDING_ID}}</code></td>
+            <td>{{FINDING_DESCRIPTION}}</td>
+            <td>{{REVIEW_NOTES}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Optional scope / coverage visualization. Remove when the source has no coverage data. -->
+  <section class="panel">
+    <h2>Coverage</h2>
+    <p class="muted">Summarize what was scanned, skipped, or unavailable.</p>
+    <div class="grid">
+      <div class="coverage-item"><strong>{{COVERAGE_LABEL}}</strong><div class="bar"><span style="width:{{COVERAGE_PERCENT}}%"></span></div><span class="muted">{{COVERAGE_DETAIL}}</span></div>
+    </div>
+  </section>
+
+  <p class="foot">Source: {{SOURCE_DESCRIPTION}}. This report reflects one run and is not live-linked to the source system.</p>
+</main>
+<script>
+  const tableBody = document.querySelector('#findings tbody');
+  const rows = [...tableBody.rows];
+  const search = document.getElementById('search');
+  const status = document.getElementById('status');
+  const group = document.getElementById('group');
+  const count = document.getElementById('result-count');
+
+  function updateFindings() {
+    const term = search.value.trim().toLowerCase();
+    let visible = 0;
+    rows.forEach(row => {
+      const matches = (status.value === 'ALL' || row.dataset.status === status.value)
+        && (group.value === 'ALL' || row.dataset.group === group.value)
+        && row.innerText.toLowerCase().includes(term);
+      row.hidden = !matches;
+      if (matches) visible++;
+    });
+    count.textContent = `${visible} of ${rows.length} findings`;
+  }
+
+  search.addEventListener('input', updateFindings);
+  status.addEventListener('change', updateFindings);
+  group.addEventListener('change', updateFindings);
+
+  document.querySelectorAll('thead button[data-key]').forEach(button => {
+    let ascending = true;
+    button.addEventListener('click', () => {
+      const key = button.dataset.key;
+      rows.sort((a, b) => {
+        const left = a.dataset[key] || '';
+        const right = b.dataset[key] || '';
+        const compare = key === 'id'
+          ? left.localeCompare(right, undefined, {numeric: true})
+          : left.localeCompare(right);
+        return compare * (ascending ? 1 : -1);
+      });
+      rows.forEach(row => tableBody.appendChild(row));
+      ascending = !ascending;
+    });
+  });
+
+  updateFindings();
+</script>
+</body>
+</html>
