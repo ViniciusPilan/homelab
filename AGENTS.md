@@ -11,6 +11,13 @@ the existing deployment architecture unless the task asks to change it.
 ```text
 .
 ├── .agents/skills/                  # Repository workflows and conventions
+│   ├── deploy-cluster-tool/         # Add a Kubernetes tool through Argo CD and Helm
+│   ├── financial-dashboard-report/  # Bank-stock dashboard workflow and HTML base
+│   │   └── assets/                  # Reusable report design
+│   ├── python-script-patterns/      # Python project conventions
+│   ├── sec-report/                 # Evidence-based security and tool reports
+│   │   └── agents/                  # Skill metadata
+│   └── shell-script-patterns/       # Bash script conventions
 ├── .github/workflows/               # YAML lint, Kubesec, PR title, and weather release workflows
 ├── ansible-playbooks/               # Host preparation and k0s installation
 ├── examples/
@@ -55,8 +62,16 @@ workflows under `.github/workflows/`.
 ## Before changing files
 
 1. Check `.agents/skills/` for a workflow that applies to the task and read its
-   `SKILL.md`. In particular, use `deploy-cluster-tool` for a new cluster tool
-   and `shell-script-patterns` when creating or revising repository scripts.
+   `SKILL.md` before editing. Available workflows:
+   - `deploy-cluster-tool` for adding a Kubernetes tool through Argo CD and Helm.
+   - `financial-dashboard-report` for HTML dashboards analyzing publicly traded
+     bank stocks. Its reusable design is in
+     `.agents/skills/financial-dashboard-report/assets/`; other financial
+     sectors are outside this skill's scope.
+   - `python-script-patterns` for creating or revising Python projects.
+   - `sec-report` (skill name `tool-report`) for reports based on security or
+     operational tool output.
+   - `shell-script-patterns` for creating or revising repository shell scripts.
 2. Read the target files and their related README or runbook. For provisioning
    or deployment changes, inspect the corresponding Argo CD, Helm, OpenTofu,
    or Ansible configuration as applicable.
@@ -117,8 +132,11 @@ workflows under `.github/workflows/`.
 
 ### HTML reports
 
-- Follow `.agents/skills/tool-report/SKILL.md` whenever creating or refreshing a
-  report for a repository or cluster tool.
+- Follow `.agents/skills/sec-report/SKILL.md` (skill name `tool-report`) whenever
+  creating or refreshing a report for a repository or cluster tool. For
+  financial dashboards, follow
+  `.agents/skills/financial-dashboard-report/SKILL.md`; that workflow is limited
+  to bank stocks.
 - When creating a report from scanner, security, or operational logs, start
   from
   `examples/html-page-for-reports/html-report-template.html`. Replace its
