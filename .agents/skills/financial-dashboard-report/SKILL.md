@@ -1,13 +1,19 @@
 ---
 name: financial-dashboard-report
-description: Create or update a concise HTML dashboard comparing publicly traded banks and financial companies for a long-term investor, using the user's approved Brazilian data sources.
+description: Create or update a concise HTML dashboard for analyzing publicly traded bank stocks for a long-term investor, using the user's approved Brazilian data sources.
 metadata:
   short-description: Create a sourced financial dashboard report
 ---
 
 # Financial dashboard report
 
-Use this skill when the user asks to create, refresh, or adapt the bank and financial-company HTML report. Save the finished report as a standalone HTML file in the repository root unless the user requests another location.
+Use this skill only when the user asks to create, refresh, or adapt an HTML dashboard analyzing publicly traded bank stocks. Save the finished report as a standalone HTML file in the repository root unless the user requests another location.
+
+## Scope
+
+Include only listed equity securities whose issuer's primary business is banking, such as commercial, universal, investment, or digital banks. A BDR may be included when it represents shares of a bank; identify the underlying issuer, ticker, and BDR ratio clearly. Include a diversified company only when banking is its primary business, and describe material non-bank operations where relevant.
+
+Exclude companies whose primary business is insurance, brokerage, investments, asset management, payments, consumer finance, or a financial holding/conglomerate that is not itself primarily a bank. Do not include these securities just because they are financial companies or appear in the user's broader portfolio. If the request mixes bank stocks with other sectors, cover only the bank stocks with this skill; another sector-specific skill should handle the rest.
 
 ## Data sources
 
@@ -23,7 +29,7 @@ Browse current data each time the report is refreshed. Link the relevant pages i
 
 Keep the report compact and make the dashboard the visual and informational center. Use four numbered parts:
 
-1. **Empresas:** a brief description of each company and its business model. Distinguish banks from insurers, holdings, BDRs, and other securities.
+1. **Empresas:** a brief description of each bank and its business model. Identify BDRs and their underlying shares when applicable; exclude non-bank companies from the comparison.
 2. **Dashboard:** the latest available price, 12-month price change, P/L, P/VP, DY, ROE, ROA, payout, net margin, and average daily liquidity when available. Include other relevant bank measures such as capital ratios, credit growth, non-performing loans, and provisions when the approved sources report them.
 3. **Métricas:** short plain-language explanations for every metric shown in the dashboard. Explain any metric that is not comparable for a company or sector.
 4. **Conclusões:** use a bullet list with one item per asset. Give a concise interpretation grounded in its dashboard metrics, including the main trade-off or item to monitor. Avoid personalized buy/sell instructions.
@@ -34,7 +40,7 @@ Add a visible data-reference date. Note when quote dates, balance-sheet periods,
 
 Start from [assets/relatorio-base-atual.html](assets/relatorio-base-atual.html) when creating another report in this series. It is a snapshot of the user's approved report design and section order, not a source of current data. Replace the company list, data, date, source links, caveats, and conclusions to match the new request. Keep the dark teal header, compact card layout, horizontally scrollable metric table, mobile behavior, print styling, and embedded CSS unless the user asks for a different design.
 
-The current example includes Nu Holdings via ROXO34 (a BDR with 1 underlying share represented by 6 BDRs) and XP Inc. via XPBR31. Keep the distinction between banks and broader financial-services platforms clear. Check ticker status, BDR parity, source quote dates, and metric availability on the approved sources each time; mark unavailable values instead of inferring them. Only include companies the user requested; do not add Caixa Econômica Federal, Caixa Seguridade, or any other company by default.
+The current example includes Nu Holdings via ROXO34 (a BDR with 1 underlying share represented by 6 BDRs). Check that every requested issuer meets the bank-only scope, and check ticker status, BDR parity, source quote dates, and metric availability on the approved sources each time; mark unavailable values instead of inferring them. Only include companies the user requested; do not add Caixa Econômica Federal, Caixa Seguridade, or any other company by default. Caixa Econômica Federal is a bank and may be included if requested; Caixa Seguridade is an insurer and is out of scope.
 
 ## Output quality
 
