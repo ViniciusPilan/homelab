@@ -1,6 +1,6 @@
 ---
 name: tool-report
-description: Create or update an evidence-based HTML report for a repository or cluster tool from its logs or scan output. Use whenever the user asks for a report for a tool, including security scanners and operational tools.
+description: Create or update an evidence-based HTML report for a security tool from its logs or scan output of my Kubernetes cluster. Use whenever the user asks for a report for a tool, including security scanners and operational tools.
 ---
 
 # Tool Report
