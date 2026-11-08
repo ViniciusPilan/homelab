@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Dashboard de acompanhamento de fundos imobiliários e FIAGROs brasileiros.">
+  <title>Dashboard de FIIs</title>
+  <style>
+    :root{color-scheme:light;--ink:#172a3a;--muted:#62727d;--line:#dce5e9;--paper:#fff;--wash:#f1f7f6;--teal:#087f79;--teal2:#075d59;--gold:#d99a2b}
+    *{box-sizing:border-box}body{margin:0;background:#edf3f3;color:var(--ink);font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{color:var(--teal2);text-underline-offset:3px}.page{width:min(1180px,calc(100% - 28px));margin:24px auto 48px}
+    header{padding:clamp(25px,5vw,48px);border-radius:20px;color:#fff;background:linear-gradient(125deg,#123244,#087f79);box-shadow:0 16px 40px #193d4718}
+    .eyebrow{margin:0 0 8px;color:#b9eeea;font-size:.75rem;font-weight:750;letter-spacing:.13em;text-transform:uppercase}h1{margin:0;font-size:clamp(2rem,5vw,3.2rem);line-height:1.08;letter-spacing:-.04em}header p:not(.eyebrow){max-width:780px;margin:14px 0 0;color:#e5f1f2;font-size:1rem}.stamp{display:inline-block;margin-top:18px;padding:5px 10px;border:1px solid #ffffff55;border-radius:999px;font-size:.82rem}
+    main{display:grid;gap:18px;margin-top:18px}section{padding:clamp(19px,3vw,28px);border:1px solid var(--line);border-radius:17px;background:var(--paper);box-shadow:0 6px 22px #193d4708}h2{margin:0 0 12px;font-size:1.35rem;line-height:1.25;letter-spacing:-.02em}h3{margin:0 0 5px;font-size:1rem}p{margin:7px 0}.muted,.note{color:var(--muted)}.note{font-size:.83rem}
+    .part{display:inline-block;margin-bottom:8px;color:var(--teal);font-size:.74rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+    .funds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.fund{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfdfd}.fund p{font-size:.87rem;color:#435662}.tag{display:inline-block;padding:2px 7px;border-radius:99px;background:#e8f1f1;color:#28545e;font-size:.75rem;font-weight:750}
+    .dash-head{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;flex-wrap:wrap}.dash-kpis{display:flex;gap:8px;flex-wrap:wrap}.kpi{padding:7px 10px;border-radius:9px;background:var(--wash);font-size:.79rem}.kpi b{color:var(--teal2)}
+    .table-wrap{max-width:100%;overflow-x:auto;margin-top:13px;border:1px solid var(--line);border-radius:12px;overscroll-behavior-inline:contain}table{width:100%;min-width:0;border-collapse:collapse;table-layout:fixed;font-variant-numeric:tabular-nums}th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:normal;overflow-wrap:anywhere;hyphens:auto}th{position:sticky;top:0;background:#eaf3f2;color:#31515c;font-size:.68rem;line-height:1.25;letter-spacing:.02em;text-transform:uppercase}td{font-size:.78rem;line-height:1.35}th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:#f7fbfb}tbody tr:last-child td{border-bottom:0}tbody tr:hover td{background:#f3f9f8}
+    @media(max-width:760px){.table-wrap{overflow:visible;border:0;border-radius:0}table,tbody{display:block;width:100%}thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}tbody tr{display:block;margin:0 0 12px;padding:6px 11px;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 3px 12px #193d4708}tbody td,tbody td:first-child{position:static;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;width:100%;padding:8px 0;border-bottom:1px solid var(--line);background:transparent;text-align:right;font-size:.85rem}tbody td:first-child{font-weight:750}tbody td:last-child{border-bottom:0}tbody td::before{content:attr(data-label);flex:0 0 42%;color:var(--muted);font-size:.73rem;font-weight:700;line-height:1.3;text-align:left;overflow-wrap:anywhere}tbody td:first-child::before{content:"";display:none}}
+    @media(min-width:761px) and (max-width:1050px){th,td{padding:7px 5px}th{font-size:.62rem}td{font-size:.71rem}}.neg{color:#a3463b}.pos{color:#14756f}.dim{color:#8a989e}
+    .legend{display:flex;gap:7px 15px;flex-wrap:wrap;margin-top:9px;color:var(--muted);font-size:.78rem}.compact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:13px}.watch{padding:11px 13px;border-radius:10px;background:var(--wash);font-size:.83rem}.watch b{color:var(--teal2)}
+    .conclusion{border-left:5px solid var(--gold);background:#fffaf0}.conclusion p,.conclusion li{font-size:.93rem}.conclusion ul{margin:8px 0 0;padding-left:22px}.conclusion li{margin:0 0 8px}.sources{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.sources a{padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:white;font-size:.78rem;font-weight:700}footer{padding:15px 5px 0;color:var(--muted);font-size:.78rem}
+    @media(max-width:850px){.funds{grid-template-columns:repeat(2,minmax(0,1fr))}.compact{grid-template-columns:1fr}}
+    @media(max-width:560px){.page{width:calc(100% - 16px);margin:8px auto 28px}.funds{grid-template-columns:1fr}header{border-radius:15px}}
+    @media print{body{background:white;font-size:10pt}.page{width:100%;margin:0}header,section{box-shadow:none;break-inside:avoid}header{print-color-adjust:exact;-webkit-print-color-adjust:exact}.table-wrap{overflow:visible}table{min-width:0;font-size:7pt}th,td{padding:5px 4px;font-size:7pt}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <p class="eyebrow">Acompanhamento de renda imobiliária · FIIs e FIAGROs</p>
+      <h1>Dashboard de fundos imobiliários</h1>
+      <p>Compare renda, qualidade dos ativos, ocupação, crédito e riscos específicos de cada estratégia. Proventos passados não garantem pagamentos futuros.</p>
+      <span class="stamp">Referência consultada: [data] · cotações: [data]</span>
+    </header>
+    <main>
+      <section id="fundos">
+        <span class="part">Parte 1 · Fundos</span>
+        <h2>Estratégia e composição da carteira</h2>
+        <div class="funds">
+          <!-- Repita um cartão por ticker solicitado; informe a estratégia confirmada em fonte atual. -->
+          <article class="fund"><h3>[Nome do fundo] <span class="tag">[TICKER]</span></h3><p>[Mandato, principais ativos/fontes de renda, diversificação e risco relevante. Cite período e fonte no relatório final.]</p></article>
+        </div>
+      </section>
+      <section id="dashboard">
+        <span class="part">Parte 2 · Dashboard</span>
+        <div class="dash-head"><div><h2>Indicadores para acompanhar</h2><p class="note">Informe a data e a definição de cada indicador. Separe fundos de imóveis, crédito e FIAGRO quando a comparação direta não fizer sentido.</p></div>
+          <div class="dash-kpis"><span class="kpi"><b>Mercado:</b> preço · P/VP · liquidez</span><span class="kpi"><b>Renda:</b> proventos · DY</span><span class="kpi"><b>Carteira:</b> vacância · crédito</span></div></div>
+        <div class="table-wrap" role="region" aria-label="Dashboard comparativo; role horizontalmente para ver todas as métricas" tabindex="0">
+          <table><thead><tr><th>Fundo / ticker</th><th>Preço</th><th>Var. 12m</th><th>P/VP</th><th>DY 12m</th><th>Provento mensal</th><th>Liquidez diária</th><th>Métrica específica</th><th>Referência</th></tr></thead>
+            <tbody><tr><td>[Fundo · TICKER]</td><td>[R$]</td><td>[%]</td><td>[x]</td><td>[% · período]</td><td>[R$/cota]</td><td>[R$]</td><td>[Vacância, ocupação, LTV ou n/a]</td><td>[mês/ano]</td></tr></tbody>
+          </table>
+        </div>
+        <div class="legend"><span><b>n/d:</b> dado não divulgado ou indisponível.</span><span>Identifique valores extraordinários e diferenças de metodologia.</span></div>
+        <div class="compact">
+          <div class="watch"><b>Imóveis</b><br>[Vacância física e financeira, concentração, contratos e vencimentos.]</div>
+          <div class="watch"><b>Crédito</b><br>[Indexadores, concentração, garantias, LTV, atrasos e eventos de crédito.]</div>
+          <div class="watch"><b>Renda e obrigações</b><br>[Recorrência dos proventos, caixa, endividamento e vencimentos.]</div>
+        </div>
+        <p class="note">[Limitações de dados, metodologia de yield/P/VP e diferenças entre fundos.]</p>
+        <div class="sources" aria-label="Fontes de dados"><a href="[URL]">[Administrador/gestor · fundo · relatório do mês]</a><a href="[URL]">[CVM/B3 ou fonte de mercado · dado consultado]</a></div>
+      </section>
+      <section id="metricas">
+        <span class="part">Parte 3 · Métricas</span><h2>Como interpretar</h2>
+        <div class="compact">
+          <div class="watch"><b>P/VP</b><br>Preço de mercado em relação ao valor patrimonial por cota. Informe a data do NAV e considere que avaliações imobiliárias podem estar defasadas.</div>
+          <div class="watch"><b>DY histórico</b><br>Proventos pagos no período escolhido divididos pelo preço de referência. Não é projeção nem promessa de renda.</div>
+          <div class="watch"><b>Vacância física e financeira</b><br>Área desocupada e parcela potencial de receita perdida, respectivamente. Definições e bases de cálculo variam; reporte ambas quando possível.</div>
+          <div class="watch"><b>WALE e vencimentos</b><br>Prazo médio remanescente dos contratos. Registre o método de ponderação e os vencimentos relevantes.</div>
+          <div class="watch"><b>Indicadores de shopping</b><br>SSS, SSR, custo de ocupação e fluxo de visitantes dependem de período, participação do fundo e escopo dos empreendimentos informados.</div>
+          <div class="watch"><b>Crédito, indexação e LTV</b><br>Apresente concentração, indexador, prazo, garantias e base de cálculo do LTV. A taxa contratada não elimina risco de inadimplência ou liquidez.</div>
+        </div>
+      </section>
+      <section class="conclusion" id="conclusoes">
+        <span class="part">Parte 4 · Conclusões</span><h2>Leitura por fundo</h2>
+        <ul><li><strong>[TICKER · nome]:</strong> [evidência, principal risco e métrica a acompanhar, com período].</li></ul>
+      </section>
+    </main>
+    <footer>Relatório informativo. Preços, carteiras e proventos mudam com o mercado e com novas divulgações. Fontes e datas estão identificadas junto aos indicadores.</footer>
+  </div>
+  <script>
+    document.querySelectorAll("table").forEach((table) => {
+      const labels = Array.from(table.querySelectorAll("thead th"), (cell) => cell.textContent.trim());
+      table.querySelectorAll("tbody tr").forEach((row) => {
+        Array.from(row.cells).forEach((cell, index) => {
+          if (labels[index]) cell.setAttribute("data-label", labels[index]);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

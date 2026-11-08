@@ -14,6 +14,8 @@ the existing deployment architecture unless the task asks to change it.
 │   ├── deploy-cluster-tool/         # Add a Kubernetes tool through Argo CD and Helm
 │   ├── financial-dashboard-report/  # Bank-stock dashboard workflow and HTML base
 │   │   └── assets/                  # Reusable report design
+│   ├── fii-dashboard-report/        # FII and FIAGRO dashboard workflow and HTML base
+│   │   └── assets/                  # Reusable report design
 │   ├── python-script-patterns/      # Python project conventions
 │   ├── sec-report/                 # Evidence-based security and tool reports
 │   │   └── agents/                  # Skill metadata
@@ -69,6 +71,8 @@ workflows under `.github/workflows/`.
      bank stocks. Its reusable design is in
      `.agents/skills/financial-dashboard-report/assets/`; other financial
      sectors are outside this skill's scope.
+   - `fii-dashboard-report` for dashboards analyzing Brazilian FIIs and
+     FIAGROs, using fund-specific property, income, and credit metrics.
    - `python-script-patterns` for creating or revising Python projects.
    - `sec-report` (skill name `tool-report`) for reports based on security or
      operational tool output.
