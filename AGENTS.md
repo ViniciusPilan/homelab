@@ -31,6 +31,7 @@ the existing deployment architecture unless the task asks to change it.
 ├── release-please-config.json       # Release Please package configuration
 ├── .release-please-manifest.json    # Current release versions
 ├── scripts/                         # Cluster, host, and development scripts
+├── smart-reports/                   # Relatórios finais em PDF, agrupados por assunto
 ├── systems/k8s-cluster/
 │   ├── provisioning/
 │   │   ├── dev/                     # Development-cluster configuration
@@ -132,6 +133,12 @@ workflows under `.github/workflows/`.
 
 ### HTML reports
 
+- Save every final report created in this repository under `smart-reports/<assunto>/`.
+  Create the subject directory when needed. Save the deliverable as
+  `<nome-do-relatorio>_DD-MM-YYYY_HH-MM.pdf`, using local 24-hour time. HTML
+  may be used as the source, but export the final report to PDF.
+- Apply this rule to every report skill. Use another location or format only
+  when the user explicitly requests it for that task.
 - Follow `.agents/skills/sec-report/SKILL.md` (skill name `tool-report`) whenever
   creating or refreshing a report for a repository or cluster tool. For
   financial dashboards, follow
@@ -143,9 +150,7 @@ workflows under `.github/workflows/`.
   placeholders with findings from the current run, preserve interactive
   search/filter/sort, and
   state the run scope, source, and any limitations that affect interpretation.
-- Keep generated reports alongside the relevant tool or dataset unless the task
-  asks for another location. Reports are snapshots unless explicitly connected
-  to a live data source.
+- Reports are snapshots unless explicitly connected to a live data source.
 
 ## Validation
 
