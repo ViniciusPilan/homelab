@@ -1,13 +1,13 @@
 ---
 name: equity-sector-dashboard-report
-description: Create or update a concise HTML dashboard for Brazilian listed companies in banking, sanitation, electric utilities, and commodities, using sector-specific operating and financial metrics.
+description: Create or update a responsive, browser-ready HTML intelligent sector report for Brazilian listed companies in banking, sanitation, electric utilities, and commodities. Invoke when the user asks for a "relatório inteligente do setor de ações brasileiras" or an intelligent report for one of these equity sectors.
 metadata:
   short-description: Create a sourced sector-aware equity dashboard
 ---
 
 # Equity sector dashboard report
 
-Use this skill when the user asks to create, refresh, or adapt an HTML report about Brazilian listed companies in banking, sanitation, electric utilities, or commodity producers. Follow the shared report location and file format in the repository `AGENTS.md`.
+Use this skill when the user asks for a “relatório inteligente do setor de ações brasileiras”, or to create, refresh, or adapt an HTML report about Brazilian listed companies in banking, sanitation, electric utilities, or commodity producers. If the request names a narrower equity sector, cover only the requested companies and apply the relevant sector metrics. Follow the shared report location and file format in the repository `AGENTS.md`. Deliver a standalone HTML file for browser viewing; PDF is only an additional output when explicitly requested.
 
 ## Scope and classification
 
@@ -86,6 +86,6 @@ Separate transmission from distribution and generation; never compare their oper
 
 ## Reusable design and output quality
 
-Start from [assets/relatorio-base-setorial.html](assets/relatorio-base-setorial.html), a copy of the established dashboard design. Preserve its dark teal header, compact company cards, responsive metric tables, print styling, and embedded CSS unless the user requests a different design. Tables should fit notebook-width screens with wrapped cell content and become labeled, readable metric cards on narrow phone screens; preserve semantic table headers for accessibility and retain horizontal scrolling as a fallback where needed. Adapt the table to the requested issuers and sectors; it is acceptable to use clearly labeled sector-specific columns or separate tables when that improves comparability.
+Start from [assets/relatorio-base-setorial.html](assets/relatorio-base-setorial.html), a copy of the established dashboard design. Preserve its dark teal header, compact company cards, responsive metric tables, and embedded CSS unless the user requests a different design. The HTML must be comfortable to read directly in a browser on both desktop and phone: tables should fit notebook-width screens with wrapped cell content and become labeled, readable metric cards on narrow phone screens; preserve semantic table headers for accessibility and retain keyboard-accessible horizontal scrolling as a fallback. Adapt the table to the requested issuers and sectors; it is acceptable to use clearly labeled sector-specific columns or separate tables when that improves comparability.
 
 Use Brazilian Portuguese unless requested otherwise. Preserve semantic headings and table headers, keyboard-scrollable table overflow, responsive layout, and readable contrast. Keep conclusions evidence-based and state limitations plainly. Do not run tests or validation checks unless the user asks for verification.

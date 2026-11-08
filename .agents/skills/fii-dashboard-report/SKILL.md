@@ -1,13 +1,13 @@
 ---
 name: fii-dashboard-report
-description: Create or update a sourced dashboard for Brazilian listed real estate funds (FIIs) and FIAGROs, using fund-specific property, income, portfolio, and credit metrics.
+description: Create or update a responsive, browser-ready HTML intelligent sector report for Brazilian listed real estate funds (FIIs) and FIAGROs, using fund-specific property, income, portfolio, and credit metrics. Invoke when the user asks for a "relatório inteligente do setor de FIIs" or an intelligent report about FIIs/FIAGROs.
 metadata:
   short-description: Create a specialized Brazilian FII dashboard
 ---
 
 # FII dashboard report
 
-Use this skill when the user asks to create, refresh, or adapt a report about Brazilian listed real estate funds (FIIs), including the established watchlist below. Follow the shared report location and PDF naming rules in the repository `AGENTS.md`.
+Use this skill when the user asks for a “relatório inteligente do setor de FIIs”, or to create, refresh, or adapt a report about Brazilian listed real estate funds (FIIs) or FIAGROs, including the established watchlist below. Follow the shared report location and HTML naming rules in the repository `AGENTS.md`. Deliver a standalone HTML file for browser viewing; PDF is only an additional output when explicitly requested.
 
 ## Scope and classification
 
@@ -95,6 +95,6 @@ The conclusions should identify fund-specific evidence and risk rather than rank
 
 ## Reusable design and output quality
 
-Start from [assets/relatorio-base-fii.html](assets/relatorio-base-fii.html). Preserve its dark teal header, responsive cards/tables, print styling, and embedded CSS unless the user requests a different design. Use separate compact tables for property, credit, and FIAGRO metrics when needed. Tables should be readable on notebook screens, become labeled metric cards on narrow screens, preserve semantic headers and keyboard-scrollable overflow, and remain legible when printed to PDF.
+Start from [assets/relatorio-base-fii.html](assets/relatorio-base-fii.html). Preserve its dark teal header, responsive cards/tables, and embedded CSS unless the user requests a different design. The HTML must be comfortable to read directly in a browser on both desktop and phone. Use separate compact tables for property, credit, and FIAGRO metrics when needed. Tables should be readable on notebook screens, become labeled metric cards on narrow screens, preserve semantic headers and keyboard-accessible scrollable overflow. Print styling may be retained, but PDF export is not required unless requested.
 
-Use Brazilian Portuguese unless requested otherwise. Keep conclusions evidence-based and limitations plain. Save final reports under `smart-reports/<assunto>/` as a PDF with the local 24-hour timestamp format required by repository `AGENTS.md`. Do not run tests or validation checks unless the user asks for verification.
+Use Brazilian Portuguese unless requested otherwise. Keep conclusions evidence-based and limitations plain. Save the final HTML under `smart-reports/<assunto>/` using the local 24-hour timestamp format required by repository `AGENTS.md`. Do not run tests or validation checks unless the user asks for verification.

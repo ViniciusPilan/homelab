@@ -1,13 +1,13 @@
 ---
-name: financial-dashboard-report
-description: Create or update a concise HTML dashboard for analyzing publicly traded bank stocks for a long-term investor, using the user's approved Brazilian data sources.
+name: financial-sector-dashboard-report
+description: Create or update a responsive, browser-ready HTML intelligent sector report for publicly traded bank stocks, using the user's approved Brazilian data sources. Invoke when the user asks for a "relatório inteligente do setor financeiro" or an intelligent report about banks.
 metadata:
   short-description: Create a sourced financial dashboard report
 ---
 
 # Financial dashboard report
 
-Use this skill only when the user asks to create, refresh, or adapt an HTML dashboard analyzing publicly traded bank stocks. Follow the shared report location and file format in the repository `AGENTS.md`.
+Use this skill when the user asks for a “relatório inteligente do setor financeiro” or to create, refresh, or adapt an HTML dashboard analyzing publicly traded bank stocks. Follow the shared report location and HTML naming rules in the repository `AGENTS.md`. Deliver a standalone HTML file for browser viewing; PDF is only an additional output when explicitly requested.
 
 ## Scope
 
@@ -38,7 +38,7 @@ Add a visible data-reference date. Note when quote dates, balance-sheet periods,
 
 ## Reusable base
 
-Start from [assets/relatorio-base-atual.html](assets/relatorio-base-atual.html) when creating another report in this series. It is a snapshot of the user's approved report design and section order, not a source of current data. Replace the company list, data, date, source links, caveats, and conclusions to match the new request. Keep the dark teal header, compact cards, responsive metric table, print styling, and embedded CSS unless the user asks for a different design. Tables should fit notebook-width screens with wrapped cell content and become labeled, readable metric cards on narrow phone screens; preserve semantic table headers for accessibility and retain horizontal scrolling as a fallback where needed.
+Start from [assets/relatorio-base-atual.html](assets/relatorio-base-atual.html) when creating another report in this series. It is a snapshot of the user's approved report design and section order, not a source of current data. Replace the company list, data, date, source links, caveats, and conclusions to match the new request. Keep the dark teal header, compact cards, responsive metric table, and embedded CSS unless the user asks for a different design. The HTML must be comfortable to read directly in a browser on both desktop and phone. Tables should fit notebook-width screens with wrapped cell content and become labeled, readable metric cards on narrow phone screens; preserve semantic table headers for accessibility and retain keyboard-accessible horizontal scrolling as a fallback.
 
 The current example includes Nu Holdings via ROXO34 (a BDR with 1 underlying share represented by 6 BDRs). Check that every requested issuer meets the bank-only scope, and check ticker status, BDR parity, source quote dates, and metric availability on the approved sources each time; mark unavailable values instead of inferring them. Only include companies the user requested; do not add Caixa Econômica Federal, Caixa Seguridade, or any other company by default. Caixa Econômica Federal is a bank and may be included if requested; Caixa Seguridade is an insurer and is out of scope.
 
