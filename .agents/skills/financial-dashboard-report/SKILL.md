@@ -7,7 +7,7 @@ metadata:
 
 # Financial dashboard report
 
-Use this skill only when the user asks to create, refresh, or adapt an HTML dashboard analyzing publicly traded bank stocks. Save the finished report as a standalone HTML file in the repository root unless the user requests another location.
+Use this skill only when the user asks to create, refresh, or adapt an HTML dashboard analyzing publicly traded bank stocks. Follow the shared report location and file format in the repository `AGENTS.md`.
 
 ## Scope
 

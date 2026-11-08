@@ -1,23 +1,24 @@
 ---
 name: equity-sector-dashboard-report
-description: Create or update a concise HTML dashboard for Brazilian listed companies in sanitation, electric utilities, and commodities, using sector-specific operating and financial metrics.
+description: Create or update a concise HTML dashboard for Brazilian listed companies in banking, sanitation, electric utilities, and commodities, using sector-specific operating and financial metrics.
 metadata:
   short-description: Create a sourced sector-aware equity dashboard
 ---
 
 # Equity sector dashboard report
 
-Use this skill when the user asks to create, refresh, or adapt an HTML report about Brazilian listed companies in sanitation, electric utilities, or commodity producers. Save the report as a standalone HTML file in the repository root unless the user asks for another location.
+Use this skill when the user asks to create, refresh, or adapt an HTML report about Brazilian listed companies in banking, sanitation, electric utilities, or commodity producers. Follow the shared report location and file format in the repository `AGENTS.md`.
 
 ## Scope and classification
 
-Include only the companies and tickers requested. Do not treat all utilities or commodity companies as interchangeable:
+Include only the companies and tickers requested. When the request is to update the user's established Brazilian equity watchlist, cover every ticker in this canonical list unless the user narrows the scope:
 
-- **Saneamento:** water supply, sewage collection and treatment (for example, Sabesp and Sanepar).
-- **Energia:** classify each issuer by activity. CPFL has distribution and other electricity businesses; Taesa is a transmission company. Do not group them under sanitation.
-- **Commodities:** identify each company's main products and material segments. Vale is exposed to iron ore and base metals; Suzano is principally exposed to pulp and paper products.
+- **Bancos:** BBAS3 — Banco do Brasil S.A. ON; BBDC4 — Banco Bradesco S.A. PN; BPAC11 — Banco BTG Pactual S.A. UNIT; ITUB4 — Itaú Unibanco Holding S.A. PN. Do not apply industrial-company debt or EV/EBITDA interpretations to banks; deposits, funding, capital adequacy, credit quality, and provisions are central to their analysis.
+- **Saneamento:** CSMG3 — Companhia de Saneamento de Minas Gerais (Copasa) ON; SAPR11 — Companhia de Saneamento do Paraná (Sanepar) UNIT; SBSP3 — Companhia de Saneamento Básico do Estado de São Paulo (Sabesp) ON. Cover water supply, sewage collection and treatment, concessions, regulation, and investment commitments.
+- **Energia elétrica:** ALUP4 — Alupar Investimento S.A. PN; CPFE3 — CPFL Energia S.A. ON; TAEE11 — Transmissora Aliança de Energia Elétrica S.A. UNIT. Classify each issuer by actual business activity and segment. Distinguish transmission from distribution and generation; Alupar and Taesa have material transmission exposure, while CPFL has distribution and other electricity businesses. Confirm the current business mix from issuer sources.
+- **Commodities, materiais e indústria:** PETR4 — Petróleo Brasileiro S.A. (Petrobras) PN; SUZB3 — Suzano S.A. ON; VALE3 — Vale S.A. ON; WEGE3 — WEG S.A. ON. Identify each company's products and material segments. Petrobras is an integrated oil and gas producer/refiner, Vale is exposed to iron ore and base metals, Suzano principally to pulp and paper, and WEG is an industrial equipment manufacturer; do not assume they share the same commodity exposure or operating drivers.
 
-Confirm the issuer, ticker, share class, listing status, and business mix from current sources. Explain material changes such as privatization, acquisitions, new concessions, or project ramp-ups when they affect interpretation. Do not add companies the user did not request.
+Confirm the issuer, ticker, share class, listing status, and business mix from current sources. Treat this list as the expected coverage, not as an instruction to force every company into one sector or one ranking. Explain material changes such as privatization, acquisitions, new concessions, or project ramp-ups when they affect interpretation. Do not add companies the user did not request.
 
 ## Sources and freshness
 
@@ -45,6 +46,7 @@ Use a consistent basis across companies where possible:
 - Historical dividend yield and payout, with the period and source stated. Discuss distributions alongside cash generation, investment needs, debt covenants, and announced policy.
 - Revenue, EBITDA, margins, net income, operating cash flow, free cash flow, capex, net debt/EBITDA, debt cost, maturity profile, and currency/index exposure when reported.
 - Prefer multi-year history that includes different operating or commodity conditions. Distinguish recurring performance from impairments, asset sales, tax effects, and other non-recurring items.
+- For banks, prioritize ROE, ROA, net interest income/spread, efficiency ratio, loan portfolio growth and mix, non-performing loans/arrears, cost of risk and provisions, capital adequacy (Basel/CET1 when available), and recurring versus extraordinary earnings. Treat bank dividend payout and yield in the context of capital needs and applicable distribution policy. Do not compare bank leverage or margins directly with non-financial issuers.
 
 Do not use ROE, ROA, or net margin as universal headline comparisons. They may be included as supporting measures with the accounting basis and comparability caveat stated.
 
@@ -67,6 +69,11 @@ Separate transmission from distribution and generation; never compare their oper
 - **Transmission (such as Taesa):** Receita Anual Permitida (RAP), asset availability, variable deductions/penalties, concessions and remaining terms, projects under construction and their expected entry into service, capex, and financing needs. Explain the contract and tariff-cycle context.
 - **Distribution (including CPFL's distribution operations):** distributed energy/volume, losses, continuity and quality indicators, tariff adjustments and reviews, customer base, and segment contribution. Include generation or other material business segments separately where applicable.
 - For any utility, connect capex and project returns to leverage, cash flow, concession obligations, and dividend capacity.
+
+### Oil, gas, and industrial equipment
+
+- **Petrobras:** report production and sales by oil/gas product where available, lifting cost with its definition and unit, refining utilization/margins, realized prices, reserves and replacement, investment and project delivery, net debt, and sensitivity to Brent, exchange rates, and fuel pricing policy. Separate reported results from corporate guidance and policy targets.
+- **WEG:** cover revenue and order intake/backlog by business or geography when disclosed, delivered volumes or production indicators, operating margin, return on capital, exports and currency exposure, capacity expansion, capex, and the contribution of acquisitions or non-recurring items. Do not apply mining or pulp unit-cost metrics to an equipment manufacturer.
 
 ### Commodity producers
 
