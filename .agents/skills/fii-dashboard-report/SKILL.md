@@ -23,19 +23,27 @@ Include only requested tickers. When updating the established watchlist, cover e
 - **XPLG11 — XP Log FII:** logistics/industrial properties.
 - **XPML11 — XP Malls FII:** shopping centers.
 
-Confirm the current fund name, ticker, legal type, manager/administrator, listing status, mandate, and portfolio composition from current sources. A fund's label is not proof of its current exposure. Explain material acquisitions, sales, mergers, follow-on offerings, restructurings, and strategy changes. Do not add funds the user did not request.
+Confirm the current fund name, ticker, legal type, manager/administrator, listing status, mandate, portfolio composition, and **segment** from the allowed sources. State a segment explicitly for every fund (for example, tijolo/logística, tijolo/shopping, tijolo/lajes corporativas, tijolo/residencial, papel/recebíveis, híbrido, FoF, or FIAGRO) and briefly describe its principal exposure. A fund's label is not proof of its current exposure. If its portfolio spans segments, identify it as híbrido or multiestratégia and show the main exposures separately. Explain material acquisitions, sales, mergers, follow-on offerings, restructurings, and strategy changes only when reported by the allowed sources. Do not add funds the user did not request.
 
 ## Sources, dates, and definitions
 
-Browse current information each time a report is created or refreshed. Prefer primary sources for fund-specific facts: administrator and manager reports, monthly portfolio reports, audited financial statements, material-fact notices, and CVM filings. Use B3 for listing and trading facts. Market-data platforms may supply prices, historical distributions, P/VP, and liquidity only when the reference date and calculation basis are visible. Link sources beside data or in a compact source list.
+Use only the following sources for market indicators, fund/company descriptions, and financial results:
 
-Use the latest available official report and state its reporting month, publication date, quote date, and financial-statement period. For every important metric, record its unit, definition, and source. Distinguish physical from financial vacancy; contractual rent from cash received; recurring distributions from extraordinary income, capital gains, amortizations, or return of capital; and paid distributions from announced or projected amounts. Do not silently combine providers with different methodologies. Mark unavailable data `n/d`; never infer it from an old report. Avoid implying distributions are guaranteed or tax outcomes are universal.
+- [Investidor10](https://investidor10.com.br/)
+- [Status Invest](https://statusinvest.com.br/)
+- [AUVP Analítica](https://analitica.auvp.com.br/)
+
+Browse current information from these sources each time a report is created or refreshed. Do not use administrator or manager websites, B3, CVM, other market-data platforms, news sites, search snippets, or other third-party sources to supply or corroborate those data categories. Link each source beside the relevant data or in a compact source list. If a fact or metric is unavailable from the allowed sources, mark it `n/d`; do not fill the gap from another source or infer it from an older report. When allowed providers disagree, show the provider and its methodology/date or mark the metric `n/d`; do not silently combine their values.
+
+This source restriction applies to market indicators, fund/company descriptions, and financial results, including portfolio composition and fund events when presented as fund-specific facts. Keep the rest of the report workflow unchanged, including the requirement to browse current information and state reporting month, publication date, quote date, and financial-statement period when the allowed sources provide them.
+
+For every important metric, record its unit, definition, reference period, and allowed source. Distinguish physical from financial vacancy; contractual rent from cash received; recurring distributions from extraordinary income, capital gains, amortizations, or return of capital; and paid distributions from announced or projected amounts. Avoid implying distributions are guaranteed or tax outcomes are universal.
 
 ## Report structure
 
 Keep the report concise and make the dashboard its visual center. Use four numbered parts:
 
-1. **Fundos:** ticker, mandate, current strategy, portfolio type, main income drivers, diversification, and material risks.
+1. **Fundos:** ticker, explicit segment classification, mandate, current strategy, portfolio type, main income drivers, diversification, and material risks.
 2. **Dashboard:** common market and income indicators plus the applicable property or credit measures below. Use separate panels/tables where business models differ; do not force one ranking across brick, paper, hybrid, and FIAGRO strategies.
 3. **Métricas:** plain-language definitions, reporting periods, and comparability limits for all displayed indicators.
 4. **Conclusões:** one short, evidence-based observation per requested ticker, stating the main positive factor and monitoring point. Do not give personalized buy/sell instructions.
@@ -52,6 +60,7 @@ Use a consistent basis across funds where possible:
 - Number of assets, geographic and tenant/borrower concentration, and portfolio allocation by segment or instrument.
 - Gross/net liabilities, leverage or securitized obligations, cash balance, debt maturity and indexation when relevant. Explain the denominator and methodology for leverage; do not treat development commitments or property-level debt as fund-level debt without stating it.
 - For property funds, net operating income/rental income, expenses, and recurring cash flow where consistently disclosed. Do not treat accounting profit as interchangeable with distributable cash.
+- For property-owning funds, include vacancy in the dashboard whenever the allowed sources report it. Show **physical vacancy and financial vacancy separately**, with reference date and source definitions; never present a single unlabeled vacancy percentage. If a measure is relevant but unavailable from the allowed sources, mark it `n/d`. For pure paper funds or portfolios where vacancy is not meaningful, label it `não se aplica`. For mixed funds, report vacancy only for the direct property sleeve and state its scope.
 - Compare distributions with inflation-linked or CDI-linked income only with matching periods and an explicit benchmark basis. Historical yield does not predict future income.
 
 ## Fund-specific analysis
@@ -60,7 +69,7 @@ Use a consistent basis across funds where possible:
 
 Use only the measures relevant to the current portfolio:
 
-- Physical vacancy and financial vacancy, each with definition and reference date; occupancy and delinquency/arrears where reported. Distinguish occupied area from rent-paying occupancy.
+- Physical vacancy and financial vacancy, each shown separately with definition and reference date; occupancy and delinquency/arrears where reported. Distinguish occupied area from rent-paying occupancy. If either relevant measure is unavailable from the allowed sources, mark it `n/d` rather than substituting another source's value.
 - Portfolio area (m²), number and quality/location of properties, tenant concentration, lease concentration, and lease expiry schedule. For logistics, describe asset class, region, specification and tenant exposure; for offices, location, quality and lease rollover; for shopping centers, ownership share and mall-level exposure.
 - Rental revenue, same-property rent or NOI growth, leasing spreads, rent revisions, concessions, rent-free periods, and one-off lease effects where disclosed.
 - WALE (weighted average lease expiry) only when the source defines it; clarify whether calculated by area, rent, or another weighting basis. Report lease type (typical, atípico, or other) and upcoming expirations when material.
@@ -69,7 +78,7 @@ Use only the measures relevant to the current portfolio:
 - Diversified funds: show exposure by segment and top assets/tenants; do not let a portfolio average hide a concentrated risk.
 - Property valuation/appraisal date, transaction price versus book value, cap rate/yield assumptions, and appraisal limitations when available. Avoid presenting appraisal-based NAV as a current sale value.
 
-Do not report vacancy as meaningful for pure paper funds. For mixed portfolios, show the physical-property portion separately.
+Do not report vacancy as meaningful for pure paper funds; label it `não se aplica`. For mixed portfolios, show the physical-property portion separately and state the scope. If vacancy is relevant but unavailable from the allowed sources, mark it `n/d`.
 
 ### Paper/credit funds and CRI exposure
 
