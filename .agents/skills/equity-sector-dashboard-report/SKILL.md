@@ -23,6 +23,8 @@ Confirm the issuer, ticker, share class, listing status, and business mix from c
 
 Prefer primary sources for company-specific facts and operating results: issuer investor-relations pages, earnings releases, financial statements, and reference forms; use B3 and CVM records for listing, filings, and corporate facts where relevant. Market-data sites such as Investidor10, Status Invest, or AUVP Analítica may be used for market multiples and liquidity.
 
+For each asset and metric, apply the source search order in `brazilian-market-dashboard-core` wherever those market-data platforms are permitted. For company-specific facts and operating results, follow the primary-source preference above and check the permitted sources before marking data `n/d`.
+
 ## Equity dashboard requirements
 
 Use the shared four-part report structure. Identify each company's ticker/share class, business, principal revenue drivers, and relevant operating exposure. Build a common comparison panel only for meaningfully comparable measures; add sector-specific panels and avoid ranking unlike business models together. Label currencies and units, including R$, US$, tonnes, MWh, and percentages.

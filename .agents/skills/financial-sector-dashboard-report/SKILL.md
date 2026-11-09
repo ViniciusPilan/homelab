@@ -35,6 +35,8 @@ Use only these sources for market indicators, company descriptions, and financia
 - [Status Invest](https://statusinvest.com.br/)
 - [AUVP Analítica](https://analitica.auvp.com.br/)
 
+For each bank and metric, follow the source search order in `brazilian-market-dashboard-core`. Do not mark a value `n/d` until the permitted source fallback has been attempted.
+
 ## Bank dashboard requirements
 
 Include price, 12-month price change, P/L, P/VP, DY, ROE, ROA, payout, net margin, average daily liquidity, **Índice de Basileia**, and **inadimplência**. Provide dedicated fields for Basileia and inadimplência for every required bank. Show `n/d` with an explanation when unavailable. State the period and definition for each capital or credit metric; for delinquency, identify the threshold and whether the figure is an NPL ratio, overdue portfolio share, or another disclosed measure. Include credit growth and provisions when the approved sources report them. Do not use net debt/EBITDA as a primary bank measure.

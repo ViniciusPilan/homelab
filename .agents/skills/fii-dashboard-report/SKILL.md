@@ -37,6 +37,8 @@ Do not use administrator or manager websites, B3, CVM, other market-data platfor
 
 This source restriction applies to market indicators, fund/company descriptions, and financial results, including portfolio composition and fund events when presented as fund-specific facts.
 
+For each fund and metric, follow the source search order in `brazilian-market-dashboard-core`. Mark `n/d` only after the permitted fallback sources have been checked.
+
 Distinguish physical from financial vacancy; contractual rent from cash received; recurring distributions from extraordinary income, capital gains, amortizations, or return of capital; and paid distributions from announced or projected amounts. Avoid implying distributions are guaranteed or tax outcomes are universal.
 
 ## FII dashboard requirements
@@ -48,13 +50,13 @@ Use the shared four-part report structure, adapting the first section to funds. 
 Use a consistent basis across funds where possible:
 
 - Market price, 12-month price return, average daily traded financial volume, and market capitalization when available.
-- Total net asset value / patrimônio líquido (R$) and net asset value per share / valor patrimonial por cota (R$) for every requested fund, using the latest figures available from the allowed sources. Include these fields in the main dashboard table, identify their reporting/reference date when shown, and mark `n/d` only if the allowed sources do not provide the value.
+- Total net asset value / patrimônio líquido (R$) and net asset value per share / valor patrimonial por cota (R$) for every requested fund, using the latest figures available from the allowed sources. Include these fields in the main dashboard table, identify their reporting/reference date when shown, and mark `n/d` only after checking all permitted sources in the core's search order.
 - P/VP using the same quote date and the latest reported NAV per share; disclose the NAV date. Explain that appraisals can lag market prices and that P/VP alone is not a quality or discount verdict.
 - Historical distribution yield over 12 months, monthly distribution per share, and distribution history over several years. State whether yield uses trailing cash distributions or another basis. Identify extraordinary items and compare distributions with recurring cash generation when the data permit.
 - Number of assets, geographic and tenant/borrower concentration, and portfolio allocation by segment or instrument.
 - Gross/net liabilities, leverage or securitized obligations, cash balance, debt maturity and indexation when relevant. Explain the denominator and methodology for leverage; do not treat development commitments or property-level debt as fund-level debt without stating it.
 - For property funds, net operating income/rental income, expenses, and recurring cash flow where consistently disclosed. Do not treat accounting profit as interchangeable with distributable cash.
-- Include a single **Vacância** field in the dashboard for every requested fund. Use the vacancy percentage displayed by the allowed source and identify the source and reference date when available. Do not split it into physical and financial vacancy columns unless the user explicitly asks for that breakdown. If the allowed sources do not provide a vacancy value, mark it `n/d`; for pure paper funds where vacancy is not meaningful, label it `não se aplica`. For mixed funds and FIAGROs, use the platform's reported value and clarify its scope when the source does so.
+- Include a single **Vacância** field in the dashboard for every requested fund. Use the vacancy percentage displayed by the allowed source and identify the source and reference date when available. Do not split it into physical and financial vacancy columns unless the user explicitly asks for that breakdown. If none of the permitted sources provides a usable vacancy value after the core's search order, mark it `n/d`; for pure paper funds where vacancy is not meaningful, label it `não se aplica`. For mixed funds and FIAGROs, use the platform's reported value and clarify its scope when the source does so.
 - Compare distributions with inflation-linked or CDI-linked income only with matching periods and an explicit benchmark basis. Historical yield does not predict future income.
 
 ## Fund-specific analysis
@@ -63,7 +65,7 @@ Use a consistent basis across funds where possible:
 
 Use only the measures relevant to the current portfolio:
 
-- Vacancy as a single reported percentage, with source and reference date when available. Use the allowed platform's displayed figure; do not create separate physical/financial columns unless explicitly requested. Mark `n/d` only when no allowed source provides a value. Include occupancy and delinquency/arrears where reported. If the source does not clarify the vacancy methodology, say so briefly in the observation/limitations rather than omitting the available percentage.
+- Vacancy as a single reported percentage, with source and reference date when available. Use the allowed platform's displayed figure; do not create separate physical/financial columns unless explicitly requested. Mark `n/d` only when no permitted source provides a usable value after the core's search order. Include occupancy and delinquency/arrears where reported. If the source does not clarify the vacancy methodology, say so briefly in the observation/limitations rather than omitting the available percentage.
 - Portfolio area (m²), number and quality/location of properties, tenant concentration, lease concentration, and lease expiry schedule. For logistics, describe asset class, region, specification and tenant exposure; for offices, location, quality and lease rollover; for shopping centers, ownership share and mall-level exposure.
 - Rental revenue, same-property rent or NOI growth, leasing spreads, rent revisions, concessions, rent-free periods, and one-off lease effects where disclosed.
 - WALE (weighted average lease expiry) only when the source defines it; clarify whether calculated by area, rent, or another weighting basis. Report lease type (typical, atípico, or other) and upcoming expirations when material.
@@ -72,7 +74,7 @@ Use only the measures relevant to the current portfolio:
 - Diversified funds: show exposure by segment and top assets/tenants; do not let a portfolio average hide a concentrated risk.
 - Property valuation/appraisal date, transaction price versus book value, cap rate/yield assumptions, and appraisal limitations when available. Avoid presenting appraisal-based NAV as a current sale value.
 
-For pure paper funds, label vacancy `não se aplica`. For mixed portfolios, use the allowed source's reported vacancy value and state its scope when available. If vacancy is relevant but no allowed source provides a value, mark it `n/d`.
+For pure paper funds, label vacancy `não se aplica`. For mixed portfolios, use the allowed source's reported vacancy value and state its scope when available. If vacancy is relevant but no permitted source provides a usable value after the core's search order, mark it `n/d`.
 
 ### Paper/credit funds and CRI exposure
 
