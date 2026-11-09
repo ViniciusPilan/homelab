@@ -7,7 +7,7 @@ metadata:
 
 # Financial dashboard report
 
-Use this skill only for listed Brazilian bank stocks. Follow the shared research, data-handling, and HTML workflow in [brazilian-market-dashboard-core](../brazilian-market-dashboard-core/SKILL.md). This skill controls bank scope, sources, metrics, and interpretation. For non-bank companies, use `equity-sector-dashboard-report`; for FIIs/FIAGROs, use `fii-dashboard-report`.
+Use this skill only for listed Brazilian bank stocks. Follow the shared research, data-handling, and HTML workflow in [brazilian-market-dashboard-core](../brazilian-market-dashboard-core/SKILL.md). This skill controls bank scope, approved sources, metrics, and interpretation.
 
 ## Scope
 
@@ -41,10 +41,7 @@ Include price, 12-month price change, P/L, P/VP, DY, ROE, ROA, payout, net margi
 
 ## Reusable base
 
-Start from [assets/relatorio-base-atual.html](assets/relatorio-base-atual.html) when creating another report in this series. It is a snapshot of the user's approved report design and section order, not a source of current data. Replace the company list, data, date, source links, caveats, and conclusions to match the new request. Keep the dark teal header, compact cards, responsive metric table, and embedded CSS unless the user asks for a different design. The HTML must be comfortable to read directly in a browser on both desktop and phone. Tables should fit notebook-width screens with wrapped cell content and become labeled, readable metric cards on narrow phone screens; preserve semantic table headers for accessibility and retain keyboard-accessible horizontal scrolling as a fallback.
+Start from [assets/relatorio-base-atual.html](assets/relatorio-base-atual.html) when creating another report in this series. It is a snapshot of the user's approved report design and section order, not a source of current data. Replace the company list, data, date, source links, caveats, and conclusions to match the new request. Preserve the dark teal header, compact cards, and embedded CSS unless the user asks for a different design.
 
 Check that each required issuer still meets the bank-only scope and that its ticker is active. Additional requested issuers must meet the same scope. Do not add Caixa Econômica Federal, Caixa Seguridade, or other companies by default. Caixa Econômica Federal may be included when explicitly requested; Caixa Seguridade is an insurer and out of scope. ROXO34 may be added only when explicitly requested; identify the underlying Nu Holdings shares and BDR ratio.
 
-## Output quality
-
-- Restrict bank market and financial data to the three approved domains above.

@@ -7,7 +7,7 @@ metadata:
 
 # FII dashboard report
 
-Use this skill for Brazilian listed FIIs and FIAGROs, including the established watchlist below. Follow the shared research, data-handling, and HTML workflow in [brazilian-market-dashboard-core](../brazilian-market-dashboard-core/SKILL.md). This skill controls fund scope, approved sources, fund metrics, and interpretation. For listed company stocks, use `financial-sector-dashboard-report` for banks and `equity-sector-dashboard-report` for other sectors.
+Use this skill for Brazilian listed FIIs and FIAGROs, including the established watchlist below. Follow the shared research, data-handling, and HTML workflow in [brazilian-market-dashboard-core](../brazilian-market-dashboard-core/SKILL.md). This skill controls fund scope, approved sources, fund metrics, and interpretation.
 
 ## Scope and classification
 
@@ -37,7 +37,7 @@ Do not use administrator or manager websites, B3, CVM, other market-data platfor
 
 This source restriction applies to market indicators, fund/company descriptions, and financial results, including portfolio composition and fund events when presented as fund-specific facts.
 
-For every important metric, record its unit, definition, reference period, and allowed source. Distinguish physical from financial vacancy; contractual rent from cash received; recurring distributions from extraordinary income, capital gains, amortizations, or return of capital; and paid distributions from announced or projected amounts. Avoid implying distributions are guaranteed or tax outcomes are universal.
+Distinguish physical from financial vacancy; contractual rent from cash received; recurring distributions from extraordinary income, capital gains, amortizations, or return of capital; and paid distributions from announced or projected amounts. Avoid implying distributions are guaranteed or tax outcomes are universal.
 
 ## FII dashboard requirements
 
@@ -98,4 +98,4 @@ The conclusions should identify fund-specific evidence and risk rather than rank
 
 ## Reusable design
 
-Start from [assets/relatorio-base-fii.html](assets/relatorio-base-fii.html). Preserve its dark teal header, responsive cards/tables, and embedded CSS unless the user requests a different design. Use separate compact tables for property, credit, and FIAGRO metrics when needed.
+Start from [assets/relatorio-base-fii.html](assets/relatorio-base-fii.html). Preserve its dark teal header and embedded CSS unless the user requests a different design. Use separate compact tables for property, credit, and FIAGRO metrics when needed.

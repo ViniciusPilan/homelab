@@ -7,7 +7,7 @@ metadata:
 
 # Equity sector dashboard report
 
-Use this skill for listed Brazilian companies outside banking, including sanitation, electric utilities, commodities, and industrial equipment. Follow the shared research, data-handling, and HTML workflow in [brazilian-market-dashboard-core](../brazilian-market-dashboard-core/SKILL.md). This skill controls company scope, source selection, sector metrics, and interpretation. Use `financial-sector-dashboard-report` for bank stocks and `fii-dashboard-report` for FIIs/FIAGROs.
+Use this skill for listed Brazilian companies outside banking, including sanitation, electric utilities, commodities, and industrial equipment. Follow the shared research, data-handling, and HTML workflow in [brazilian-market-dashboard-core](../brazilian-market-dashboard-core/SKILL.md). This skill controls company scope, source selection, sector metrics, and interpretation.
 
 ## Scope and classification
 
@@ -75,4 +75,4 @@ Separate transmission from distribution and generation; never compare their oper
 
 ## Reusable design and output quality
 
-Start from [assets/relatorio-base-setorial.html](assets/relatorio-base-setorial.html), a copy of the established dashboard design. Preserve its dark teal header, compact company cards, responsive metric tables, and embedded CSS unless the user requests a different design. Adapt tables to requested issuers and sectors; use sector-specific columns or separate tables where that improves comparability.
+Start from [assets/relatorio-base-setorial.html](assets/relatorio-base-setorial.html), a copy of the established dashboard design. Preserve its dark teal header, compact company cards, and embedded CSS unless the user requests a different design. Adapt tables to requested issuers and sectors; use sector-specific columns or separate tables where that improves comparability.
