@@ -12,8 +12,9 @@ Use this workflow together with exactly one sector skill:
 - `fii-dashboard-report` for FIIs and FIAGROs.
 - `equity-sector-dashboard-report` for listed Brazilian companies outside banking.
 - `financial-sector-dashboard-report` for listed Brazilian banks.
+- `currency-crypto-commodities-report` for selected currencies, cryptoassets, gold, oil, and iron ore.
 
-The sector skill controls the universe, approved sources, metrics, and interpretation. Never transfer source permissions or metric assumptions from one sector to another. If a request spans sectors, apply each relevant sector skill to its own assets and keep comparisons separated where their business models are not comparable.
+The selected specialist skill controls the universe, approved sources, metrics, and interpretation. Never transfer source permissions or metric assumptions from one specialist skill to another. If a request spans asset classes, apply each relevant skill to its own assets and keep comparisons separated where their units and markets are not comparable.
 
 ## Research and data handling
 
