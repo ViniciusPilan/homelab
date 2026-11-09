@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Dashboard de indicadores de ações de bancos para acompanhamento buy and hold.">
+  <title>Dashboard de bancos | Buy and hold</title>
+  <style>
+    :root{color-scheme:light;--ink:#172a3a;--muted:#62727d;--line:#dce5e9;--paper:#fff;--wash:#f1f7f6;--teal:#087f79;--teal2:#075d59;--gold:#d99a2b}
+    *{box-sizing:border-box}body{margin:0;background:#edf3f3;color:var(--ink);font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{color:var(--teal2);text-underline-offset:3px}.page{width:min(1180px,calc(100% - 28px));margin:24px auto 48px}
+    header{padding:clamp(25px,5vw,48px);border-radius:20px;color:#fff;background:linear-gradient(125deg,#123244,#087f79);box-shadow:0 16px 40px #193d4718}
+    .eyebrow{margin:0 0 8px;color:#b9eeea;font-size:.75rem;font-weight:750;letter-spacing:.13em;text-transform:uppercase}h1{margin:0;font-size:clamp(2rem,5vw,3.2rem);line-height:1.08;letter-spacing:-.04em}header p:not(.eyebrow){max-width:750px;margin:14px 0 0;color:#e5f1f2;font-size:1rem}.stamp{display:inline-block;margin-top:18px;padding:5px 10px;border:1px solid #ffffff55;border-radius:999px;font-size:.82rem}
+    main{display:grid;gap:18px;margin-top:18px}section{padding:clamp(19px,3vw,28px);border:1px solid var(--line);border-radius:17px;background:var(--paper);box-shadow:0 6px 22px #193d4708}h2{margin:0 0 12px;font-size:1.35rem;line-height:1.25;letter-spacing:-.02em}h3{margin:0 0 5px;font-size:1rem}p{margin:7px 0}.muted,.note{color:var(--muted)}.note{font-size:.83rem}
+    .part{display:inline-block;margin-bottom:8px;color:var(--teal);font-size:.74rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+    .companies{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.company{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfdfd}.company p{font-size:.87rem;color:#435662}.tag{display:inline-block;padding:2px 7px;border-radius:99px;background:#e8f1f1;color:#28545e;font-size:.75rem;font-weight:750}
+    .dash-head{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;flex-wrap:wrap}.dash-kpis{display:flex;gap:8px;flex-wrap:wrap}.kpi{padding:7px 10px;border-radius:9px;background:var(--wash);font-size:.79rem}.kpi b{color:var(--teal2)}
+    .table-wrap{max-width:100%;overflow-x:auto;margin-top:13px;border:1px solid var(--line);border-radius:12px;overscroll-behavior-inline:contain}table{width:100%;min-width:0;border-collapse:collapse;table-layout:fixed;font-variant-numeric:tabular-nums}th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:normal;overflow-wrap:anywhere;hyphens:auto}th{position:sticky;top:0;background:#eaf3f2;color:#31515c;font-size:.68rem;line-height:1.25;letter-spacing:.02em;text-transform:uppercase}td{font-size:.78rem;line-height:1.35}th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:#f7fbfb}tbody tr:last-child td{border-bottom:0}tbody tr:hover td{background:#f3f9f8}
+    @media(max-width:760px){.table-wrap{overflow:visible;border:0;border-radius:0}table,tbody{display:block;width:100%}thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}tbody tr{display:block;margin:0 0 12px;padding:6px 11px;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 3px 12px #193d4708}tbody td,tbody td:first-child{position:static;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;width:100%;padding:8px 0;border-bottom:1px solid var(--line);background:transparent;text-align:right;font-size:.85rem}tbody td:first-child{font-weight:750}tbody td:last-child{border-bottom:0}tbody td::before{content:attr(data-label);flex:0 0 42%;color:var(--muted);font-size:.73rem;font-weight:700;line-height:1.3;text-align:left;overflow-wrap:anywhere}tbody td:first-child::before{content:"";display:none}}
+    @media(min-width:761px) and (max-width:1050px){th,td{padding:7px 5px}th{font-size:.62rem}td{font-size:.71rem}}.neg{color:#a3463b}.pos{color:#14756f}.dim{color:#8a989e}
+    .legend{display:flex;gap:7px 15px;flex-wrap:wrap;margin-top:9px;color:var(--muted);font-size:.78rem}.legend span{white-space:nowrap}.compact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:13px}.watch{padding:11px 13px;border-radius:10px;background:var(--wash);font-size:.83rem}.watch b{color:var(--teal2)}
+    .conclusion{border-left:5px solid var(--gold);background:#fffaf0}.conclusion p,.conclusion li{font-size:.93rem}.conclusion ul{margin:8px 0 0;padding-left:22px}.conclusion li{margin:0 0 8px}.sources{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.sources a{padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:white;font-size:.78rem;font-weight:700}footer{padding:15px 5px 0;color:var(--muted);font-size:.78rem}
+    @media(max-width:850px){.companies{grid-template-columns:repeat(2,minmax(0,1fr))}.compact{grid-template-columns:1fr}}
+    @media(max-width:560px){.page{width:calc(100% - 16px);margin:8px auto 28px}.companies{grid-template-columns:1fr}header{border-radius:15px}}
+    @media print{body{background:white;font-size:10pt}.page{width:100%;margin:0}header,section{box-shadow:none;break-inside:avoid}header{print-color-adjust:exact;-webkit-print-color-adjust:exact}.table-wrap{overflow:visible}table{min-width:0;font-size:7pt}th,td{padding:5px 4px;font-size:7pt}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <p class="eyebrow">Acompanhamento buy and hold · renda + crescimento</p>
+      <h1>Dashboard de bancos</h1>
+      <p>Visão compacta das empresas da sua lista, com fundamentos para acompanhar valuation, rentabilidade, proventos e evolução do negócio.</p>
+      <span class="stamp">Referência consultada: 7 de novembro de 2026 · cotações mais recentes disponíveis nos sites</span>
+    </header>
+
+    <main>
+      <section id="empresas">
+        <span class="part">Parte 1 · Empresas</span>
+        <h2>O que cada ticker representa</h2>
+        <div class="companies">
+          <article class="company"><h3>BTG Pactual <span class="tag">BPAC11</span></h3><p>Banco privado com atuação forte em investment banking, gestão de recursos, crédito e wealth management. A tese combina expansão de negócios e rentabilidade elevada; historicamente distribui menos proventos que bancos mais maduros.</p></article>
+          <article class="company"><h3>Bradesco <span class="tag">BBDC4</span></h3><p>Grande banco privado universal, com negócios de varejo, empresas, seguros e serviços. A leitura atual inclui um ciclo de recuperação da rentabilidade e atenção à qualidade da carteira de crédito.</p></article>
+          <article class="company"><h3>Itaú Unibanco <span class="tag">ITUB4</span></h3><p>Banco privado diversificado, com escala, presença regional e histórico recente de rentabilidade forte. Para o acionista, a tese costuma combinar geração de lucro, proventos recorrentes e crescimento moderado.</p></article>
+          <article class="company"><h3>Banco do Brasil <span class="tag">BBAS3</span></h3><p>Banco de controle estatal e grande exposição a crédito rural, empresas e setor público. O desconto de valuation precisa ser analisado junto à rentabilidade, inadimplência, provisões e influência do controlador.</p></article>
+          <article class="company"><h3>Nubank / Nu Holdings <span class="tag">ROXO34 · BDR</span></h3><p>Banco digital e plataforma financeira latino-americana, com operações no Brasil, México e Colômbia. ROXO34 é o BDR negociado na B3 e representa 1 ação da Nu Holdings para cada 6 BDRs.</p></article>
+        </div>
+      </section>
+
+      <section id="dashboard">
+        <span class="part">Parte 2 · Dashboard</span>
+        <div class="dash-head">
+          <div><h2>Métricas para acompanhar</h2><p class="note">Indicadores atuais conforme as páginas consultadas. Valores podem variar entre provedores e conforme a atualização do balanço.</p></div>
+          <div class="dash-kpis"><span class="kpi"><b>Valuation:</b> P/L · P/VP</span><span class="kpi"><b>Renda:</b> DY · payout</span><span class="kpi"><b>Retorno:</b> ROE · ROA</span></div>
+        </div>
+        <div class="table-wrap" role="region" aria-label="Dashboard comparativo; role horizontalmente para ver todas as métricas" tabindex="0">
+          <table>
+            <thead><tr><th>Empresa / ticker</th><th>Preço</th><th>Var. 12m</th><th>P/L</th><th>P/VP</th><th>DY 12m</th><th>ROE</th><th>ROA</th><th>Payout</th><th>Margem líquida</th><th>Liquidez diária</th></tr></thead>
+            <tbody>
+              <tr><td>BTG · BPAC11</td><td>R$ 55,52</td><td class="pos">+11,50%</td><td>11,87</td><td>2,71</td><td>2,56%</td><td>22,88%</td><td>2,27%</td><td>30,35%</td><td>24,61%</td><td>R$ 1,52 bi</td></tr>
+              <tr><td>Bradesco · BBDC4</td><td>R$ 14,19</td><td class="neg">−19,83%</td><td>6,08</td><td>0,81</td><td>11,38%</td><td>13,41%</td><td>1,06%</td><td>75,72%</td><td>8,49%</td><td>R$ 1,40 bi</td></tr>
+              <tr><td>Itaú · ITUB4</td><td>R$ 40,52</td><td class="pos">+11,45%</td><td>9,36</td><td>1,95</td><td>7,81%</td><td>20,83%</td><td>1,46%</td><td>71,84%</td><td>11,97%</td><td>R$ 1,80 bi</td></tr>
+              <tr><td>Banco do Brasil · BBAS3</td><td>R$ 17,17</td><td class="neg">−22,96%</td><td>8,02</td><td>0,53</td><td>4,14%</td><td>6,60%</td><td>0,47%</td><td>30%¹</td><td>3,71%</td><td>R$ 1,16 bi</td></tr>
+              <tr><td>Nu Holdings · ROXO34⁴</td><td>R$ 10,94</td><td class="neg">−23,87%</td><td>18,28</td><td>12,29</td><td>0,00%</td><td>67,19%</td><td>12,64%</td><td>n/d</td><td>18,20%</td><td>R$ 198,97 mi</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="legend"><span><b>Var. 12m:</b> valorização reportada pela plataforma.</span><span><b>n/d:</b> dado indisponível ou não comparável.</span></div>
+        <div class="compact">
+          <div class="watch"><b>Proventos a observar</b><br>DY médio de 5 anos: BPAC11 2,50% · BBDC4 7,12% · ITUB4 6,41%. Nu: sem proventos no período observado.</div>
+          <div class="watch"><b>Risco de crédito</b><br>Compare inadimplência acima de 90 dias, custo do crédito e cobertura de provisões nos resultados trimestrais. Esses dados são mais relevantes que margem líquida isolada em bancos.</div>
+          <div class="watch"><b>Capital e escala</b><br>Liquidez diária na tabela é volume médio aproximado. Acompanhe também índice de Basileia/CET1, crescimento da carteira e eficiência operacional nos sites e resultados publicados.</div>
+        </div>
+        <p class="note">¹ Payout de 30% aprovado como referência para BBAS3 em 2026; não é payout realizado nos últimos 12 meses. ² Nos bancos brasileiros, valores seguem o Investidor10. ³ Para ROXO34, cotação, variação e fundamentos seguem o Status Invest. ⁴ ROXO34 representa 1 ação para 6 BDRs. Para bancos, dívida líquida/EBITDA não é métrica principal, pois depósitos e captações fazem parte da atividade.</p>
+        <p class="note">As telas têm datas e métodos de cálculo distintos. A AUVP Analítica não exibe atualmente fundamentos para ROXO34 e a página não foi acessível na consulta; esses campos ficam cobertos pelos outros sites autorizados. Os múltiplos de BDRs podem divergir entre provedores por paridade, conversão cambial e critérios de cálculo. Este dashboard se limita a ações de bancos; empresas financeiras de outros segmentos devem ser avaliadas em relatório próprio.</p>
+        <div class="sources" aria-label="Fontes de dados"><a href="https://investidor10.com.br/acoes/bpac11/">Investidor10 · BPAC11</a><a href="https://investidor10.com.br/acoes/bbdc4/">Investidor10 · BBDC4</a><a href="https://investidor10.com.br/acoes/itub4/">Investidor10 · ITUB4</a><a href="https://investidor10.com.br/acoes/bbas3/">Investidor10 · BBAS3</a><a href="https://investidor10.com.br/bdrs/roxo34/">Investidor10 · ROXO34</a><a href="https://statusinvest.com.br/acoes/bpac11">Status Invest · BPAC11</a><a href="https://statusinvest.com.br/acoes/bbdc4">Status Invest · BBDC4</a><a href="https://statusinvest.com.br/acoes/itub4">Status Invest · ITUB4</a><a href="https://statusinvest.com.br/acoes/bbas3">Status Invest · BBAS3</a><a href="https://statusinvest.com.br/bdrs/roxo34">Status Invest · ROXO34</a><a href="https://analitica.auvp.com.br/rankings/acoes/lucro_liquido">AUVP Analítica · ranking</a><a href="https://analitica.auvp.com.br/acoes/BBDC4">AUVP Analítica · BBDC4</a><a href="https://analitica.auvp.com.br/acoes/BBAS3">AUVP Analítica · BBAS3</a><a href="https://analitica.auvp.com.br/acoes/ROXO34/simplificada">AUVP Analítica · ROXO34</a><a href="https://analitica.auvp.com.br/acoes/agenda-de-dividendos?date=2026-11&mode=list">AUVP Analítica · proventos</a></div>
+      </section>
+
+      <section id="metricas">
+        <span class="part">Parte 3 · Métricas</span>
+        <h2>O que significa cada indicador</h2>
+        <div class="compact">
+          <div class="watch"><b>Preço e variação em 12 meses</b><br>Cotação por papel e mudança percentual do preço no último ano. A variação passada não prevê o retorno futuro.</div>
+          <div class="watch"><b>P/L · preço/lucro</b><br>Quantas vezes o lucro anual por ação está embutido no preço. Lucro temporariamente baixo ou alto pode distorcer a leitura.</div>
+          <div class="watch"><b>P/VP · preço/valor patrimonial</b><br>Compara o preço da ação com o patrimônio contábil por ação. Em bancos, precisa ser lido junto do ROE: patrimônio só cria valor quando gera retorno adequado.</div>
+          <div class="watch"><b>DY · dividend yield</b><br>Proventos brutos dos últimos 12 meses divididos pelo preço. É histórico; não representa renda garantida para os próximos 12 meses.</div>
+          <div class="watch"><b>ROE · retorno sobre patrimônio</b><br>Lucro em relação ao patrimônio dos acionistas. Ajuda a medir a rentabilidade do capital próprio; observe sua consistência ao longo do tempo.</div>
+          <div class="watch"><b>ROA · retorno sobre ativos</b><br>Lucro em relação aos ativos totais. Em bancos, costuma ser baixo porque a base de ativos é muito grande; compare empresas e períodos com cuidado.</div>
+          <div class="watch"><b>Payout</b><br>Parcela do lucro distribuída em dividendos e JCP. Payout muito alto pode limitar retenção de capital; no BB, o valor mostrado é a referência aprovada para 2026.</div>
+          <div class="watch"><b>Margem líquida</b><br>Lucro líquido como parcela das receitas. Definições de receita variam entre bancos, então use-a com cautela ao comparar instituições.</div>
+          <div class="watch"><b>Liquidez diária</b><br>Volume médio financeiro negociado por dia. Ajuda a avaliar a facilidade de negociar o papel, mas não indica qualidade do negócio.</div>
+        </div>
+        <p class="note">Métricas operacionais complementares para bancos: inadimplência acima de 90 dias, provisões/custo do crédito, índice de Basileia ou CET1, crescimento da carteira e eficiência. Elas ajudam a explicar os movimentos de lucro e ROE.</p>
+      </section>
+
+      <section class="conclusion" id="conclusoes">
+        <span class="part">Parte 4 · Conclusões</span>
+        <h2>Leitura rápida para renda + crescimento</h2>
+        <ul>
+          <li><strong>BPAC11 · BTG Pactual:</strong> ROE de 22,88% e margem líquida de 24,61% apontam rentabilidade forte; DY de 2,56% é mais contido. Acompanhe crescimento e qualidade dos negócios junto ao P/VP de 2,71.</li>
+          <li><strong>BBDC4 · Bradesco:</strong> P/L de 6,08 e P/VP de 0,81 vêm com ROE de 13,41%, variação de 12 meses negativa e payout de 75,72%. A recuperação da rentabilidade e da carteira de crédito é central para avaliar se o desconto se sustenta.</li>
+          <li><strong>ITUB4 · Itaú Unibanco:</strong> combina ROE de 20,83% com DY de 7,81% e liquidez elevada. O P/VP de 1,95 sinaliza preço acima do valor patrimonial; acompanhe se a rentabilidade continua justificando esse prêmio.</li>
+          <li><strong>BBAS3 · Banco do Brasil:</strong> P/VP de 0,53 e DY de 4,14% podem parecer atrativos, mas o ROE de 6,60% pede cautela. Observe lucro, inadimplência, provisões e efeitos do controle estatal.</li>
+          <li><strong>ROXO34 · Nu Holdings:</strong> não registrou proventos no período e tem exposição cambial e a crédito de crescimento rápido. Os indicadores de rentabilidade e valuation diferem bastante entre provedores; acompanhe crescimento com qualidade de crédito e valide a conversão por BDR.</li>
+        </ul>
+      </section>
+    </main>
+    <footer>Relatório informativo para análise comparativa. Indicadores e preços mudam com o mercado e com a publicação de novos balanços. Fontes de dados usadas neste relatório: Investidor10, Status Invest e AUVP Analítica.</footer>
+  </div>
+<script>
+  document.querySelectorAll("table").forEach((table) => {
+    const labels = Array.from(table.querySelectorAll("thead th"), (cell) => cell.textContent.trim());
+    table.querySelectorAll("tbody tr").forEach((row) => {
+      Array.from(row.cells).forEach((cell, index) => {
+        if (labels[index]) cell.setAttribute("data-label", labels[index]);
+      });
+    });
+  });
+</script>
+</body>
+</html>

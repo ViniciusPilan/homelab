@@ -11,6 +11,15 @@ the existing deployment architecture unless the task asks to change it.
 ```text
 .
 ├── .agents/skills/                  # Repository workflows and conventions
+│   ├── deploy-cluster-tool/         # Add a Kubernetes tool through Argo CD and Helm
+│   ├── financial-sector-dashboard-report/ # Bank-stock dashboard workflow and HTML base
+│   │   └── assets/                  # Reusable report design
+│   ├── fii-dashboard-report/        # FII and FIAGRO dashboard workflow and HTML base
+│   │   └── assets/                  # Reusable report design
+│   ├── python-script-patterns/      # Python project conventions
+│   ├── sec-report/                 # Evidence-based security and tool reports
+│   │   └── agents/                  # Skill metadata
+│   └── shell-script-patterns/       # Bash script conventions
 ├── .github/workflows/               # YAML lint, Kubesec, PR title, and weather release workflows
 ├── ansible-playbooks/               # Host preparation and k0s installation
 ├── examples/
@@ -24,6 +33,7 @@ the existing deployment architecture unless the task asks to change it.
 ├── release-please-config.json       # Release Please package configuration
 ├── .release-please-manifest.json    # Current release versions
 ├── scripts/                         # Cluster, host, and development scripts
+├── smart-reports/                   # Relatórios finais, agrupados por assunto
 ├── systems/k8s-cluster/
 │   ├── provisioning/
 │   │   ├── dev/                     # Development-cluster configuration
@@ -55,8 +65,29 @@ workflows under `.github/workflows/`.
 ## Before changing files
 
 1. Check `.agents/skills/` for a workflow that applies to the task and read its
-   `SKILL.md`. In particular, use `deploy-cluster-tool` for a new cluster tool
-   and `shell-script-patterns` when creating or revising repository scripts.
+   `SKILL.md` before editing. Available workflows:
+   - `deploy-cluster-tool` for adding a Kubernetes tool through Argo CD and Helm.
+   - `financial-sector-dashboard-report` for HTML dashboards analyzing publicly traded
+     bank stocks. Its reusable design is in
+     `.agents/skills/financial-sector-dashboard-report/assets/`; other financial
+     sectors are outside this skill's scope.
+   - `fii-dashboard-report` for dashboards analyzing Brazilian FIIs and
+     FIAGROs, using fund-specific property, income, and credit metrics.
+   - `python-script-patterns` for creating or revising Python projects.
+   - `sec-report` (skill name `tool-report`) for reports based on security or
+     operational tool output.
+   - `shell-script-patterns` for creating or revising repository shell scripts.
+   - `equity-sector-dashboard-report` for intelligent dashboards about Brazilian
+     listed companies in banking, sanitation, electric utilities, and commodities.
+   - `fii-dashboard-report` for intelligent dashboards about Brazilian FIIs and
+     FIAGROs.
+   - `financial-sector-dashboard-report` for intelligent dashboards focused on
+     publicly traded banks.
+   When the user asks for a “relatório inteligente do setor”, select the matching
+   skill from the sector named in the request. If they say only “setor financeiro”
+   or “setor de ações” without clarifying the intended scope, infer bank stocks
+   for “financeiro” and the broader listed-company skill for “ações”; use the FII
+   skill for FIIs/FIAGROs. Ask which sector only when the request remains ambiguous.
 2. Read the target files and their related README or runbook. For provisioning
    or deployment changes, inspect the corresponding Argo CD, Helm, OpenTofu,
    or Ansible configuration as applicable.
@@ -117,17 +148,32 @@ workflows under `.github/workflows/`.
 
 ### HTML reports
 
-- Follow `.agents/skills/tool-report/SKILL.md` whenever creating or refreshing a
-  report for a repository or cluster tool.
+- For the equity-sector, FII/FIAGRO, and bank-sector dashboard skills, the final
+  deliverable is a standalone HTML file intended for direct viewing in a browser.
+  Save it under `smart-reports/<assunto>/` as
+  `<nome-do-relatorio>_DD-MM-YYYY_HH-MM.html`, using local 24-hour time. Do not
+  make PDF the default or require a PDF export for these dashboards. Create a PDF
+  only when the user explicitly requests one.
+- Make every such HTML report responsive for both phones and computers. At
+  narrow widths, reorganize dense tables into labeled metric cards when practical;
+  retain semantic headings and table headers, readable contrast and type,
+  keyboard-accessible horizontal scrolling as a fallback, and embedded CSS so
+  the report remains portable as a single file. Check the report's layout at
+  desktop and mobile viewport sizes when the user asks for verification.
+- Other report skills may define a different final format; follow their specific
+  workflow unless the user requests another format.
+- Follow `.agents/skills/sec-report/SKILL.md` (skill name `tool-report`) whenever
+  creating or refreshing a report for a repository or cluster tool. For
+  financial dashboards, follow
+  `.agents/skills/financial-sector-dashboard-report/SKILL.md`; that workflow is limited
+  to bank stocks.
 - When creating a report from scanner, security, or operational logs, start
   from
   `examples/html-page-for-reports/html-report-template.html`. Replace its
   placeholders with findings from the current run, preserve interactive
   search/filter/sort, and
   state the run scope, source, and any limitations that affect interpretation.
-- Keep generated reports alongside the relevant tool or dataset unless the task
-  asks for another location. Reports are snapshots unless explicitly connected
-  to a live data source.
+- Reports are snapshots unless explicitly connected to a live data source.
 
 ## Validation
 
