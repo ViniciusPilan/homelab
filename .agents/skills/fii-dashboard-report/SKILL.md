@@ -1,13 +1,13 @@
 ---
 name: fii-dashboard-report
-description: Create or update a responsive, browser-ready HTML intelligent sector report for Brazilian listed real estate funds (FIIs) and FIAGROs, using fund-specific property, income, portfolio, and credit metrics. Invoke when the user asks for a "relatório inteligente do setor de FIIs" or an intelligent report about FIIs/FIAGROs.
+description: Create or update a responsive HTML report about Brazilian listed FIIs and FIAGROs, using fund-specific property, income, portfolio, and credit measures. Use for FII/FIAGRO requests, not company stocks.
 metadata:
   short-description: Create a specialized Brazilian FII dashboard
 ---
 
 # FII dashboard report
 
-Use this skill when the user asks for a “relatório inteligente do setor de FIIs”, or to create, refresh, or adapt a report about Brazilian listed real estate funds (FIIs) or FIAGROs, including the established watchlist below. Follow the shared report location and HTML naming rules in the repository `AGENTS.md`. Deliver a standalone HTML file for browser viewing; PDF is only an additional output when explicitly requested.
+Use this skill for Brazilian listed FIIs and FIAGROs, including the established watchlist below. Follow the shared research, data-handling, and HTML workflow in [brazilian-market-dashboard-core](../brazilian-market-dashboard-core/SKILL.md). This skill controls fund scope, approved sources, fund metrics, and interpretation. For listed company stocks, use `financial-sector-dashboard-report` for banks and `equity-sector-dashboard-report` for other sectors.
 
 ## Scope and classification
 
@@ -33,22 +33,15 @@ Use only the following sources for market indicators, fund/company descriptions,
 - [Status Invest](https://statusinvest.com.br/)
 - [AUVP Analítica](https://analitica.auvp.com.br/)
 
-Browse current information from these sources each time a report is created or refreshed. Do not use administrator or manager websites, B3, CVM, other market-data platforms, news sites, search snippets, or other third-party sources to supply or corroborate those data categories. Link each source beside the relevant data or in a compact source list. If a fact or metric is unavailable from the allowed sources, mark it `n/d`; do not fill the gap from another source or infer it from an older report. When allowed providers disagree, show the provider and its methodology/date or mark the metric `n/d`; do not silently combine their values.
+Do not use administrator or manager websites, B3, CVM, other market-data platforms, news sites, search snippets, or other third-party sources to supply or corroborate those data categories. Link each source beside relevant data or in a compact source list.
 
-This source restriction applies to market indicators, fund/company descriptions, and financial results, including portfolio composition and fund events when presented as fund-specific facts. Keep the rest of the report workflow unchanged, including the requirement to browse current information and state reporting month, publication date, quote date, and financial-statement period when the allowed sources provide them.
+This source restriction applies to market indicators, fund/company descriptions, and financial results, including portfolio composition and fund events when presented as fund-specific facts.
 
 For every important metric, record its unit, definition, reference period, and allowed source. Distinguish physical from financial vacancy; contractual rent from cash received; recurring distributions from extraordinary income, capital gains, amortizations, or return of capital; and paid distributions from announced or projected amounts. Avoid implying distributions are guaranteed or tax outcomes are universal.
 
-## Report structure
+## FII dashboard requirements
 
-Keep the report concise and make the dashboard its visual center. Use four numbered parts:
-
-1. **Fundos:** ticker, explicit segment classification, mandate, current strategy, portfolio type, main income drivers, diversification, and material risks.
-2. **Dashboard:** common market and income indicators plus the applicable property or credit measures below. Use separate panels/tables where business models differ; do not force one ranking across brick, paper, hybrid, and FIAGRO strategies.
-3. **Métricas:** plain-language definitions, reporting periods, and comparability limits for all displayed indicators.
-4. **Conclusões:** one short, evidence-based observation per requested ticker, stating the main positive factor and monitoring point. Do not give personalized buy/sell instructions.
-
-Include a visible reference date and Brazilian number formatting. Label values in R$, m², number of properties, percentage points, and other units as applicable.
+Use the shared four-part report structure, adapting the first section to funds. Include each fund's explicit segment, mandate, current strategy, portfolio type, income drivers, diversification, and material risks. Use separate dashboard panels where business models differ; do not force a ranking across brick, paper, hybrid, and FIAGRO strategies. Label values in R$, m², property counts, percentage points, and other applicable units.
 
 ## Common dashboard measures
 
@@ -103,8 +96,6 @@ Interpret P/VP and distribution yield alongside portfolio quality, recurring cas
 
 The conclusions should identify fund-specific evidence and risk rather than rank all tickers by yield or discount. Avoid treating a single month of distribution or an unusually high yield as sustainable. State data gaps that materially limit the reading.
 
-## Reusable design and output quality
+## Reusable design
 
-Start from [assets/relatorio-base-fii.html](assets/relatorio-base-fii.html). Preserve its dark teal header, responsive cards/tables, and embedded CSS unless the user requests a different design. The HTML must be comfortable to read directly in a browser on both desktop and phone. Use separate compact tables for property, credit, and FIAGRO metrics when needed. Tables should be readable on notebook screens, become labeled metric cards on narrow screens, preserve semantic headers and keyboard-accessible scrollable overflow. Print styling may be retained, but PDF export is not required unless requested.
-
-Use Brazilian Portuguese unless requested otherwise. Keep conclusions evidence-based and limitations plain. Save the final HTML under `smart-reports/<assunto>/` using the local 24-hour timestamp format required by repository `AGENTS.md`. Do not run tests or validation checks unless the user asks for verification.
+Start from [assets/relatorio-base-fii.html](assets/relatorio-base-fii.html). Preserve its dark teal header, responsive cards/tables, and embedded CSS unless the user requests a different design. Use separate compact tables for property, credit, and FIAGRO metrics when needed.

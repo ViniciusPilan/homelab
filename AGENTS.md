@@ -16,6 +16,7 @@ the existing deployment architecture unless the task asks to change it.
 │   │   └── assets/                  # Reusable report design
 │   ├── fii-dashboard-report/        # FII and FIAGRO dashboard workflow and HTML base
 │   │   └── assets/                  # Reusable report design
+│   ├── brazilian-market-dashboard-core/ # Shared research and HTML workflow for sector dashboards
 │   ├── python-script-patterns/      # Python project conventions
 │   ├── sec-report/                 # Evidence-based security and tool reports
 │   │   └── agents/                  # Skill metadata
@@ -67,27 +68,25 @@ workflows under `.github/workflows/`.
 1. Check `.agents/skills/` for a workflow that applies to the task and read its
    `SKILL.md` before editing. Available workflows:
    - `deploy-cluster-tool` for adding a Kubernetes tool through Argo CD and Helm.
-   - `financial-sector-dashboard-report` for HTML dashboards analyzing publicly traded
-     bank stocks. Its reusable design is in
-     `.agents/skills/financial-sector-dashboard-report/assets/`; other financial
-     sectors are outside this skill's scope.
-   - `fii-dashboard-report` for dashboards analyzing Brazilian FIIs and
-     FIAGROs, using fund-specific property, income, and credit metrics.
+   - `brazilian-market-dashboard-core` for shared data handling and HTML presentation;
+     use it together with exactly one sector dashboard skill.
+   - `financial-sector-dashboard-report` for publicly traded Brazilian bank stocks.
+     Its reusable design is in `.agents/skills/financial-sector-dashboard-report/assets/`.
+   - `fii-dashboard-report` for Brazilian FIIs and FIAGROs, using fund-specific
+     property, income, and credit metrics.
    - `python-script-patterns` for creating or revising Python projects.
    - `sec-report` (skill name `tool-report`) for reports based on security or
      operational tool output.
    - `shell-script-patterns` for creating or revising repository shell scripts.
-   - `equity-sector-dashboard-report` for intelligent dashboards about Brazilian
-     listed companies in banking, sanitation, electric utilities, and commodities.
-   - `fii-dashboard-report` for intelligent dashboards about Brazilian FIIs and
-     FIAGROs.
-   - `financial-sector-dashboard-report` for intelligent dashboards focused on
-     publicly traded banks.
-   When the user asks for a “relatório inteligente do setor”, select the matching
-   skill from the sector named in the request. If they say only “setor financeiro”
-   or “setor de ações” without clarifying the intended scope, infer bank stocks
-   for “financeiro” and the broader listed-company skill for “ações”; use the FII
-   skill for FIIs/FIAGROs. Ask which sector only when the request remains ambiguous.
+   - `equity-sector-dashboard-report` for Brazilian listed-company stocks outside
+     banking, including sanitation, electric utilities, commodities, and industry.
+   For a report request, select one sector skill: FIIs/FIAGROs use
+   `fii-dashboard-report`; bank stocks use `financial-sector-dashboard-report`;
+   all other listed-company stocks use `equity-sector-dashboard-report`. Each
+   sector skill uses `brazilian-market-dashboard-core` for the shared workflow.
+   If the request says only “setor financeiro”, infer bank stocks; if it says only
+   “setor de ações”, infer non-bank listed companies. Ask only when the intended
+   asset class or sector remains unclear.
 2. Read the target files and their related README or runbook. For provisioning
    or deployment changes, inspect the corresponding Argo CD, Helm, OpenTofu,
    or Ansible configuration as applicable.

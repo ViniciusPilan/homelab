@@ -1,13 +1,13 @@
 ---
 name: financial-sector-dashboard-report
-description: Create or update a responsive, browser-ready HTML intelligent sector report for publicly traded bank stocks, using the user's approved Brazilian data sources. Invoke when the user asks for a "relatório inteligente do setor financeiro" or an intelligent report about banks.
+description: Create or update a responsive HTML report about publicly traded Brazilian banks. Use for requests specifically about bank stocks; use equity-sector-dashboard-report for other listed companies.
 metadata:
   short-description: Create a sourced financial dashboard report
 ---
 
 # Financial dashboard report
 
-Use this skill when the user asks for a “relatório inteligente do setor financeiro” or to create, refresh, or adapt an HTML dashboard analyzing publicly traded bank stocks. Follow the shared report location and HTML naming rules in the repository `AGENTS.md`. Deliver a standalone HTML file for browser viewing; PDF is only an additional output when explicitly requested.
+Use this skill only for listed Brazilian bank stocks. Follow the shared research, data-handling, and HTML workflow in [brazilian-market-dashboard-core](../brazilian-market-dashboard-core/SKILL.md). This skill controls bank scope, sources, metrics, and interpretation. For non-bank companies, use `equity-sector-dashboard-report`; for FIIs/FIAGROs, use `fii-dashboard-report`.
 
 ## Scope
 
@@ -35,30 +35,16 @@ Use only these sources for market indicators, company descriptions, and financia
 - [Status Invest](https://statusinvest.com.br/)
 - [AUVP Analítica](https://analitica.auvp.com.br/)
 
-Browse current data each time the report is refreshed. Link the relevant pages in the report. If one site is unavailable or does not provide a requested metric, use the other approved sources and mark the gap; do not silently fill it from another site. Do not present a metric as current without checking its displayed quote date and financial-statement period.
+## Bank dashboard requirements
 
-## Report structure
-
-Keep the report compact and make the dashboard the visual and informational center. Use four numbered parts:
-
-1. **Empresas:** a brief description of each bank and its business model. Identify BDRs and their underlying shares when applicable; exclude non-bank companies from the comparison.
-2. **Dashboard:** the latest available price, 12-month price change, P/L, P/VP, DY, ROE, ROA, payout, net margin, average daily liquidity, **Índice de Basileia**, and **inadimplência**. Always provide dedicated columns/fields for Índice de Basileia and inadimplência for every bank in the required set. Use the latest figures available from the approved sources; if a source does not publish a figure, show `n/d` and explain the gap instead of omitting the metric or inferring it. Include the reporting date/period and the source's definition for each credit or capital metric. For inadimplência, identify the delinquency threshold (for example, above 90 days) and whether the value is an NPL ratio, overdue portfolio share, or another disclosed measure; do not compare unlike definitions as if equivalent. Include other relevant bank measures such as credit growth and provisions when the approved sources report them.
-3. **Métricas:** short plain-language explanations for every metric shown in the dashboard. Explain any metric that is not comparable for a company or sector.
-4. **Conclusões:** use a bullet list with one item per asset. Give a concise interpretation grounded in its dashboard metrics, including the main trade-off or item to monitor. Avoid personalized buy/sell instructions.
-
-Add a visible data-reference date. Note when quote dates, balance-sheet periods, or calculation methods differ across the source sites. Keep historical dividend yield distinct from expected future income. For banks, do not use net debt/EBITDA as a primary measure; deposits and funding are part of the business model. Treat Índice de Basileia and inadimplência as core dashboard indicators, not optional observations relegated only to notes; preserve `n/d` fields when data is unavailable.
+Include price, 12-month price change, P/L, P/VP, DY, ROE, ROA, payout, net margin, average daily liquidity, **Índice de Basileia**, and **inadimplência**. Provide dedicated fields for Basileia and inadimplência for every required bank. Show `n/d` with an explanation when unavailable. State the period and definition for each capital or credit metric; for delinquency, identify the threshold and whether the figure is an NPL ratio, overdue portfolio share, or another disclosed measure. Include credit growth and provisions when the approved sources report them. Do not use net debt/EBITDA as a primary bank measure.
 
 ## Reusable base
 
 Start from [assets/relatorio-base-atual.html](assets/relatorio-base-atual.html) when creating another report in this series. It is a snapshot of the user's approved report design and section order, not a source of current data. Replace the company list, data, date, source links, caveats, and conclusions to match the new request. Keep the dark teal header, compact cards, responsive metric table, and embedded CSS unless the user asks for a different design. The HTML must be comfortable to read directly in a browser on both desktop and phone. Tables should fit notebook-width screens with wrapped cell content and become labeled, readable metric cards on narrow phone screens; preserve semantic table headers for accessibility and retain keyboard-accessible horizontal scrolling as a fallback.
 
-Check that each required issuer still meets the bank-only scope and that its ticker is active; verify source quote dates and metric availability each time, marking unavailable values instead of inferring them. Additional requested issuers must meet the same scope. Do not add Caixa Econômica Federal, Caixa Seguridade, or other companies by default. Caixa Econômica Federal is a bank and may be included when explicitly requested; Caixa Seguridade is an insurer and is out of scope. ROXO34 may be added only when explicitly requested; identify the underlying Nu Holdings shares and BDR ratio.
+Check that each required issuer still meets the bank-only scope and that its ticker is active. Additional requested issuers must meet the same scope. Do not add Caixa Econômica Federal, Caixa Seguridade, or other companies by default. Caixa Econômica Federal may be included when explicitly requested; Caixa Seguridade is an insurer and out of scope. ROXO34 may be added only when explicitly requested; identify the underlying Nu Holdings shares and BDR ratio.
 
 ## Output quality
 
-- Use Brazilian Portuguese unless the user asks for another language.
-- Use concise labels, consistent units, and Brazilian number formatting.
-- Show `n/d` for missing data and say why when material.
-- Keep links adjacent to the source list or relevant data, and avoid sources outside the approved three domains.
-- Preserve accessibility: semantic headings, table headers, keyboard-scrollable overflow, responsive layout, and readable contrast.
-- Do not run tests or validation checks unless the user asks for verification. Report any limitations plainly.
+- Restrict bank market and financial data to the three approved domains above.
