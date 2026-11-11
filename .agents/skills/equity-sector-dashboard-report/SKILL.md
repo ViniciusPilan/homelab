@@ -1,19 +1,18 @@
 ---
 name: equity-sector-dashboard-report
-description: Create or update a responsive, browser-ready HTML intelligent sector report for Brazilian listed companies in banking, sanitation, electric utilities, and commodities. Invoke when the user asks for a "relatório inteligente do setor de ações brasileiras" or an intelligent report for one of these equity sectors.
+description: Create or update a responsive HTML report about listed Brazilian companies outside banking, including sanitation, electric utilities, commodities, and industrial sectors. Use the bank-specific skill for banks.
 metadata:
   short-description: Create a sourced sector-aware equity dashboard
 ---
 
 # Equity sector dashboard report
 
-Use this skill when the user asks for a “relatório inteligente do setor de ações brasileiras”, or to create, refresh, or adapt an HTML report about Brazilian listed companies in banking, sanitation, electric utilities, or commodity producers. If the request names a narrower equity sector, cover only the requested companies and apply the relevant sector metrics. Follow the shared report location and file format in the repository `AGENTS.md`. Deliver a standalone HTML file for browser viewing; PDF is only an additional output when explicitly requested.
+Use this skill for listed Brazilian companies outside banking, including sanitation, electric utilities, commodities, and industrial equipment. Follow the shared research, data-handling, and HTML workflow in [brazilian-market-dashboard-core](../brazilian-market-dashboard-core/SKILL.md). This skill controls company scope, source selection, sector metrics, and interpretation.
 
 ## Scope and classification
 
-Include only the companies and tickers requested. When the request is to update the user's established Brazilian equity watchlist, cover every ticker in this canonical list unless the user narrows the scope:
+Include only requested companies and tickers. Exclude banks from this workflow; route bank-stock requests to `financial-sector-dashboard-report`. When updating the established non-bank Brazilian equity watchlist, cover every ticker in this canonical list unless the user narrows the scope:
 
-- **Bancos:** BBAS3 — Banco do Brasil S.A. ON; BBDC4 — Banco Bradesco S.A. PN; BPAC11 — Banco BTG Pactual S.A. UNIT; ITUB4 — Itaú Unibanco Holding S.A. PN. Do not apply industrial-company debt or EV/EBITDA interpretations to banks; deposits, funding, capital adequacy, credit quality, and provisions are central to their analysis.
 - **Saneamento:** CSMG3 — Companhia de Saneamento de Minas Gerais (Copasa) ON; SAPR11 — Companhia de Saneamento do Paraná (Sanepar) UNIT; SBSP3 — Companhia de Saneamento Básico do Estado de São Paulo (Sabesp) ON. Cover water supply, sewage collection and treatment, concessions, regulation, and investment commitments.
 - **Energia elétrica:** ALUP4 — Alupar Investimento S.A. PN; CPFE3 — CPFL Energia S.A. ON; TAEE11 — Transmissora Aliança de Energia Elétrica S.A. UNIT. Classify each issuer by actual business activity and segment. Distinguish transmission from distribution and generation; Alupar and Taesa have material transmission exposure, while CPFL has distribution and other electricity businesses. Confirm the current business mix from issuer sources.
 - **Commodities, materiais e indústria:** PETR4 — Petróleo Brasileiro S.A. (Petrobras) PN; SUZB3 — Suzano S.A. ON; VALE3 — Vale S.A. ON; WEGE3 — WEG S.A. ON. Identify each company's products and material segments. Petrobras is an integrated oil and gas producer/refiner, Vale is exposed to iron ore and base metals, Suzano principally to pulp and paper, and WEG is an industrial equipment manufacturer; do not assume they share the same commodity exposure or operating drivers.
@@ -22,20 +21,13 @@ Confirm the issuer, ticker, share class, listing status, and business mix from c
 
 ## Sources and freshness
 
-Browse current data each time the report is created or refreshed. Prefer primary sources for company-specific facts and operating results: issuer investor-relations pages, earnings releases, financial statements, and reference forms; use B3 and CVM records for listing, filings, and corporate facts where relevant. Market-data sites such as Investidor10, Status Invest, or AUVP Analítica may be used for market multiples and liquidity when they show the relevant date and calculation basis. Link sources next to the data or in a compact source list.
+Prefer primary sources for company-specific facts and operating results: issuer investor-relations pages, earnings releases, financial statements, and reference forms; use B3 and CVM records for listing, filings, and corporate facts where relevant. Market-data sites such as Investidor10, Status Invest, or AUVP Analítica may be used for market multiples and liquidity.
 
-Do not silently combine inconsistent definitions. Record the quote date, financial-statement period, currency, unit, and source for important metrics. Mark unavailable values as `n/d`, explain material gaps, and do not infer current values from old reports. Separate historical dividend yield from announced, approved, or projected payments. Distinguish reported results from guidance and analyst estimates.
+For each asset and metric, apply the source search order in `brazilian-market-dashboard-core` wherever those market-data platforms are permitted. For company-specific facts and operating results, follow the primary-source preference above and check the permitted sources before marking data `n/d`.
 
-## Report structure
+## Equity dashboard requirements
 
-Keep the report concise and make the dashboard its visual center. Use four numbered parts:
-
-1. **Empresas:** brief business description, ticker/share class, principal revenue drivers, and relevant segment or concession exposure.
-2. **Dashboard:** a common comparison panel plus the operating metrics relevant to the requested sectors. Show latest price, 12-month return, valuation, dividends, debt, and liquidity when available; add sector measures described below. Avoid forcing a single ranking across different business models.
-3. **Métricas:** plain-language definitions for every displayed metric. State when a metric is weakly comparable or misleading for a particular business.
-4. **Conclusões:** one concise item per requested asset, grounded in reported metrics and identifying its main trade-off or monitoring point. Do not give personalized buy/sell instructions.
-
-Include a visible reference date. Keep Brazilian number formatting and label currencies and units, including R$, US$, tonnes, MWh, and percentages as applicable.
+Use the shared four-part report structure. Identify each company's ticker/share class, business, principal revenue drivers, and relevant operating exposure. Build a common comparison panel only for meaningfully comparable measures; add sector-specific panels and avoid ranking unlike business models together. Label currencies and units, including R$, US$, tonnes, MWh, and percentages.
 
 ## Common metrics
 
@@ -46,7 +38,6 @@ Use a consistent basis across companies where possible:
 - Historical dividend yield and payout, with the period and source stated. Discuss distributions alongside cash generation, investment needs, debt covenants, and announced policy.
 - Revenue, EBITDA, margins, net income, operating cash flow, free cash flow, capex, net debt/EBITDA, debt cost, maturity profile, and currency/index exposure when reported.
 - Prefer multi-year history that includes different operating or commodity conditions. Distinguish recurring performance from impairments, asset sales, tax effects, and other non-recurring items.
-- For banks, prioritize ROE, ROA, net interest income/spread, efficiency ratio, loan portfolio growth and mix, non-performing loans/arrears, cost of risk and provisions, capital adequacy (Basel/CET1 when available), and recurring versus extraordinary earnings. Treat bank dividend payout and yield in the context of capital needs and applicable distribution policy. Do not compare bank leverage or margins directly with non-financial issuers.
 
 Do not use ROE, ROA, or net margin as universal headline comparisons. They may be included as supporting measures with the accounting basis and comparability caveat stated.
 
@@ -86,6 +77,4 @@ Separate transmission from distribution and generation; never compare their oper
 
 ## Reusable design and output quality
 
-Start from [assets/relatorio-base-setorial.html](assets/relatorio-base-setorial.html), a copy of the established dashboard design. Preserve its dark teal header, compact company cards, responsive metric tables, and embedded CSS unless the user requests a different design. The HTML must be comfortable to read directly in a browser on both desktop and phone: tables should fit notebook-width screens with wrapped cell content and become labeled, readable metric cards on narrow phone screens; preserve semantic table headers for accessibility and retain keyboard-accessible horizontal scrolling as a fallback. Adapt the table to the requested issuers and sectors; it is acceptable to use clearly labeled sector-specific columns or separate tables when that improves comparability.
-
-Use Brazilian Portuguese unless requested otherwise. Preserve semantic headings and table headers, keyboard-scrollable table overflow, responsive layout, and readable contrast. Keep conclusions evidence-based and state limitations plainly. Do not run tests or validation checks unless the user asks for verification.
+Start from [assets/relatorio-base-setorial.html](assets/relatorio-base-setorial.html), a copy of the established dashboard design. Preserve its dark teal header, compact company cards, and embedded CSS unless the user requests a different design. Adapt tables to requested issuers and sectors; use sector-specific columns or separate tables where that improves comparability.
