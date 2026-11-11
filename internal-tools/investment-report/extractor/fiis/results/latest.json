@@ -1,0 +1,184 @@
+{
+  "stocks": [
+    {
+      "name": "APTO11",
+      "ticker": "APTO11",
+      "indicators": {
+        "ticker": "APTO11",
+        "fundo": "VINCI RESIDENCIAL",
+        "preco": "R$ 5,00",
+        "patrimonio_total": "R$ 46,03 Milhões",
+        "vp_cota": "R$ 9,98",
+        "variacao_12_meses": "-32,80%",
+        "p_vp": "0,50",
+        "dy_12_meses": "19,60%",
+        "liquidez_diaria": "R$ 26,25 K",
+        "segmento": "Híbrido",
+        "tipo_de_fundo": "Fundo de Tijolo",
+        "vacancia": "23,00%",
+        "ultimo_rendimento": "R$ 0,05",
+        "taxa_administracao": "1,5% a.a. sobre patrimônio líquido até R$500mm"
+      }
+    },
+    {
+      "name": "BTAL11",
+      "ticker": "BTAL11",
+      "indicators": {
+        "ticker": "BTAL11",
+        "fundo": "BTG PACTUAL AGRO LOGÍSTICA",
+        "preco": "R$ 80,34",
+        "patrimonio_total": "R$ 684,70 Milhões",
+        "vp_cota": "R$ 114,45",
+        "variacao_12_meses": "20,40%",
+        "p_vp": "0,70",
+        "dy_12_meses": "14,75%",
+        "liquidez_diaria": "R$ 489,06 K",
+        "segmento": "Outros",
+        "tipo_de_fundo": "Fundo de Tijolo",
+        "vacancia": "0,00%",
+        "ultimo_rendimento": "R$ 1,00",
+        "taxa_administracao": "1,10% ao ano sobre PL"
+      }
+    },
+    {
+      "name": "BTLG11",
+      "ticker": "BTLG11",
+      "indicators": {
+        "ticker": "BTLG11",
+        "fundo": "BTG PACTUAL LOGÍSTICA",
+        "preco": "R$ 98,70",
+        "patrimonio_total": "R$ 7,54 Bilhões",
+        "vp_cota": "R$ 106,22",
+        "variacao_12_meses": "4,23%",
+        "p_vp": "0,93",
+        "dy_12_meses": "9,77%",
+        "liquidez_diaria": "R$ 25,40 M",
+        "segmento": "Logístico / Indústria / Galpões",
+        "tipo_de_fundo": "Fundo de Tijolo",
+        "vacancia": "1,20%",
+        "ultimo_rendimento": "R$ 0,81",
+        "taxa_administracao": "0,9% a.a. sobre o Valor de Mercado"
+      }
+    },
+    {
+      "name": "GARE11",
+      "ticker": "GARE11",
+      "indicators": {
+        "ticker": "GARE11",
+        "fundo": "GUARDIAN REAL ESTATE",
+        "preco": "R$ 8,13",
+        "patrimonio_total": "R$ 2,60 Bilhões",
+        "vp_cota": "R$ 9,00",
+        "variacao_12_meses": "1,50%",
+        "p_vp": "0,90",
+        "dy_12_meses": "12,25%",
+        "liquidez_diaria": "R$ 6,83 M",
+        "segmento": "Híbrido",
+        "tipo_de_fundo": "Fundo de Tijolo",
+        "vacancia": "0,00%",
+        "ultimo_rendimento": "R$ 0,08",
+        "taxa_administracao": "0,94% - 1,00% a.a sobre PL"
+      }
+    },
+    {
+      "name": "KNCR11",
+      "ticker": "KNCR11",
+      "indicators": {
+        "ticker": "KNCR11",
+        "fundo": "KINEA RENDIMENTOS IMOBILIÁRIOS FUNDOS",
+        "preco": "R$ 102,50",
+        "patrimonio_total": "R$ 10,98 Bilhões",
+        "vp_cota": "R$ 102,57",
+        "variacao_12_meses": "11,17%",
+        "p_vp": "1,00",
+        "dy_12_meses": "13,36%",
+        "liquidez_diaria": "R$ 29,39 M",
+        "segmento": "Títulos e Valores Mobiliários",
+        "tipo_de_fundo": "Fundo de Papel",
+        "vacancia": "0,00%",
+        "ultimo_rendimento": "R$ 1,10",
+        "taxa_administracao": "1,08 % a.a"
+      }
+    },
+    {
+      "name": "KNRI11",
+      "ticker": "KNRI11",
+      "indicators": {
+        "ticker": "KNRI11",
+        "fundo": "KINEA RENDA IMOBILIÁRIA",
+        "preco": "R$ 146,66",
+        "patrimonio_total": "R$ 4,62 Bilhões",
+        "vp_cota": "R$ 163,64",
+        "variacao_12_meses": "9,36%",
+        "p_vp": "0,90",
+        "dy_12_meses": "9,08%",
+        "liquidez_diaria": "R$ 8,04 M",
+        "segmento": "Híbrido",
+        "tipo_de_fundo": "Fundo de Tijolo",
+        "vacancia": "1,84%",
+        "ultimo_rendimento": "R$ 1,10",
+        "taxa_administracao": "1,11% a.a"
+      }
+    },
+    {
+      "name": "VISC11",
+      "ticker": "VISC11",
+      "indicators": {
+        "ticker": "VISC11",
+        "fundo": "VINCI SHOPPING CENTERS",
+        "preco": "R$ 98,30",
+        "patrimonio_total": "R$ 3,34 Bilhões",
+        "vp_cota": "R$ 115,79",
+        "variacao_12_meses": "1,65%",
+        "p_vp": "0,85",
+        "dy_12_meses": "10,19%",
+        "liquidez_diaria": "R$ 9,80 M",
+        "segmento": "Shoppings / Varejo",
+        "tipo_de_fundo": "Fundo de Tijolo",
+        "vacancia": "6,10%",
+        "ultimo_rendimento": "R$ 0,84",
+        "taxa_administracao": "1,35% a.a sobre patrimônio liquido"
+      }
+    },
+    {
+      "name": "XPLG11",
+      "ticker": "XPLG11",
+      "indicators": {
+        "ticker": "XPLG11",
+        "fundo": "XP LOG",
+        "preco": "R$ 88,30",
+        "patrimonio_total": "R$ 5,37 Bilhões",
+        "vp_cota": "R$ 104,43",
+        "variacao_12_meses": "-3,17%",
+        "p_vp": "0,85",
+        "dy_12_meses": "11,14%",
+        "liquidez_diaria": "R$ 10,82 M",
+        "segmento": "Logístico / Indústria / Galpões",
+        "tipo_de_fundo": "Fundo de Tijolo",
+        "vacancia": "3,80%",
+        "ultimo_rendimento": "R$ 0,82",
+        "taxa_administracao": "0,85% a.a sobre patrimônio liquido (minimo R$25.000,00 mensais)"
+      }
+    },
+    {
+      "name": "XPML11",
+      "ticker": "XPML11",
+      "indicators": {
+        "ticker": "XPML11",
+        "fundo": "XP MALLS FUNDOS",
+        "preco": "R$ 91,44",
+        "patrimonio_total": "R$ 6,90 Bilhões",
+        "vp_cota": "R$ 107,36",
+        "variacao_12_meses": "-4,78%",
+        "p_vp": "0,85",
+        "dy_12_meses": "12,07%",
+        "liquidez_diaria": "R$ 25,94 M",
+        "segmento": "Shoppings / Varejo",
+        "tipo_de_fundo": "Fundo de Tijolo",
+        "vacancia": "5,10%",
+        "ultimo_rendimento": "R$ 0,92",
+        "taxa_administracao": "0,95% a.a"
+      }
+    }
+  ]
+}

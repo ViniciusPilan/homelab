@@ -1,0 +1,256 @@
+{
+  "stocks": [
+    {
+      "name": "Itaú",
+      "ticker": "ITUB4",
+      "indicators": {
+        "ticker": "ITUB4",
+        "preco": "R$ 41,20",
+        "variacao_12_meses": "12,96%",
+        "pl": "9,51",
+        "p_vp": "1,98",
+        "dy_12_meses": "7,59%",
+        "roe": "20,83%",
+        "roa": "1,46%",
+        "payout": "71,84%",
+        "margem_liquida": "11,97%",
+        "liquidez_diaria": "R$ 1.708.046.000",
+        "segmento": "Bancos"
+      }
+    },
+    {
+      "name": "BTG",
+      "ticker": "BPAC11",
+      "indicators": {
+        "ticker": "BPAC11",
+        "preco": "R$ 55,72",
+        "variacao_12_meses": "10,09%",
+        "pl": "11,91",
+        "p_vp": "2,72",
+        "dy_12_meses": "2,47%",
+        "roe": "22,88%",
+        "roa": "2,27%",
+        "payout": "30,35%",
+        "margem_liquida": "24,61%",
+        "liquidez_diaria": "R$ 1.473.755.000",
+        "segmento": "Bancos"
+      }
+    },
+    {
+      "name": "Bradesco",
+      "ticker": "BBDC4",
+      "indicators": {
+        "ticker": "BBDC4",
+        "preco": "R$ 14,54",
+        "variacao_12_meses": "-19,36%",
+        "pl": "6,23",
+        "p_vp": "0,83",
+        "dy_12_meses": "11,00%",
+        "roe": "13,41%",
+        "roa": "1,06%",
+        "payout": "75,72%",
+        "margem_liquida": "8,49%",
+        "liquidez_diaria": "R$ 1.316.332.000",
+        "segmento": "Bancos"
+      }
+    },
+    {
+      "name": "Banco do Brasil",
+      "ticker": "BBAS3",
+      "indicators": {
+        "ticker": "BBAS3",
+        "preco": "R$ 17,10",
+        "variacao_12_meses": "-22,90%",
+        "pl": "7,99",
+        "p_vp": "0,53",
+        "dy_12_meses": "4,01%",
+        "roe": "6,60%",
+        "roa": "0,59%",
+        "payout": "32,24%",
+        "margem_liquida": "3,71%",
+        "liquidez_diaria": "R$ 1.143.072.000",
+        "segmento": "Bancos"
+      }
+    },
+    {
+      "name": "Copasa",
+      "ticker": "CSMG3",
+      "indicators": {
+        "ticker": "CSMG3",
+        "preco": "R$ 53,03",
+        "variacao_12_meses": "45,50%",
+        "pl": "15,90",
+        "p_vp": "2,22",
+        "dy_12_meses": "3,85%",
+        "roe": "13,95%",
+        "roa": "5,96%",
+        "payout": "59,78%",
+        "margem_liquida": "14,13%",
+        "liquidez_diaria": "R$ 363.933.000",
+        "segmento": "Água e Saneamento"
+      }
+    },
+    {
+      "name": "Sanepar",
+      "ticker": "SAPR11",
+      "indicators": {
+        "ticker": "SAPR11",
+        "preco": "R$ 32,48",
+        "variacao_12_meses": "-7,45%",
+        "pl": "21,56",
+        "p_vp": "0,81",
+        "dy_12_meses": "1,69%",
+        "roe": "3,76%",
+        "roa": "1,72%",
+        "payout": "128,56%",
+        "margem_liquida": "6,04%",
+        "liquidez_diaria": "R$ 88.597.000",
+        "segmento": "Água e Saneamento"
+      }
+    },
+    {
+      "name": "Sabesp",
+      "ticker": "SBSP3",
+      "indicators": {
+        "ticker": "SBSP3",
+        "preco": "R$ 27,39",
+        "variacao_12_meses": "5,60%",
+        "pl": "13,32",
+        "p_vp": "2,07",
+        "dy_12_meses": "5,22%",
+        "roe": "15,55%",
+        "roa": "6,33%",
+        "payout": "169,16%",
+        "margem_liquida": "17,47%",
+        "liquidez_diaria": "R$ 889.899.000",
+        "segmento": "Água e Saneamento"
+      }
+    },
+    {
+      "name": "Alupar",
+      "ticker": "ALUP4",
+      "indicators": {
+        "ticker": "ALUP4",
+        "preco": "R$ 10,41",
+        "variacao_12_meses": "-0,60%",
+        "pl": "9,99",
+        "p_vp": "1,06",
+        "dy_12_meses": "3,37%",
+        "roe": "10,66%",
+        "roa": "4,72%",
+        "payout": "34,54%",
+        "margem_liquida": "19,73%",
+        "liquidez_diaria": "R$ 280.000",
+        "segmento": "Energia Elétrica"
+      }
+    },
+    {
+      "name": "CPFL Energia",
+      "ticker": "CPFE3",
+      "indicators": {
+        "ticker": "CPFE3",
+        "preco": "R$ 44,39",
+        "variacao_12_meses": "9,82%",
+        "pl": "8,52",
+        "p_vp": "2,25",
+        "dy_12_meses": "8,35%",
+        "roe": "26,43%",
+        "roa": "7,54%",
+        "payout": "60,78%",
+        "margem_liquida": "13,17%",
+        "liquidez_diaria": "R$ 115.637.000",
+        "segmento": "Energia Elétrica"
+      }
+    },
+    {
+      "name": "Taesa",
+      "ticker": "TAEE11",
+      "indicators": {
+        "ticker": "TAEE11",
+        "preco": "R$ 40,72",
+        "variacao_12_meses": "4,68%",
+        "pl": "8,63",
+        "p_vp": "1,74",
+        "dy_12_meses": "7,32%",
+        "roe": "20,14%",
+        "roa": "7,16%",
+        "payout": "76,24%",
+        "margem_liquida": "36,25%",
+        "liquidez_diaria": "R$ 121.769.000",
+        "segmento": "Energia Elétrica"
+      }
+    },
+    {
+      "name": "Petrobras",
+      "ticker": "PETR4",
+      "indicators": {
+        "ticker": "PETR4",
+        "preco": "R$ 44,95",
+        "variacao_12_meses": "46,55%",
+        "pl": "4,13",
+        "p_vp": "1,15",
+        "dy_12_meses": "8,01%",
+        "roe": "27,82%",
+        "roa": "10,61%",
+        "payout": "27,56%",
+        "margem_liquida": "23,80%",
+        "liquidez_diaria": "R$ 3.101.048.000",
+        "segmento": "Exploração, Refino e Distribuição"
+      }
+    },
+    {
+      "name": "Suzano",
+      "ticker": "SUZB3",
+      "indicators": {
+        "ticker": "SUZB3",
+        "preco": "R$ 54,46",
+        "variacao_12_meses": "19,60%",
+        "pl": "8,28",
+        "p_vp": "1,33",
+        "dy_12_meses": "2,07%",
+        "roe": "16,11%",
+        "roa": "4,37%",
+        "payout": "16,97%",
+        "margem_liquida": "15,94%",
+        "liquidez_diaria": "R$ 555.264.000",
+        "segmento": "Papel e Celulose"
+      }
+    },
+    {
+      "name": "Vale",
+      "ticker": "VALE3",
+      "indicators": {
+        "ticker": "VALE3",
+        "preco": "R$ 64,80",
+        "variacao_12_meses": "4,29%",
+        "pl": "131,47",
+        "p_vp": "1,48",
+        "dy_12_meses": "8,49%",
+        "roe": "1,13%",
+        "roa": "0,12%",
+        "payout": "1.138,70%",
+        "margem_liquida": "1,01%",
+        "liquidez_diaria": "R$ 1.947.297.000",
+        "segmento": "Minerais Metálicos"
+      }
+    },
+    {
+      "name": "WEG",
+      "ticker": "WEGE3",
+      "indicators": {
+        "ticker": "WEGE3",
+        "preco": "R$ 50,95",
+        "variacao_12_meses": "17,15%",
+        "pl": "34,11",
+        "p_vp": "10,72",
+        "dy_12_meses": "3,95%",
+        "roe": "31,41%",
+        "roa": "14,66%",
+        "payout": "65,35%",
+        "margem_liquida": "15,40%",
+        "liquidez_diaria": "R$ 838.766.000",
+        "segmento": "Motores, Compressores e Outros"
+      }
+    }
+  ]
+}
