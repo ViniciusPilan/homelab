@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Painel de acompanhamento de BDRs preenchido dinamicamente com os dados do arquivo latest.json.">
+<title>BDRs | Painel de indicadores</title>
+<style>
+:root{color-scheme:light;--ink:#172a3a;--muted:#62727d;--line:#dce5e9;--paper:#fff;--wash:#f1f7f6;--teal:#087f79;--teal2:#075d59;--red:#a43939;--green:#16734f}*{box-sizing:border-box}body{margin:0;background:#edf3f3;color:var(--ink);font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.page{width:min(1180px,calc(100% - 28px));margin:24px auto 48px}header{min-width:0;padding:clamp(25px,5vw,48px);border-radius:20px;color:#fff;background:linear-gradient(125deg,#123244,#087f79);box-shadow:0 16px 40px #193d4718}.eyebrow{margin:0 0 8px;color:#b9eeea;font-size:.75rem;font-weight:750;letter-spacing:.13em;text-transform:uppercase}h1{margin:0;font-size:clamp(2rem,5vw,3.2rem);line-height:1.08;letter-spacing:-.04em}header p:not(.eyebrow){max-width:850px;margin:14px 0 0;color:#e5f1f2}.stamp{display:inline-block;margin-top:18px;padding:5px 10px;border:1px solid #ffffff55;border-radius:999px;font-size:.82rem;overflow-wrap:anywhere}main{display:grid;gap:18px;margin-top:18px;min-width:0}section{min-width:0;padding:clamp(19px,3vw,28px);border:1px solid var(--line);border-radius:17px;background:var(--paper);box-shadow:0 6px 22px #193d4708}h2{margin:0 0 12px;font-size:1.35rem;line-height:1.25}h3{margin:0 0 5px;font-size:1rem;overflow-wrap:anywhere}p{margin:7px 0}.note{color:var(--muted);font-size:.83rem}.part{display:inline-block;margin-bottom:8px;color:var(--teal);font-size:.74rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}.assets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;min-width:0}.asset{min-width:0;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfdfd}.asset p{font-size:.87rem;color:#435662;overflow-wrap:anywhere}.tag{display:inline-block;padding:2px 7px;border-radius:99px;background:#e8f1f1;color:#28545e;font-size:.75rem;font-weight:750;white-space:normal}.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0;min-width:0}.toolbar input{width:min(100%,360px);min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit}.toolbar input:focus{outline:3px solid #087f7930;border-color:var(--teal)}.count{color:var(--muted);font-size:.85rem}.table-wrap{width:100%;max-width:100%;min-width:0;overflow-x:auto;margin-top:12px;border:1px solid var(--line);border-radius:12px;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}table{width:100%;min-width:850px;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th{position:sticky;top:0;background:#eaf3f2;color:#31515c;font-size:.68rem;line-height:1.25;text-transform:uppercase}td{font-size:.82rem;line-height:1.35}th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:#f7fbfb}tbody tr:last-child td{border-bottom:0}tbody tr:hover td{background:#f3f9f8}.group{min-width:0;margin-top:18px}.group:first-of-type{margin-top:0}.group-label{color:var(--teal2);font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;overflow-wrap:anywhere}.legend{display:flex;gap:7px 15px;flex-wrap:wrap;margin-top:11px;color:var(--muted);font-size:.78rem}.compact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:13px}.watch{min-width:0;padding:11px 13px;border-radius:10px;background:var(--wash);font-size:.83rem}.watch b{color:var(--teal2)}.positive{color:var(--green);font-weight:700}.negative{color:var(--red);font-weight:700}.status{padding:22px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center;overflow-wrap:anywhere}.error{color:var(--red);background:#fff7f7;border-color:#efcaca}footer{padding:15px 5px 0;color:var(--muted);font-size:.78rem;overflow-wrap:anywhere}@media(max-width:760px){.assets{grid-template-columns:repeat(2,minmax(0,1fr))}.compact{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.page{width:calc(100% - 16px);margin:8px auto 28px}.assets,.compact{grid-template-columns:minmax(0,1fr)}header{border-radius:15px}section{padding:16px}.toolbar{align-items:stretch;gap:8px}.toolbar label{width:100%}.toolbar input{width:100%;max-width:none}.table-wrap{width:100%;min-width:0}}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <p class="eyebrow">BDRs · acompanhamento</p>
+  <h1>Painel de indicadores</h1>
+  <p>Visão consolidada dos BDRs disponíveis no arquivo. Pesquise por empresa, ticker ou setor para localizar os indicadores informados pela fonte.</p>
+  <span class="stamp" id="reference">Carregando referência…</span>
+</header>
+<main>
+  <section id="assets-section"><span class="part">Parte 1 · BDRs</span><h2>Ativos incluídos no arquivo</h2><p class="note">Os cartões são montados com os itens de <code>bdrs</code>. Nome, ticker, empresa e setor refletem os dados recebidos.</p><div class="assets" id="assets"><div class="status">Carregando dados…</div></div></section>
+  <section id="dashboard"><span class="part">Parte 2 · Dashboard</span><h2>Indicadores de mercado</h2><p class="note">Valores conforme recebidos no JSON. Datas de referência, moeda de origem e definições dependem da fonte.</p><div class="toolbar"><label for="search">Buscar empresa, ticker ou setor</label><input id="search" type="search" placeholder="Ex.: AAPL34, Apple, Tecnologia"><span class="count" id="count"></span></div><div id="tables"><div class="status">Carregando indicadores…</div></div><div class="legend"><span><b>P/L:</b> preço sobre lucro.</span><span><b>P/VP:</b> preço sobre valor patrimonial.</span><span><b>DY 12 meses:</b> dividend yield no período informado pela fonte.</span><span><b>Liquidez diária:</b> valor reportado no arquivo.</span></div></section>
+  <section id="metrics"><span class="part">Parte 3 · Métricas</span><h2>Como ler os indicadores</h2><div class="compact"><div class="watch"><b>Preço e variação em 12 meses</b><br>Preço unitário do BDR em reais e variação percentual conforme os valores fornecidos pela fonte.</div><div class="watch"><b>P/L e P/VP</b><br>Múltiplos de referência; diferenças de mercado, moeda, estrutura do BDR e contabilidade limitam comparações.</div><div class="watch"><b>DY e payout</b><br>Medidas históricas/baseadas no cálculo da fonte. Não representam promessa de distribuição futura.</div><div class="watch"><b>ROE e ROA</b><br>Indicadores de retorno sobre patrimônio e ativos. Bases contábeis e modelos de negócio variam entre empresas.</div><div class="watch"><b>Margem líquida</b><br>Proporção do resultado líquido sobre a receita na base da fonte; não é uma comparação universal de eficiência.</div><div class="watch"><b>Setor e liquidez</b><br>Classificações e liquidez diária conforme reportadas. O arquivo pode apresentar campos indisponíveis como “-”.</div></div><p class="note">Este painel apenas apresenta os campos disponíveis e não acrescenta estimativas ou dados externos. Consulte a fonte original para período, metodologia e atualização.</p></section>
+</main>
+<footer id="footer">Snapshot informativo. Indicadores podem mudar conforme mercado e atualização do arquivo.</footer>
+</div>
+<script>
+(() => {
+  // A raiz HTTP é internal-tools/investment-report; o relatório está em render/bdrs.
+  const DATA_URL = '../../extractor/bdrs/results/latest.json';
+  const labels = {preco:'Preço',variacao_12_meses:'Variação 12 meses',pl:'P/L',p_vp:'P/VP',dy_12_meses:'DY 12 meses',roe:'ROE',roa:'ROA',payout:'Payout',margem_liquida:'Margem líquida',liquidez_diaria:'Liquidez diária'};
+  const esc = value => String(value ?? 'n/d').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const entries = data => Array.isArray(data?.bdrs) ? data.bdrs.filter(item => item && typeof item === 'object') : [];
+  const metric = (item, key) => item?.indicators?.[key] ?? 'n/d';
+  const sortText = (a,b) => String(a).localeCompare(String(b),'pt-BR',{sensitivity:'base'});
+  let bdrs = [];
+
+  function render() {
+    const query = document.querySelector('#search').value.trim().toLocaleLowerCase('pt-BR');
+    const filtered = bdrs.filter(item => [item.name,item.ticker,metric(item,'bdr'),metric(item,'setor')].some(value => String(value ?? '').toLocaleLowerCase('pt-BR').includes(query)));
+    document.querySelector('#assets').innerHTML = filtered.length ? filtered.map(item => `<article class="asset"><h3>${esc(item.name || metric(item,'bdr') || 'BDR')} <span class="tag">${esc(item.ticker || metric(item,'ticker'))}</span></h3><p><strong>${esc(metric(item,'bdr'))}</strong></p><p>Setor: <span class="tag">${esc(metric(item,'setor'))}</span></p><p>Preço: <strong>${esc(metric(item,'preco'))}</strong> · Variação 12m: <strong>${esc(metric(item,'variacao_12_meses'))}</strong></p></article>`).join('') : '<div class="status">Nenhum BDR corresponde à busca.</div>';
+    const groups = new Map();
+    filtered.forEach(item => { const sector = String(metric(item,'setor')); if (!groups.has(sector)) groups.set(sector, []); groups.get(sector).push(item); });
+    const keys = Object.keys(labels);
+    document.querySelector('#tables').innerHTML = groups.size ? [...groups.entries()].sort((a,b)=>sortText(a[0],b[0])).map(([sector,items]) => `<div class="group"><span class="group-label">${esc(sector)}</span><div class="table-wrap" role="region" aria-label="Indicadores do setor ${esc(sector)}" tabindex="0"><table><thead><tr><th>Empresa / ticker</th>${keys.map(key=>`<th>${esc(labels[key])}${key==='preco'?' (R$)':''}${key==='liquidez_diaria'?' (R$)':''}</th>`).join('')}</tr></thead><tbody>${items.map(item=>`<tr><td>${esc(item.name || metric(item,'bdr') || 'BDR')} · ${esc(item.ticker || metric(item,'ticker'))}</td>${keys.map(key=>`<td class="${key==='variacao_12_meses'?(/^-/.test(String(metric(item,key)))?'negative':'positive'):''}">${esc(metric(item,key))}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`).join('') : '<div class="status">Nenhum indicador para exibir.</div>';
+    document.querySelector('#count').textContent = `${filtered.length} de ${bdrs.length} BDRs`;
+  }
+
+  fetch(DATA_URL).then(response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); }).then(data => {
+    if (!Array.isArray(data?.bdrs)) throw new Error('O JSON não contém um array bdrs.');
+    bdrs = entries(data);
+    document.querySelector('#reference').textContent = `Arquivo de dados: ${DATA_URL.split('/').pop()} · ${bdrs.length} BDRs`;
+    document.querySelector('#footer').textContent = `Snapshot informativo · arquivo: ${DATA_URL.split('/').pop()} · ${bdrs.length} BDRs. Indicadores podem mudar conforme mercado e atualização do arquivo.`;
+    if (!bdrs.length) document.querySelector('#assets').innerHTML = '<div class="status">O campo bdrs está vazio.</div>';
+    render();
+  }).catch(error => {
+    const message = `Não foi possível carregar os dados (${error.message}). Sirva internal-tools/investment-report por HTTP e abra /render/bdrs/ para que a rota do JSON fique acessível.`;
+    document.querySelector('#reference').textContent = 'Dados indisponíveis';
+    document.querySelector('#assets').innerHTML = `<div class="status error">${esc(message)}</div>`;
+    document.querySelector('#tables').innerHTML = `<div class="status error">${esc(message)}</div>`;
+  });
+  document.querySelector('#search').addEventListener('input', render);
+})();
+</script>
+</body>
+</html>

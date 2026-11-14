@@ -1,0 +1,79 @@
+{
+  "bdrs": [
+    {
+      "name": "Apple",
+      "ticker": "AAPL34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Alibaba",
+      "ticker": "BABA34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Sea Limited",
+      "ticker": "S1PO34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "NVIDIA",
+      "ticker": "NVDC34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Coca-Cola",
+      "ticker": "COCA34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Walmart",
+      "ticker": "WALM34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "JPMorgan Chase",
+      "ticker": "JPMC34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Microsoft",
+      "ticker": "MSFT34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Alphabet",
+      "ticker": "GOGL34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Amazon",
+      "ticker": "AMZO34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Taiwan Semiconductor",
+      "ticker": "TSMC34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Meta",
+      "ticker": "M1TA34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Broadcom",
+      "ticker": "AVGO34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Visa",
+      "ticker": "VISA34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    },
+    {
+      "name": "Tesla",
+      "ticker": "TSLA34",
+      "error": "Não foi possível localizar estes campos no HTML: liquidez_diaria, segmento"
+    }
+  ]
+}

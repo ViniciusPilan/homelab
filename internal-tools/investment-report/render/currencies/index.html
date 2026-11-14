@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Painel de cotações e histórico recente de moedas em reais.">
+<title>Moedas | Painel de cotações</title>
+<style>
+:root{color-scheme:light;--ink:#172a3a;--muted:#62727d;--line:#dce5e9;--paper:#fff;--wash:#f1f7f6;--teal:#087f79;--teal2:#075d59;--red:#a43939;--green:#16734f}*{box-sizing:border-box}body{margin:0;background:#edf3f3;color:var(--ink);font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.page{width:min(1100px,calc(100% - 28px));margin:24px auto 48px}header{padding:clamp(25px,5vw,48px);border-radius:20px;color:#fff;background:linear-gradient(125deg,#123244,#087f79);box-shadow:0 16px 40px #193d4718}.eyebrow{margin:0 0 8px;color:#b9eeea;font-size:.75rem;font-weight:750;letter-spacing:.13em;text-transform:uppercase}h1{margin:0;font-size:clamp(2rem,5vw,3.2rem);line-height:1.08;letter-spacing:-.04em}header p:not(.eyebrow){max-width:780px;margin:14px 0 0;color:#e5f1f2}.stamp{display:inline-block;margin-top:18px;padding:5px 10px;border:1px solid #ffffff55;border-radius:999px;font-size:.82rem;overflow-wrap:anywhere}main{display:grid;gap:18px;margin-top:18px}section{min-width:0;padding:clamp(19px,3vw,28px);border:1px solid var(--line);border-radius:17px;background:var(--paper);box-shadow:0 6px 22px #193d4708}h2{margin:0 0 8px;font-size:1.35rem;line-height:1.25}.note{color:var(--muted);font-size:.83rem}.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0;min-width:0}.toolbar label{font-weight:650}.toolbar input{width:min(100%,360px);min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit}.toolbar input:focus{outline:3px solid #087f7930;border-color:var(--teal)}.count{color:var(--muted);font-size:.85rem}.currencies{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.currency{min-width:0;padding:17px;border:1px solid var(--line);border-radius:14px;background:#fbfdfd}.currency-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.currency h3{margin:0;font-size:1.12rem}.price{margin:8px 0 0;font-size:clamp(1.55rem,4vw,2rem);font-weight:780;letter-spacing:-.035em;font-variant-numeric:tabular-nums}.price small{color:var(--muted);font-size:.42em;font-weight:600;letter-spacing:0}.change{display:inline-block;padding:4px 8px;border-radius:999px;background:#e9f4ef;color:var(--green);font-size:.8rem;font-weight:750;white-space:nowrap}.change.negative{background:#fff0f0;color:var(--red)}.chart{display:block;width:100%;height:90px;margin-top:8px;overflow:visible}.chart line{stroke:#dce5e9;stroke-width:1}.chart polyline{fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart circle{fill:var(--teal);stroke:#fff;stroke-width:2}.chart-meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:.75rem;font-variant-numeric:tabular-nums}.history-label{margin:7px 0 0;color:var(--muted);font-size:.78rem}.details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:13px}.detail{padding:10px 12px;border-radius:10px;background:var(--wash);font-size:.83rem}.detail span{display:block;color:var(--muted);font-size:.74rem}.detail strong{font-variant-numeric:tabular-nums}.status{padding:22px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center;overflow-wrap:anywhere}.error{color:var(--red);background:#fff7f7;border-color:#efcaca}footer{padding:15px 5px 0;color:var(--muted);font-size:.78rem;overflow-wrap:anywhere}@media(max-width:620px){.page{width:calc(100% - 16px);margin:8px auto 28px}.currencies{grid-template-columns:minmax(0,1fr)}header{border-radius:15px}section{padding:16px}.toolbar{align-items:stretch;gap:8px}.toolbar label,.toolbar input{width:100%}}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <p class="eyebrow">Moedas · acompanhamento</p>
+  <h1>Cotações em reais</h1>
+  <p>Consulte as cotações atuais e o histórico recente disponível para cada moeda. Pesquise pelo nome e compare as variações informadas pela fonte.</p>
+  <span class="stamp" id="reference">Carregando referência…</span>
+</header>
+<main>
+  <section>
+    <h2>Moedas acompanhadas</h2>
+    <p class="note">Os valores são expressos em reais por unidade da moeda. O gráfico segue a ordem do vetor no arquivo, do ponto mais antigo ao mais recente; o JSON não informa as datas de cada ponto.</p>
+    <div class="toolbar"><label for="search">Buscar moeda</label><input id="search" type="search" placeholder="Ex.: dólar, euro"><span class="count" id="count"></span></div>
+    <div class="currencies" id="currencies"><div class="status">Carregando cotações…</div></div>
+  </section>
+</main>
+<footer id="footer">Snapshot informativo. Cotações e variações podem mudar conforme o mercado e a atualização do arquivo.</footer>
+</div>
+<script>
+(() => {
+  // A raiz HTTP é internal-tools/investment-report; o relatório está em render/currencies.
+  const DATA_URL = '../../extractor/currencies/results/latest.json';
+  const esc = value => String(value ?? 'n/d').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const formatBRL = value => Number.isFinite(Number(value)) ? Number(value).toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2,maximumFractionDigits:6}) : 'n/d';
+  const isNegative = value => /^\s*-/.test(String(value ?? ''));
+  const sparkline = values => {
+    const numbers = values.map(Number).filter(Number.isFinite);
+    if (!numbers.length) return '<div class="status">Histórico indisponível.</div>';
+    const min = Math.min(...numbers), max = Math.max(...numbers), span = max-min || Math.abs(max)*.02 || 1;
+    const points = numbers.map((value,index) => `${numbers.length===1?50:8+84*index/(numbers.length-1)},${78-60*(value-min)/span}`).join(' ');
+    const last = points.split(' ').at(-1).split(',');
+    return `<svg class="chart" viewBox="0 0 100 90" role="img" aria-label="Histórico: ${numbers.length} pontos, de ${esc(formatBRL(numbers[0]))} a ${esc(formatBRL(numbers.at(-1)))}"><line x1="4" y1="78" x2="96" y2="78"/><polyline points="${points}"/><circle cx="${last[0]}" cy="${last[1]}" r="4"/></svg><div class="chart-meta"><span>${esc(formatBRL(numbers[0]))}</span><span>${esc(formatBRL(numbers.at(-1)))}</span></div><p class="history-label">${numbers.length} ${numbers.length===1?'ponto':'pontos'} no histórico disponível · ordem: antigo → recente</p>`;
+  };
+  let currencies = [];
+  function render() {
+    const query = document.querySelector('#search').value.trim().toLocaleLowerCase('pt-BR');
+    const filtered = currencies.filter(item => String(item.name ?? '').toLocaleLowerCase('pt-BR').includes(query));
+    document.querySelector('#currencies').innerHTML = filtered.length ? filtered.map(item => {
+      const latest = Array.isArray(item.values) && item.values.length ? item.values.at(-1) : null;
+      const variation24 = item.variation_24h ?? 'n/d', variation12 = item.variation_12m ?? 'n/d';
+      return `<article class="currency"><div class="currency-head"><h3>${esc(item.name || 'Moeda')}</h3><span class="change ${isNegative(variation24)?'negative':''}">${esc(variation24)} · 24h</span></div><p class="price">${esc(formatBRL(latest))}<small> / unidade</small></p>${sparkline(Array.isArray(item.values)?item.values:[])}<div class="details"><div class="detail"><span>Variação em 24 horas</span><strong class="${isNegative(variation24)?'negative':''}">${esc(variation24)}</strong></div><div class="detail"><span>Variação em 12 meses</span><strong class="${isNegative(variation12)?'negative':''}">${esc(variation12)}</strong></div></div></article>`;
+    }).join('') : '<div class="status">Nenhuma moeda corresponde à busca.</div>';
+    document.querySelector('#count').textContent = `${filtered.length} de ${currencies.length} moedas`;
+  }
+  fetch(DATA_URL).then(response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); }).then(data => {
+    if (!Array.isArray(data)) throw new Error('O JSON não contém um array de moedas.');
+    currencies = data.filter(item => item && typeof item === 'object');
+    document.querySelector('#reference').textContent = `Arquivo de dados: ${DATA_URL.split('/').pop()} · ${currencies.length} moedas`;
+    document.querySelector('#footer').textContent = `Snapshot informativo · arquivo: ${DATA_URL.split('/').pop()} · ${currencies.length} moedas. Cotações e variações podem mudar conforme o mercado e a atualização do arquivo.`;
+    render();
+  }).catch(error => {
+    const message = `Não foi possível carregar os dados (${error.message}). Sirva internal-tools/investment-report por HTTP e abra /render/currencies/ para que a rota do JSON fique acessível.`;
+    document.querySelector('#reference').textContent = 'Dados indisponíveis';
+    document.querySelector('#currencies').innerHTML = `<div class="status error">${esc(message)}</div>`;
+  });
+  document.querySelector('#search').addEventListener('input', render);
+})();
+</script>
+</body>
+</html>

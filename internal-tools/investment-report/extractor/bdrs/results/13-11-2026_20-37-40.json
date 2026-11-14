@@ -1,0 +1,79 @@
+{
+  "bdrs": [
+    {
+      "name": "Apple",
+      "ticker": "AAPL34",
+      "error": "Não foi possível acessar a página de AAPL34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Alibaba",
+      "ticker": "BABA34",
+      "error": "Não foi possível acessar a página de BABA34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Sea Limited",
+      "ticker": "S1PO34",
+      "error": "Não foi possível acessar a página de S1PO34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "NVIDIA",
+      "ticker": "NVDC34",
+      "error": "Não foi possível acessar a página de NVDC34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Coca-Cola",
+      "ticker": "COCA34",
+      "error": "Não foi possível acessar a página de COCA34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Walmart",
+      "ticker": "WALM34",
+      "error": "Não foi possível acessar a página de WALM34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "JPMorgan Chase",
+      "ticker": "JPMC34",
+      "error": "Não foi possível acessar a página de JPMC34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Microsoft",
+      "ticker": "MSFT34",
+      "error": "Não foi possível acessar a página de MSFT34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Alphabet",
+      "ticker": "GOGL34",
+      "error": "Não foi possível acessar a página de GOGL34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Amazon",
+      "ticker": "AMZO34",
+      "error": "Não foi possível acessar a página de AMZO34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Taiwan Semiconductor",
+      "ticker": "TSMC34",
+      "error": "Não foi possível acessar a página de TSMC34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Meta",
+      "ticker": "M1TA34",
+      "error": "Não foi possível acessar a página de M1TA34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Broadcom",
+      "ticker": "AVGO34",
+      "error": "Não foi possível acessar a página de AVGO34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Visa",
+      "ticker": "VISA34",
+      "error": "Não foi possível acessar a página de VISA34: [Errno 8] nodename nor servname provided, or not known"
+    },
+    {
+      "name": "Tesla",
+      "ticker": "TSLA34",
+      "error": "Não foi possível acessar a página de TSLA34: [Errno 8] nodename nor servname provided, or not known"
+    }
+  ]
+}
