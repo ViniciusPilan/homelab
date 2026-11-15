@@ -19,9 +19,11 @@ padrão do Python.
 ## Saída
 
 O JSON consolidado contém dólar, euro, libra esterlina e peso argentino. Cada
-item tem `name`, `values`, `variation_24h` e `variation_12m`. `values` é um vetor
-vetor numérico de 30 preços em BRL, ordenado do mais antigo ao mais recente; o
-último valor é atualizado com a cotação atual exibida na página da moeda. As variações são
-mantidas no formato percentual apresentado pelo site.
+item tem `name`, `values`, `variation_30d`, `variation_24h` e `variation_12m`.
+`values` é um vetor numérico de 30 preços em BRL, ordenado do mais antigo ao mais
+recente; o último valor é atualizado com a cotação atual exibida na página da
+moeda. As variações de 24h e 12m são mantidas no formato percentual apresentado
+pelo site. `variation_30d` é calculada com a diferença percentual entre o primeiro
+e o último valor do vetor, com sinal explícito positivo ou negativo.
 
 Os arquivos são gravados em `results/` com data e hora local e em `latest.json`.

@@ -75,6 +75,14 @@ def _parse_brl(value):
     return float(match.group(1).replace(".", "").replace(",", "."))
 
 
+def _variation_30d(values):
+    """Return the signed percentage change between the first and last prices."""
+    if not values or values[0] == 0:
+        raise RuntimeError("Não foi possível calcular a variação de 30 dias.")
+    percentage = (values[-1] - values[0]) / values[0] * 100
+    return f"{percentage:+.2f}%"
+
+
 def fetch_currency(currency):
     """Return chronological daily BRL values, ending at the current page quote."""
     page_url = PAGE_URL.format(slug=currency["slug"])
@@ -129,6 +137,7 @@ def fetch_currency(currency):
     return {
         "name": currency["name"],
         "values": values,
+        "variation_30d": _variation_30d(values),
         "variation_24h": parser.values["variation_24h"],
         "variation_12m": parser.values["variation_12m"],
     }
