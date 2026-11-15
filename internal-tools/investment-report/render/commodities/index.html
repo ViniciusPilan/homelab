@@ -70,17 +70,29 @@
     }).join('') : '<div class="status">Nenhuma commodity corresponde à busca.</div>';
     document.querySelector('#count').textContent = `${filtered.length} de ${commodities.length} commodities`;
   }
-  fetch(DATA_URL).then(response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); }).then(data => {
-    if (!Array.isArray(data)) throw new Error('O JSON não contém um array de commodities.');
-    commodities = data.filter(item => item && typeof item === 'object');
-    document.querySelector('#reference').textContent = `Arquivo de dados: ${DATA_URL.split('/').pop()} · ${commodities.length} commodities`;
-    document.querySelector('#footer').textContent = `Snapshot informativo · arquivo: ${DATA_URL.split('/').pop()} · ${commodities.length} commodities. Dados extraídos do Investing.com; podem ter atraso e mudar conforme o mercado.`;
-    render();
-  }).catch(error => {
-    const message = `Não foi possível carregar os dados (${error.message}). Sirva internal-tools/investment-report por HTTP e abra /render/commodities/ para que a rota do JSON fique acessível.`;
-    document.querySelector('#reference').textContent = 'Dados indisponíveis';
-    document.querySelector('#commodities').innerHTML = `<div class="status error">${esc(message)}</div>`;
-  });
+  async function loadCommodities() {
+    try {
+      const response = await fetch(DATA_URL, {cache:'no-store'});
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      if (!Array.isArray(data)) throw new Error('O JSON não contém um array de commodities.');
+      commodities = data.filter(item => item && typeof item === 'object');
+      const updatedAt = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      document.querySelector('#reference').textContent = `Arquivo de dados: ${DATA_URL.split('/').pop()} · ${commodities.length} commodities · atualizado às ${updatedAt}`;
+      document.querySelector('#footer').textContent = `Snapshot informativo · arquivo: ${DATA_URL.split('/').pop()} · ${commodities.length} commodities. Atualização automática a cada 30 segundos. Dados extraídos do Investing.com; podem ter atraso e mudar conforme o mercado.`;
+      render();
+    } catch (error) {
+      if (commodities.length) {
+        document.querySelector('#reference').textContent = `Falha ao atualizar os dados; mostrando a última lista carregada (${commodities.length} commodities).`;
+        return;
+      }
+      const message = `Não foi possível carregar os dados (${error.message}). Sirva internal-tools/investment-report por HTTP e abra /render/commodities/ para que a rota do JSON fique acessível.`;
+      document.querySelector('#reference').textContent = 'Dados indisponíveis';
+      document.querySelector('#commodities').innerHTML = `<div class="status error">${esc(message)}</div>`;
+    }
+  }
+  loadCommodities();
+  window.setInterval(loadCommodities, 30_000);
   document.querySelector('#search').addEventListener('input', render);
 })();
 </script>
