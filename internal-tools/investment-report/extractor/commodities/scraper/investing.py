@@ -15,6 +15,7 @@ COMMODITIES = [
     {"name": "Prata", "slug": "silver", "unit": "USD por onça troy"},
     {"name": "Petróleo Brent", "slug": "brent-oil", "unit": "USD por barril"},
     {"name": "Soja", "slug": "us-soybeans", "unit": "USD por contrato (5.000 bushels)"},
+    {"name": "Café Contrato C", "slug": "us-coffee-c", "unit": "USD por libra"},
     {"name": "Arroz em casca", "slug": "rough-rice", "unit": "USD por quintal (cwt)"},
     {
         "name": "Minério de ferro 62% CFR",

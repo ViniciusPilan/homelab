@@ -1,7 +1,7 @@
 # Extrator de commodities
 
-Busca ouro, prata, petróleo Brent, soja, arroz em casca e minério de ferro 62%
-CFR nas páginas individuais do Investing.com Brasil. Cada registro contém o
+Busca ouro, prata, petróleo Brent, soja, café Contrato C, arroz em casca e
+minério de ferro 62% CFR nas páginas individuais do Investing.com Brasil. Cada registro contém o
 preço atual em USD, a faixa de 52 semanas, o volume e a variação
 percentual em 1 ano. O campo `unit` informa a unidade/contrato usado na cotação;
 isso é especialmente relevante para grãos, cujo preço é por contrato ou
