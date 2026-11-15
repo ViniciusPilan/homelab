@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Painel de cotações, faixas de preço e variação anual de commodities.">
+<title>Commodities | Painel de cotações</title>
+<style>
+:root{color-scheme:light;--ink:#172a3a;--muted:#62727d;--line:#dce5e9;--paper:#fff;--wash:#f1f7f6;--teal:#087f79;--red:#a43939;--green:#16734f}*{box-sizing:border-box}body{margin:0;background:#edf3f3;color:var(--ink);font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.page{width:min(1100px,calc(100% - 28px));margin:24px auto 48px}header{padding:clamp(25px,5vw,48px);border-radius:20px;color:#fff;background:linear-gradient(125deg,#123244,#087f79);box-shadow:0 16px 40px #193d4718}.eyebrow{margin:0 0 8px;color:#b9eeea;font-size:.75rem;font-weight:750;letter-spacing:.13em;text-transform:uppercase}h1{margin:0;font-size:clamp(2rem,5vw,3.2rem);line-height:1.08;letter-spacing:-.04em}header p:not(.eyebrow){max-width:780px;margin:14px 0 0;color:#e5f1f2}.stamp{display:inline-block;margin-top:18px;padding:5px 10px;border:1px solid #ffffff55;border-radius:999px;font-size:.82rem;overflow-wrap:anywhere}main{display:grid;gap:18px;margin-top:18px}section{min-width:0;padding:clamp(19px,3vw,28px);border:1px solid var(--line);border-radius:17px;background:var(--paper);box-shadow:0 6px 22px #193d4708}h2{margin:0 0 8px;font-size:1.35rem;line-height:1.25}.note{color:var(--muted);font-size:.83rem}.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0;min-width:0}.toolbar label{font-weight:650}.toolbar input{width:min(100%,360px);min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit}.toolbar input:focus{outline:3px solid #087f7930;border-color:var(--teal)}.count{color:var(--muted);font-size:.85rem}.commodities{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.commodity{min-width:0;padding:17px;border:1px solid var(--line);border-radius:14px;background:#fbfdfd}.commodity-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.commodity h3{margin:0;font-size:1.12rem}.source{color:var(--teal2);font-size:.8rem;font-weight:650;text-decoration:none}.source:hover{text-decoration:underline}.price{margin:8px 0 0;font-size:clamp(1.55rem,4vw,2rem);font-weight:780;letter-spacing:-.035em;font-variant-numeric:tabular-nums}.price small{color:var(--muted);font-size:.42em;font-weight:600;letter-spacing:0}.change{display:inline-block;padding:4px 8px;border-radius:999px;background:#e9f4ef;color:var(--green);font-size:.8rem;font-weight:750;white-space:nowrap}.change.negative{background:#fff0f0;color:var(--red)}.ranges{display:grid;gap:13px;margin-top:16px}.range-title{display:flex;justify-content:space-between;gap:8px;font-size:.8rem}.range-title strong{font-weight:700}.range-values{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:.74rem;font-variant-numeric:tabular-nums}.track{position:relative;height:7px;margin:5px 0 3px;border-radius:999px;background:#e4ecee}.marker{position:absolute;top:50%;width:13px;height:13px;border:3px solid #fff;border-radius:50%;background:var(--teal);box-shadow:0 0 0 1px var(--teal);transform:translate(-50%,-50%)}.details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:16px}.detail{min-width:0;padding:10px 12px;border-radius:10px;background:var(--wash);font-size:.83rem}.detail span{display:block;color:var(--muted);font-size:.74rem}.detail strong{font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.unit{margin:12px 0 0;color:var(--muted);font-size:.78rem}.status{padding:22px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center;overflow-wrap:anywhere}.error{color:var(--red);background:#fff7f7;border-color:#efcaca}footer{padding:15px 5px 0;color:var(--muted);font-size:.78rem;overflow-wrap:anywhere}@media(max-width:620px){.page{width:calc(100% - 16px);margin:8px auto 28px}.commodities{grid-template-columns:minmax(0,1fr)}header{border-radius:15px}section{padding:16px}.toolbar{align-items:stretch;gap:8px}.toolbar label,.toolbar input{width:100%}}
+</style>
+<style>
+.history-chart{display:block;width:100%;height:120px;margin:12px 0 0}.history-chart line{stroke:#dce5e9;stroke-width:1}.history-chart polyline{fill:none;stroke:var(--teal);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.history-chart circle{fill:var(--teal);stroke:#fff;stroke-width:2}.chart-meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:.72rem;font-variant-numeric:tabular-nums}.chart-label{margin:2px 0 0;color:var(--muted);font-size:.75rem}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <p class="eyebrow">Commodities · acompanhamento</p>
+  <h1>Cotações em dólares</h1>
+  <p>Acompanhe o preço atual, o histórico de fechamentos diários dos últimos 30 dias, a faixa de 52 semanas, o volume e a variação anual.</p>
+  <span class="stamp" id="reference">Carregando referência…</span>
+</header>
+<main>
+  <section>
+    <h2>Commodities acompanhadas</h2>
+    <p class="note">O gráfico mostra os fechamentos diários disponíveis nos últimos 30 dias corridos; fins de semana e feriados não são preenchidos. As unidades e contratos seguem a cotação publicada pela fonte.</p>
+    <div class="toolbar"><label for="search">Buscar commodity</label><input id="search" type="search" placeholder="Ex.: ouro, petróleo, soja"><span class="count" id="count"></span></div>
+    <div class="commodities" id="commodities"><div class="status">Carregando cotações…</div></div>
+  </section>
+</main>
+<footer id="footer">Snapshot informativo. Cotações podem ter atraso e mudar conforme o mercado e a atualização do arquivo.</footer>
+</div>
+<script>
+(() => {
+  // A raiz HTTP é internal-tools/investment-report; o relatório está em render/commodities.
+  const DATA_URL = '../../extractor/commodities/results/latest.json';
+  const esc = value => String(value ?? 'n/d').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const numeric = value => value !== null && value !== undefined && value !== '' && value !== '-' && Number.isFinite(Number(value));
+  const formatUSD = value => numeric(value) ? Number(value).toLocaleString('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:4}) : 'n/d';
+  const formatNumber = value => numeric(value) ? Number(value).toLocaleString('pt-BR') : 'n/d';
+  const formatPct = value => numeric(value) ? `${Number(value).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%` : 'n/d';
+  const isNegative = value => numeric(value) && Number(value) < 0;
+  function range(name, bounds, price) {
+    if (!bounds || !numeric(bounds.low) || !numeric(bounds.high)) return '';
+    const low = Number(bounds.low), high = Number(bounds.high), current = numeric(price) ? Number(price) : null;
+    const position = current === null || high === low ? 50 : Math.max(0,Math.min(100,(current-low)/(high-low)*100));
+    const marker = current === null ? '' : `<span class="marker" style="left:${position}%" aria-label="Preço atual em ${Math.round(position)}% da faixa"></span>`;
+    return `<div class="range"><div class="range-title"><strong>${esc(name)}</strong><span>${current===null?'Preço n/d':`${Math.round(position)}% da faixa`}</span></div><div class="track" role="img" aria-label="${esc(name)}: ${esc(formatUSD(low))} a ${esc(formatUSD(high))}">${marker}</div><div class="range-values"><span>${esc(formatUSD(low))}</span><span>${esc(formatUSD(high))}</span></div></div>`;
+  }
+  function historyChart(history, name) {
+    if (!Array.isArray(history) || !history.length) return '<p class="chart-label">Histórico de 30 dias indisponível.</p>';
+    const points = history.filter(point => numeric(point.close) && /^\d{4}-\d{2}-\d{2}$/.test(point.date));
+    if (!points.length) return '<p class="chart-label">Histórico de 30 dias indisponível.</p>';
+    const prices = points.map(point => Number(point.close));
+    const min = Math.min(...prices), max = Math.max(...prices), span = max - min || Math.abs(max) * .02 || 1;
+    const coords = prices.map((price,index) => `${points.length===1?50:5+90*index/(points.length-1)},${96-78*(price-min)/span}`);
+    const last = coords.at(-1).split(',');
+    const date = value => new Date(`${value}T12:00:00`).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+    const svg = `<svg class="history-chart" viewBox="0 0 100 110" role="img" aria-label="${esc(name)}: ${points.length} fechamentos, de ${esc(formatUSD(prices[0]))} em ${esc(date(points[0].date))} a ${esc(formatUSD(prices.at(-1)))} em ${esc(date(points.at(-1).date))}"><line x1="3" y1="96" x2="97" y2="96"/><polyline points="${coords.join(' ')}"/><circle cx="${last[0]}" cy="${last[1]}" r="3.5"/></svg>`;
+    return `${svg}<div class="chart-meta"><span>${esc(date(points[0].date))} · ${esc(formatUSD(prices[0]))}</span><span>${esc(date(points.at(-1).date))} · ${esc(formatUSD(prices.at(-1)))}</span></div><p class="chart-label">${points.length} pregões nos últimos 30 dias</p>`;
+  }
+  let commodities = [];
+  function render() {
+    const query = document.querySelector('#search').value.trim().toLocaleLowerCase('pt-BR');
+    const filtered = commodities.filter(item => String(item.name ?? '').toLocaleLowerCase('pt-BR').includes(query));
+    document.querySelector('#commodities').innerHTML = filtered.length ? filtered.map(item => {
+      const variation = item.variation_1y_pct;
+      const link = /^https:\/\//i.test(String(item.url ?? '')) ? `<a class="source" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">Ver fonte ↗</a>` : '';
+      return `<article class="commodity"><div class="commodity-head"><h3>${esc(item.name || 'Commodity')}</h3>${link}</div><p class="price">${esc(formatUSD(item.price_usd))}<small> / cotação</small></p>${historyChart(item.history_30d,item.name || 'Commodity')}<div class="ranges">${range('Faixa de 52 semanas',item.range_52w,item.price_usd)}</div><div class="details"><div class="detail"><span>Variação em 1 ano</span><strong class="change ${isNegative(variation)?'negative':''}">${esc(formatPct(variation))}</strong></div><div class="detail"><span>Volume diário</span><strong>${esc(formatNumber(item.volume))}</strong></div></div><p class="unit">Unidade: ${esc(item.unit || 'n/d')}</p></article>`;
+    }).join('') : '<div class="status">Nenhuma commodity corresponde à busca.</div>';
+    document.querySelector('#count').textContent = `${filtered.length} de ${commodities.length} commodities`;
+  }
+  fetch(DATA_URL).then(response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); }).then(data => {
+    if (!Array.isArray(data)) throw new Error('O JSON não contém um array de commodities.');
+    commodities = data.filter(item => item && typeof item === 'object');
+    document.querySelector('#reference').textContent = `Arquivo de dados: ${DATA_URL.split('/').pop()} · ${commodities.length} commodities`;
+    document.querySelector('#footer').textContent = `Snapshot informativo · arquivo: ${DATA_URL.split('/').pop()} · ${commodities.length} commodities. Dados extraídos do Investing.com; podem ter atraso e mudar conforme o mercado.`;
+    render();
+  }).catch(error => {
+    const message = `Não foi possível carregar os dados (${error.message}). Sirva internal-tools/investment-report por HTTP e abra /render/commodities/ para que a rota do JSON fique acessível.`;
+    document.querySelector('#reference').textContent = 'Dados indisponíveis';
+    document.querySelector('#commodities').innerHTML = `<div class="status error">${esc(message)}</div>`;
+  });
+  document.querySelector('#search').addEventListener('input', render);
+})();
+</script>
+</body>
+</html>
