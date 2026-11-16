@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Ouro",
+    "url": "https://br.investing.com/commodities/gold",
+    "price_usd": 3887.6,
+    "daily_range": {
+      "low": 3871.35,
+      "high": 3926.95
+    },
+    "range_52w": {
+      "low": 3856.7,
+      "high": 5626.8
+    },
+    "volume": 151010,
+    "variation_1y_pct": "-",
+    "unit": "USD por onça troy"
+  },
+  {
+    "name": "Prata",
+    "url": "https://br.investing.com/commodities/silver",
+    "price_usd": 48.65,
+    "daily_range": {
+      "low": 48.41,
+      "high": 50.72
+    },
+    "range_52w": {
+      "low": 48.05,
+      "high": 121.785
+    },
+    "volume": 49657,
+    "variation_1y_pct": "-",
+    "unit": "USD por onça troy"
+  },
+  {
+    "name": "Petróleo Brent",
+    "url": "https://br.investing.com/commodities/brent-oil",
+    "price_usd": 96.13,
+    "daily_range": {
+      "low": 95.07,
+      "high": 97.13
+    },
+    "range_52w": {
+      "low": 58.72,
+      "high": 126.41
+    },
+    "volume": 329588,
+    "variation_1y_pct": "-",
+    "unit": "USD por barril"
+  },
+  {
+    "name": "Soja",
+    "url": "https://br.investing.com/commodities/us-soybeans",
+    "price_usd": 1232.75,
+    "daily_range": {
+      "low": 1218.75,
+      "high": 1240.63
+    },
+    "range_52w": {
+      "low": 1037.75,
+      "high": 1335.25
+    },
+    "volume": 103557,
+    "variation_1y_pct": "-",
+    "unit": "USD por contrato (5.000 bushels)"
+  },
+  {
+    "name": "Arroz em casca",
+    "url": "https://br.investing.com/commodities/rough-rice",
+    "price_usd": 18.38,
+    "daily_range": {
+      "low": 18.36,
+      "high": 18.66
+    },
+    "range_52w": {
+      "low": 9.45,
+      "high": 18.66
+    },
+    "volume": 466,
+    "variation_1y_pct": "-",
+    "unit": "USD por quintal (cwt)"
+  },
+  {
+    "name": "Minério de ferro 62% CFR",
+    "url": "https://br.investing.com/commodities/iron-ore-62-cfr-futures",
+    "price_usd": 91.48,
+    "daily_range": {
+      "low": 91.48,
+      "high": 91.48
+    },
+    "range_52w": {
+      "low": 90.57,
+      "high": 111.42
+    },
+    "volume": 0,
+    "variation_1y_pct": "-",
+    "unit": "USD por tonelada métrica seca"
+  }
+]
